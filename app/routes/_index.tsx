@@ -32,9 +32,9 @@ export default function Homepage() {
 
 function FeaturedCollection({
   collection,
-}: {
+}: Readonly<{
   collection: FeaturedCollectionFragment;
-}) {
+}>) {
   if (!collection) return null;
   const image = collection?.image;
   return (
@@ -54,9 +54,9 @@ function FeaturedCollection({
 
 function RecommendedProducts({
   products,
-}: {
+}: Readonly<{
   products: Promise<RecommendedProductsQuery>;
-}) {
+}>) {
   return (
     <div className="recommended-products">
       <h2>Recommended Products</h2>
@@ -111,7 +111,7 @@ const FEATURED_COLLECTION_QUERY = `#graphql
       }
     }
   }
-` as const;
+`;
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
@@ -142,4 +142,4 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       }
     }
   }
-` as const;
+`;
