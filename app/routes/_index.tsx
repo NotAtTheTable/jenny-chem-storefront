@@ -6,6 +6,8 @@ import type {
   FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
+import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
+import ProductCard from '~/components/product/ProductCard';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
@@ -25,7 +27,7 @@ export default function Homepage() {
   return (
     <div className="home">
       <FeaturedCollection collection={data.featuredCollection} />
-      <RecommendedProducts products={data.recommendedProducts} />
+      <BestSellingProducts products={data.recommendedProducts} />
     </div>
   );
 }
@@ -52,34 +54,24 @@ function FeaturedCollection({
   );
 }
 
-function RecommendedProducts({
+function BestSellingProducts({
   products,
 }: Readonly<{
   products: Promise<RecommendedProductsQuery>;
 }>) {
   return (
     <div className="recommended-products">
-      <h2>Recommended Products</h2>
+      <h2>Our Best Sellers</h2>
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {({ products }) => (
-            <div className="recommended-products-grid">
+            <div className="flex flex-col gap-10 sm:flex-row">
               {products.nodes.map((product) => (
-                <Link
-                  key={product.id}
-                  className="recommended-product"
-                  to={`/products/${product.handle}`}
-                >
-                  <Image
-                    data={product.images.nodes[0]}
-                    aspectRatio="1/1"
-                    sizes="(min-width: 45em) 20vw, 50vw"
-                  />
-                  <h4>{product.title}</h4>
-                  <small>
-                    <Money data={product.priceRange.minVariantPrice} />
-                  </small>
-                </Link>
+                <ProductCard
+                  imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                  title={product.title}
+                  handle={product.handle}
+                />
               ))}
             </div>
           )}
