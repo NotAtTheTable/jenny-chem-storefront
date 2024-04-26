@@ -12,18 +12,21 @@ interface ProductCardProps {
 
 export default function ProductCard({ imageData, title, handle }: ProductCardProps) {
     return (
-        <div className="flex flex-col items-center max-w-xs min-w-max sm:min-w-60">
-            <div className="bg-light-grey flex-grow">
-
-                <Image
-                    data={imageData}
-                />
-
+        <div className="flex flex-col items-center justify-between w-52 h-100 m-4">
+            <div className='w-56'>
+                <div className="bg-light-grey justify-center items-center w-full h-72">
+                    <Image
+                        aspectRatio='4/5'
+                        data={imageData}
+                    />
+                </div>
+                <div className="m-2 text-center">{title}</div>
             </div>
-            {title}
-            <Link to={`/products/${handle}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                VIEW ALL SIZES
-            </Link>
+            <div className="">
+                <Link to={`/products/${handle}`} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                    VIEW ALL SIZES
+                </Link>
+            </div>
         </div>
     )
 }

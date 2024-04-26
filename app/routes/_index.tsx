@@ -65,7 +65,7 @@ function BestSellingProducts({
       <Suspense fallback={<div>Loading...</div>}>
         <Await resolve={products}>
           {({ products }) => (
-            <div className="flex flex-col gap-10 sm:flex-row">
+            <div className="flex sm:flex-row">
               {products.nodes.map((product) => (
                 <ProductCard
                   imageData={product.images.nodes[0] as StorefrontAPI.Image}
