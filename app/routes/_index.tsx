@@ -1,5 +1,5 @@
 import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Await, useLoaderData, Link, type MetaFunction } from '@remix-run/react';
+import { Await, useLoaderData, Link, type MetaFunction, useNavigate } from '@remix-run/react';
 import { Suspense } from 'react';
 import { Image, Money } from '@shopify/hydrogen';
 import type {
@@ -8,6 +8,7 @@ import type {
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
+import ArrowButton from '~/components/foundational/ArrowButton';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
@@ -54,6 +55,11 @@ function FeaturedCollection({
   );
 }
 
+function NavigateToProductPageButton({ handle }: { handle: string }) {
+  const navigate = useNavigate();
+  return <ArrowButton label="SEE ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+}
+
 function BestSellingProducts({
   products,
 }: Readonly<{
@@ -68,9 +74,11 @@ function BestSellingProducts({
             <div className="flex sm:flex-row">
               {products.nodes.map((product) => (
                 <ProductCard
+                  key={product.id}
                   imageData={product.images.nodes[0] as StorefrontAPI.Image}
                   title={product.title}
                   handle={product.handle}
+                  ActionElement={NavigateToProductPageButton}
                 />
               ))}
             </div>
