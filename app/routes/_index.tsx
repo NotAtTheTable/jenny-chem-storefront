@@ -1,14 +1,13 @@
 import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Await, useLoaderData, Link, type MetaFunction, useNavigate } from '@remix-run/react';
 import { Suspense } from 'react';
-import { Image, Money } from '@shopify/hydrogen';
 import type {
-  FeaturedCollectionFragment,
   RecommendedProductsQuery,
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
 import ArrowButton from '~/components/foundational/ArrowButton';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
@@ -16,48 +15,23 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const { storefront } = context;
-  const { collections } = await storefront.query(FEATURED_COLLECTION_QUERY);
-  const featuredCollection = collections.nodes[0];
   const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
 
-  return defer({ featuredCollection, recommendedProducts });
+  return defer({ recommendedProducts });
 }
 
 export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
     <div className="home">
-      <FeaturedCollection collection={data.featuredCollection} />
       <BestSellingProducts products={data.recommendedProducts} />
     </div>
   );
 }
 
-function FeaturedCollection({
-  collection,
-}: Readonly<{
-  collection: FeaturedCollectionFragment;
-}>) {
-  if (!collection) return null;
-  const image = collection?.image;
-  return (
-    <Link
-      className="featured-collection"
-      to={`/collections/${collection.handle}`}
-    >
-      {image && (
-        <div className="featured-collection-image">
-          <Image data={image} sizes="100vw" />
-        </div>
-      )}
-      <h1>{collection.title}</h1>
-    </Link>
-  );
-}
-
 function NavigateToProductPageButton({ handle }: { handle: string }) {
   const navigate = useNavigate();
-  return <ArrowButton label="SEE ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+  return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
 }
 
 function BestSellingProducts({
@@ -66,52 +40,42 @@ function BestSellingProducts({
   products: Promise<RecommendedProductsQuery>;
 }>) {
   return (
-    <div className="recommended-products">
-      <h2>Our Best Sellers</h2>
+    <div className="flex flex-col items-center">
+      <h2 className='text-center'>Our Best Sellers</h2>
       <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {({ products }) => (
-            <div className="flex sm:flex-row">
-              {products.nodes.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                  title={product.title}
-                  handle={product.handle}
-                  ActionElement={NavigateToProductPageButton}
-                />
-              ))}
-            </div>
-          )}
-        </Await>
+        <Carousel opts={{
+          align: "start",
+          loop: true,
+        }}
+          className="w-full max-w-6xl"
+        >
+          <CarouselContent className="-ml-1">
+            <Await resolve={products}>
+              {({ products }) => (
+                <>
+                  {products.nodes.map((product) => (
+                    <CarouselItem className="ml-1 pl-1 md:basis-1/2 lg:basis-1/5">
+                      <ProductCard
+                        key={product.id}
+                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                        title={product.title}
+                        handle={product.handle}
+                        ActionElement={NavigateToProductPageButton}
+                      />
+                    </CarouselItem>
+                  ))}
+                </>
+              )}
+            </Await>
+          </CarouselContent>
+          <CarouselNext style={{ top: "40%", right: "-4rem" }} />
+          <CarouselPrevious style={{ top: "40%", left: "-4.5rem" }} />
+        </Carousel>
       </Suspense>
       <br />
     </div>
   );
 }
-
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-`;
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   fragment RecommendedProduct on Product {
@@ -136,7 +100,7 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
   query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+    products(first: 8, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         ...RecommendedProduct
       }

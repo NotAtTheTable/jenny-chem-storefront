@@ -14,7 +14,6 @@ export default function ArrowButton({ label, onClick }: ArrowButtonProps) {
                 <p className="px-4" style={{ color: '#fff' }}>{label}</p>
                 <img src={lbarrow} />
             </div>
-
         </button >
     )
 }
