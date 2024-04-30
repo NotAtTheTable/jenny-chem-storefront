@@ -8,6 +8,7 @@ import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
 import ArrowButton from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
+import DashDivider from '~/components/foundational/DashDivider';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
@@ -41,22 +42,22 @@ function BestSellingProducts({
 }>) {
   return (
     <div className="flex flex-col items-center">
-      <h2 className='text-center'>Our Best Sellers</h2>
+      <h2 className='text-center text-6xl font-display'>Our Best Sellers</h2>
+      <DashDivider />
       <Suspense fallback={<div>Loading...</div>}>
         <Carousel opts={{
           align: "start",
           loop: true,
         }}
-          className="w-full max-w-6xl"
+          className="w-full max-w-5xl my-6"
         >
-          <CarouselContent className="-ml-1">
+          <CarouselContent className="-ml-2">
             <Await resolve={products}>
               {({ products }) => (
                 <>
                   {products.nodes.map((product) => (
-                    <CarouselItem className="ml-1 pl-1 md:basis-1/2 lg:basis-1/5">
+                    <CarouselItem key={product.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
                       <ProductCard
-                        key={product.id}
                         imageData={product.images.nodes[0] as StorefrontAPI.Image}
                         title={product.title}
                         handle={product.handle}

@@ -15,6 +15,10 @@ const config = {
       'jc-dark-blue': '#17255D',
       'jc-light-blue': '#7094E0'
     },
+    fontFamily: {
+      body: ["Cabin", "Roboto", "sans-serif"],
+      display: ["Bebas Neue", "Roboto", "sans-serif"]
+    },
     container: {
       center: true,
       padding: "2rem",
