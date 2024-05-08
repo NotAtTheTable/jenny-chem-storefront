@@ -75,7 +75,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const headerPromise = storefront.query(HEADER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
-      headerMenuHandle: 'main-menu', // Adjust to your header menu handle
+      headerMenuHandle: 'new-menu', // Adjust to your header menu handle
     },
   });
 
