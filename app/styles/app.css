@@ -168,7 +168,7 @@ aside li {
 
 .header-ctas {
   align-items: center;
-  justify-content: end;
+  justify-content: center;
   display: flex;
   grid-gap: 1rem;
   margin-left: auto;
