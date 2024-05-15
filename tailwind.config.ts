@@ -10,11 +10,6 @@ const config = {
   ],
   prefix: "",
   theme: {
-    colors: {
-      'jc-light-grey': '#F6F6F8',
-      'jc-dark-blue': '#17255D',
-      'jc-light-blue': '#7094E0'
-    },
     fontFamily: {
       body: ["Cabin", "Roboto", "sans-serif"],
       display: ["Bebas Neue", "Roboto", "sans-serif"]
@@ -27,6 +22,12 @@ const config = {
       },
     },
     extend: {
+      colors: {
+        'jc-light-grey': '#F6F6F8',
+        'jc-light-blue': '#7094E0',
+        'jc-dark-blue-100': '#080D3F',
+        'jc-dark-blue': '#17255D',
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

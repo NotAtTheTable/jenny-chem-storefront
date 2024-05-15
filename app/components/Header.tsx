@@ -1,18 +1,18 @@
-import {Await, NavLink} from '@remix-run/react';
-import {Suspense} from 'react';
-import type {HeaderQuery} from 'storefrontapi.generated';
-import type {LayoutProps} from './Layout';
-import {useRootLoaderData} from '~/lib/root-data';
+import { Await, NavLink } from '@remix-run/react';
+import { Suspense } from 'react';
+import type { HeaderQuery } from 'storefrontapi.generated';
+import type { LayoutProps } from './Layout';
+import { useRootLoaderData } from '~/lib/root-data';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
 type Viewport = 'desktop' | 'mobile';
 
-export function Header({header, isLoggedIn, cart}: HeaderProps) {
-  const {shop, menu} = header;
+export function Header({ header, isLoggedIn, cart }: HeaderProps) {
+  const { shop, menu } = header;
   return (
-    <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+    <header className="text-white flex justify-between items-center w-full drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue">
+      <NavLink className="flex-1" prefetch="intent" to="/" end>
         <strong>{shop.name}</strong>
       </NavLink>
       <HeaderMenu
@@ -34,8 +34,8 @@ export function HeaderMenu({
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
   viewport: Viewport;
 }) {
-  const {publicStoreDomain} = useRootLoaderData();
-  const className = `header-menu-${viewport}`;
+  const { publicStoreDomain } = useRootLoaderData();
+  const className = `header-menu-${viewport} font-display divide-x divide-jc-light-blue`;
 
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
     if (viewport === 'mobile') {
@@ -44,6 +44,8 @@ export function HeaderMenu({
     }
   }
 
+
+
   return (
     <nav className={className} role="navigation">
       {viewport === 'mobile' && (
@@ -51,7 +53,6 @@ export function HeaderMenu({
           end
           onClick={closeAside}
           prefetch="intent"
-          style={activeLinkStyle}
           to="/"
         >
           Home
@@ -63,18 +64,17 @@ export function HeaderMenu({
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
+            item.url.includes(publicStoreDomain) ||
+            item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
         return (
           <NavLink
-            className="header-menu-item"
+            className="header-menu-item px-4 my-4"
             end
             key={item.id}
             onClick={closeAside}
             prefetch="intent"
-            style={activeLinkStyle}
             to={url}
           >
             {item.title}
@@ -90,9 +90,9 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav className="header-ctas" role="navigation">
+    <nav className="header-ctas flex-1" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
+      <NavLink prefetch="intent" to="/account">
         <Suspense fallback="Sign in">
           <Await resolve={isLoggedIn} errorElement="Sign in">
             {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
@@ -117,11 +117,11 @@ function SearchToggle() {
   return <a href="#search-aside">Search</a>;
 }
 
-function CartBadge({count}: {count: number}) {
+function CartBadge({ count }: { count: number }) {
   return <a href="#cart-aside">Cart {count}</a>;
 }
 
-function CartToggle({cart}: Pick<HeaderProps, 'cart'>) {
+function CartToggle({ cart }: Pick<HeaderProps, 'cart'>) {
   return (
     <Suspense fallback={<CartBadge count={0} />}>
       <Await resolve={cart}>
@@ -175,16 +175,3 @@ const FALLBACK_HEADER_MENU = {
     },
   ],
 };
-
-function activeLinkStyle({
-  isActive,
-  isPending,
-}: {
-  isActive: boolean;
-  isPending: boolean;
-}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'black',
-  };
-}
