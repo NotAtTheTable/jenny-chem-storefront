@@ -25,6 +25,15 @@ export default function Homepage() {
   const data = useLoaderData<typeof loader>();
   return (
     <div className="home">
+      <Hero
+        title="Outdoor Surface Cleaners"
+        subtitle='Giving your vehicle a showroom look without 
+        damaging or effecting its paintwork, while 
+        keeping it’s gloss finish.'
+        ctaOnClick={() => { return 'b' }}
+        ctaText='Shop Collection'
+        backgroundImage='https://placehold.co/1600x500'
+      />
       <BestSellingProducts products={data.recommendedProducts} />
     </div>
   );
@@ -33,6 +42,31 @@ export default function Homepage() {
 function NavigateToProductPageButton({ handle }: { handle: string }) {
   const navigate = useNavigate();
   return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+}
+
+function Hero({
+  title,
+  subtitle,
+  ctaText,
+  ctaOnClick,
+  backgroundImage
+}: Readonly<{
+  title: string,
+  subtitle: string,
+  ctaText: string,
+  ctaOnClick: () => void,
+  backgroundImage: string
+}>) {
+  return <div
+    className="relative bg-cover bg-center flex items-center justify-center"
+    style={{ backgroundImage: `url(${backgroundImage})`, height: '500px' }}
+  >
+    <div className="relative z-10 text-center text-white p-8 max-w-2xl">
+      <h1 className="text-5xl font-bold mb-4">{title}</h1>
+      <p className="text-xl mb-8">{subtitle}</p>
+      <ArrowButton label={ctaText} onClick={ctaOnClick} />
+    </div>
+  </div>
 }
 
 function BestSellingProducts({
