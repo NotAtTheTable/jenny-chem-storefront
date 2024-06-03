@@ -1,6 +1,7 @@
 import { Await, NavLink } from '@remix-run/react';
 import { Suspense } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
+import { Image } from "@shopify/hydrogen"
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
 import ContactIcon from "~/assets/foundational/contact_icon.svg"
@@ -17,7 +18,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   return (
     <header className="text-white flex justify-between items-center w-full drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue">
       <NavLink className="flex-1 flex justify-center" prefetch="intent" to="/" end>
-        <strong>{shop.name}</strong>
+        <img className="w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
       </NavLink>
       <HeaderMenu
         menu={menu}

@@ -1,18 +1,48 @@
-import {NavLink} from '@remix-run/react';
-import type {FooterQuery, HeaderQuery} from 'storefrontapi.generated';
-import {useRootLoaderData} from '~/lib/root-data';
+import { NavLink } from '@remix-run/react';
+import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
+import { useRootLoaderData } from '~/lib/root-data';
+import FacebookIcon from '~/assets/social-icons/facebook-white.svg'
+import YoutubeIcon from '~/assets/social-icons/youtube-white.svg'
+import TiktokIcon from '~/assets/social-icons/tiktok-white.svg'
+import InstagramIcon from '~/assets/social-icons/instagram-white.svg'
+import { LightBlueArrowButton } from './foundational/ArrowButton';
 
 export function Footer({
   menu,
   shop,
-}: FooterQuery & {shop: HeaderQuery['shop']}) {
+}: FooterQuery & { shop: HeaderQuery['shop'] }) {
   return (
     <footer className="footer">
+      <MailingListBanner />
       {menu && shop?.primaryDomain?.url && (
         <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
       )}
     </footer>
   );
+}
+
+function MailingListBanner({ }: {}) {
+  return <div className="flex justify-between bg-jc-light-blue py-3 px-12">
+    <div>
+      <div className="flex flex-row gap-1">
+        <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
+        <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
+        <a href="https://google.com"><img alt="Instagram" src={InstagramIcon} /></a>
+        <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
+      </div>
+    </div>
+    <form className='max-w-none'>
+      <div className="flex flex-row gap-2">
+        <h3 style={{ lineHeight: 'inherit' }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
+        <input
+          className='rounded-full px-8 w-64'
+          placeholder='Enter your email address'
+        />
+        <LightBlueArrowButton onClick={() => { }} label='Sign Up' />
+
+      </div>
+    </form>
+  </div>
 }
 
 function FooterMenu({
@@ -22,7 +52,7 @@ function FooterMenu({
   menu: FooterQuery['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
 }) {
-  const {publicStoreDomain} = useRootLoaderData();
+  const { publicStoreDomain } = useRootLoaderData();
 
   return (
     <nav className="footer-menu" role="navigation">
@@ -31,8 +61,8 @@ function FooterMenu({
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
-          item.url.includes(publicStoreDomain) ||
-          item.url.includes(primaryDomainUrl)
+            item.url.includes(publicStoreDomain) ||
+            item.url.includes(primaryDomainUrl)
             ? new URL(item.url).pathname
             : item.url;
         const isExternal = !url.startsWith('/');

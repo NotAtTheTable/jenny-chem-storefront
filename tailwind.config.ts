@@ -44,6 +44,9 @@ const config = {
       },
     },
   },
+  safelist: [{
+    pattern: /(bg|text|border)-jc-(light|dark)-(blue|grey)/
+  }],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config
 
