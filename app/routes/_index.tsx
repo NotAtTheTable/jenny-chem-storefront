@@ -7,7 +7,7 @@ import type {
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
-import ArrowButton from '~/components/foundational/ArrowButton';
+import { ArrowButton } from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import DashDivider from '~/components/foundational/DashDivider';
 

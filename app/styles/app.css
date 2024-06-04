@@ -188,17 +188,6 @@ aside li {
   margin-top: auto;
 }
 
-.footer-menu {
-  align-items: center;
-  display: flex;
-  grid-gap: 1rem;
-  padding: 1rem;
-}
-
-.footer-menu a {
-  color: var(--color-light);
-}
-
 /*
 * --------------------------------------------------
 * components/Cart
