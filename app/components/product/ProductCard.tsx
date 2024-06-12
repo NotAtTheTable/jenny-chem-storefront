@@ -16,12 +16,13 @@ interface ProductCardProps {
 
 export default function ProductCard({ imageData, title, handle, ActionElement }: ProductCardProps) {
     return (
-        <div style={{ height: "20.5rem" }} className="flex flex-col items-center w-48 border rounded shadow">
+        <div style={{ height: "20.5rem" }} className="flex flex-col items-center w-52 border rounded shadow">
 
             <div className="bg-jc-light-grey flex justify-center items-center w-full h-56">
                 <Image
+                    height={"100"}
                     sizes="(min-width: 45em) 50vw, 100vw"
-                    aspectRatio='1'
+                    aspectRatio='1/1'
                     data={imageData}
                 />
             </div>

@@ -106,6 +106,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
+        <script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
       </head>
       <body>
         <Layout {...data}>
@@ -120,7 +121,7 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
-  const rootData = useLoaderData<typeof loader>();
+  //const rootData = useLoaderData<typeof loader>();
   const nonce = useNonce();
   let errorMessage = 'Unknown error';
   let errorStatus = 500;
@@ -141,7 +142,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-        <Layout {...rootData}>
+        <Layout cart={null as any} footer={null as any} header={null as any} isLoggedIn={false as any}>
           <div className="route-error">
             <h1>Oops</h1>
             <h2>{errorStatus}</h2>

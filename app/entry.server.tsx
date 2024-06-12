@@ -24,6 +24,14 @@ export default async function handleRequest(
       "'self'",
       'https://placehold.co',
       'https://cdn.shopify.com',
+    ],
+    scriptSrc: [
+      "'self'",
+      'http://widget.trustpilot.com'
+    ],
+    frameSrc: [
+      "'self'",
+      'https://widget.trustpilot.com'
     ]
   });
 
