@@ -211,7 +211,7 @@ function Tips({ blog }: Readonly<{
             >
               <CarouselContent className="-ml-2">
                 {blog?.articles.nodes.map((article) => (
-                  <CarouselItem key={article.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
+                  <CarouselItem key={article.id} className="pl-2 md:basis-1/3 lg:basis-1/4">
                     <ArticleCard
                       title={article.title}
                       publishedAt={new Date(article.publishedAt)}

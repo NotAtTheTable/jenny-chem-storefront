@@ -26,10 +26,10 @@ function MailingListBanner({ }: {}) {
     <div className="flex justify-between py-3 px-12 container">
       <div>
         <div className="flex flex-row gap-1">
-          <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
-          <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
-          <a href="https://google.com"><img alt="Instagram" src={InstagramIcon} /></a>
-          <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
+          <a href="https://www.facebook.com/Officialjennychem/"><img alt="Facebook" src={FacebookIcon} /></a>
+          <a href="https://www.youtube.com/channel/UC5UXsZSRBnF7sVBi0egZz6g"><img alt="Youtube" src={YoutubeIcon} /></a>
+          <a href="https://www.instagram.com/officialjennychem/"><img alt="Instagram" src={InstagramIcon} /></a>
+          <a href="https://tiktok.com/@jennychem.com"><img alt="Tiktok" src={TiktokIcon} /></a>
         </div>
       </div>
       <form className='max-w-none'>
@@ -40,7 +40,6 @@ function MailingListBanner({ }: {}) {
             placeholder='Enter your email address'
           />
           <LightBlueArrowButton onClick={() => { }} label='Sign Up' />
-
         </div>
       </form>
     </div>

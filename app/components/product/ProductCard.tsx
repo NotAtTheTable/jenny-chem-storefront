@@ -29,7 +29,7 @@ export default function ProductCard({ imageData, title, handle, ActionElement }:
             <div className='p-2 flex-1 flex flex-col justify-end w-full'>
                 <div className="line-clamp-2 text-left text-jc-dark-blue text-base leading-tight">{title}</div>
                 <div className="text-xl text-jc-dark-blue py-2">
-                    <span>£12.00</span><span className='border-l-2 border-jc-light-blue ml-3'>{/*trust pilot*/}</span>
+                    <span>£12.00</span>
                 </div>
                 {
                     ActionElement && <ActionElement handle={handle} />
