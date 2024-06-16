@@ -1,6 +1,6 @@
 import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Await, useLoaderData, Link, type MetaFunction, useNavigate } from '@remix-run/react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import type {
   RecommendedProductsQuery,
   RecommendedBlogPostsQuery
@@ -19,6 +19,9 @@ import LightBlueBubble from '~/assets/foundational/light_blue_bubbles.svg'
 
 import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
+import { isMobileViewport } from '~/lib/utils';
+
+type Viewport = 'desktop' | 'mobile';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
@@ -34,8 +37,17 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const { blog, recommendedProducts } = useLoaderData<typeof loader>();
+  const [isMobile, setIsMobile] = useState(isMobileViewport());
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(isMobileViewport());
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div>
+    <>
       <Hero
         title="Outdoor Surface Cleaners"
         subtitle='Giving your vehicle a showroom look without 
@@ -47,10 +59,10 @@ export default function Homepage() {
       />
       <BestSellingProducts products={recommendedProducts} />
       <TrustPilotBanner />
-      <GetSocial />
+      <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
       <Tips blog={blog} />
       <WhyOurFormula />
-    </div>
+    </>
   );
 }
 
@@ -142,38 +154,15 @@ function TrustPilotBanner({ }: {}) {
   </BlueBubbleBackground>
 }
 
-function GetSocial({ }: {}) {
-  return <div className='flex flex-row-reverse p-10 container'>
-    <div className='grid grid-cols-4 grid-rows-2 gap-4 p-4'>
-      <div className="w-48 h-auto shadow">
+function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
+  if (viewport === 'mobile') {
+    return <div className='flex flex-col items-center p-6 container text-center'>
+      <h1 className='text-center text-8xl text-jc-dark-blue font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
+      <DashDivider />
+      <div className="w-full h-auto my-4 shadow">
         <img src="https://placehold.co/400x400" alt="grid-1" />
       </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-2" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-3" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-4" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-5" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-6" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-7" />
-      </div>
-      <div className="w-48 h-auto shadow">
-        <img src="https://placehold.co/400x400" alt="grid-8" />
-      </div>
-    </div>
-    <div className='flex-1 p-4 text-jc-dark-blue'>
-      <h1 className='text-8xl font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
-      <div className='w-16'><DashDivider /></div>
-      <span>
+      <span className='mb-2'>
         Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
         have in development, along with limited time offers.<br /><br />
 
@@ -187,7 +176,53 @@ function GetSocial({ }: {}) {
         <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
       </div>
     </div>
-  </div>
+  } else {
+    return <div className='flex flex-row-reverse p-10 container'>
+      <div className='grid grid-cols-4 grid-rows-2 gap-4 p-4'>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-1" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-2" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-3" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-4" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-5" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-6" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-7" />
+        </div>
+        <div className="w-48 h-auto shadow">
+          <img src="https://placehold.co/400x400" alt="grid-8" />
+        </div>
+      </div>
+      <div className='flex-1 p-4 text-jc-dark-blue'>
+        <h1 className='text-8xl font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
+        <div className='w-16'><DashDivider /></div>
+        <span>
+          Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
+          have in development, along with limited time offers.<br /><br />
+
+          We also like to see what you can achieve by using our products.
+          Use the hashtag <span className='text-jc-light-blue'>#jennychem</span> when posting to show your results!
+        </span>
+        <div className="flex flex-row gap-1 my-2">
+          <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
+          <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
+          <a href="https://google.com"><img alt="Instagram" src={InstagramIcon} /></a>
+          <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
+        </div>
+      </div>
+    </div>
+  }
 }
 
 function Tips({ blog }: Readonly<{
