@@ -11,20 +11,14 @@ import { useState, useEffect } from 'react';
 import { isMobileViewport } from '~/lib/utils';
 
 import { CircleChevronRight } from "lucide-react"
+import { useViewport } from '~/hooks/useViewport';
 
 export function Footer({
   menu,
   shop,
 }: FooterQuery & { shop: HeaderQuery['shop'] }) {
 
-  const [isMobile, setIsMobile] = useState(isMobileViewport());
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(isMobileViewport());
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const isMobile = useViewport();
 
   return (
     <footer className="footer">

@@ -5,6 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function isMobileViewport() {
-  return window.matchMedia("(max-width: 48em)").matches;
-}
+export const isMobileViewport = (): boolean => {
+  return typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+};

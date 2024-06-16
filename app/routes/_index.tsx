@@ -20,6 +20,7 @@ import LightBlueBubble from '~/assets/foundational/light_blue_bubbles.svg'
 import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { isMobileViewport } from '~/lib/utils';
+import { useViewport } from '~/hooks/useViewport';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -37,14 +38,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
 export default function Homepage() {
   const { blog, recommendedProducts } = useLoaderData<typeof loader>();
-  const [isMobile, setIsMobile] = useState(isMobileViewport());
-
-  useEffect(() => {
-    const handleResize = () => setIsMobile(isMobileViewport());
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const isMobile = useViewport();
 
   return (
     <>
@@ -57,7 +51,7 @@ export default function Homepage() {
         ctaText='Shop Collection'
         backgroundImage='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774'
       />
-      <BestSellingProducts products={recommendedProducts} />
+      <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
       <TrustPilotBanner />
       <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
       <Tips blog={blog} />
@@ -102,48 +96,89 @@ function Hero({
 
 function BestSellingProducts({
   products,
+  viewport = 'desktop'
 }: Readonly<{
   products: Promise<RecommendedProductsQuery>;
+  viewport?: Viewport;
 }>) {
 
   const [currentLastIndex, setCurrentLastIndex] = useState<number>(0);
 
-  return (
-    <div className="flex flex-col items-center p-10 container">
-      <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
-      <DashDivider />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Carousel opts={{
-          align: "start",
-          loop: true,
-        }}
-          className="w-full max-w-6xl my-6"
-        >
-          <CarouselContent className="-ml-2">
-            <Await resolve={products}>
-              {({ products }) => (
-                <>
-                  {products.nodes.map((product) => (
-                    <CarouselItem key={product.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
-                      <ProductCard
-                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                        title={product.title}
-                        handle={product.handle}
-                        ActionElement={NavigateToProductPageButton}
-                      />
-                    </CarouselItem>
-                  ))}
-                </>
-              )}
-            </Await>
-          </CarouselContent>
-          <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
-          <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
-        </Carousel>
-      </Suspense>
-      <br />
-    </div>
-  );
+  if (viewport === "mobile") {
+    return (
+      <div className="flex flex-col items-center p-6 container">
+        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
+        <DashDivider />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Carousel opts={{
+            align: "start",
+            loop: true,
+          }}
+            className="w-72 my-6"
+          >
+            <CarouselContent className="-ml-4">
+              <Await resolve={products}>
+                {({ products }) => (
+                  <>
+                    {products.nodes.map((product) => (
+                      <CarouselItem key={product.id} className="pl-9 basis-1/1">
+                        <ProductCard
+                          imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                          title={product.title}
+                          handle={product.handle}
+                          ActionElement={NavigateToProductPageButton}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </>
+                )}
+              </Await>
+            </CarouselContent>
+            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
+            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
+          </Carousel>
+        </Suspense>
+        <br />
+      </div>
+    );
+  } else {
+    return (
+      <div className="flex flex-col items-center p-10 container">
+        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
+        <DashDivider />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Carousel opts={{
+            align: "start",
+            loop: true,
+          }}
+            className="w-full max-w-7xl my-6"
+          >
+            <CarouselContent className="-ml-2">
+              <Await resolve={products}>
+                {({ products }) => (
+                  <>
+                    {products.nodes.map((product) => (
+                      <CarouselItem key={product.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
+                        <ProductCard
+                          imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                          title={product.title}
+                          handle={product.handle}
+                          ActionElement={NavigateToProductPageButton}
+                        />
+                      </CarouselItem>
+                    ))}
+                  </>
+                )}
+              </Await>
+            </CarouselContent>
+            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
+            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
+          </Carousel>
+        </Suspense>
+        <br />
+      </div>
+    );
+  }
 }
 
 function TrustPilotBanner({ }: {}) {
@@ -292,61 +327,61 @@ function BlueBubbleBackground({ children }: { children: React.ReactNode }) {
 }
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
-    id
+                fragment RecommendedProduct on Product {
+                  id
     title
-    handle
-    priceRange {
-      minVariantPrice {
-        amount
+                handle
+                priceRange {
+                  minVariantPrice {
+                  amount
         currencyCode
       }
     }
-    images(first: 1) {
-      nodes {
-        id
+                images(first: 1) {
+                  nodes {
+                  id
         url
-        altText
-        width
-        height
+                altText
+                width
+                height
       }
     }
   }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 8, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...RecommendedProduct
-      }
+                query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
+                @inContext(country: $country, language: $language) {
+                  products(first: 8, sortKey: UPDATED_AT, reverse: true) {
+                  nodes {
+                  ...RecommendedProduct
+                }
     }
   }
-`;
+                `;
 
 const RECOMMENDED_BLOG_POSTS_QUERY = `#graphql
-  query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-        blog(handle: "news") {
-          id
+                query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)
+                @inContext(country: $country, language: $language) {
+                  blog(handle: "news") {
+                  id
           seo {
-            title
+                  title
             description
           }
-          articles(first: 20) {
-            nodes {
-              id
+                articles(first: 20) {
+                  nodes {
+                  id
               title
-              image {
-              	id
+                image {
+                  id
                 url
               }
-              publishedAt
-              excerpt
-              seo {
-                title
+                publishedAt
+                excerpt
+                seo {
+                  title
                 description
               }
             }
           }
         }
     }
-`;
+                `;

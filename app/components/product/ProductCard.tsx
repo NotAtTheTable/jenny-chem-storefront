@@ -16,9 +16,9 @@ interface ProductCardProps {
 
 export default function ProductCard({ imageData, title, handle, ActionElement }: ProductCardProps) {
     return (
-        <div style={{ height: "20.5rem" }} className="flex flex-col items-center w-52 border rounded shadow">
+        <div style={{ height: "28.5rem" }} className="flex flex-col items-center w-60 border rounded shadow">
 
-            <div className="bg-jc-light-grey flex justify-center items-center w-full h-56">
+            <div className="bg-jc-light-grey flex justify-center items-center w-full h-72">
                 <Image
                     height={"100"}
                     sizes="(min-width: 45em) 50vw, 100vw"
