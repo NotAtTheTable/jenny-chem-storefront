@@ -21,7 +21,7 @@ import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { isMobileViewport } from '~/lib/utils';
 
-type Viewport = 'desktop' | 'mobile';
+export type Viewport = 'desktop' | 'mobile';
 
 export const meta: MetaFunction = () => {
   return [{ title: 'JENNYCHEM | Home' }];
