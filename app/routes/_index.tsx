@@ -9,6 +9,7 @@ import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
+import Autoplay, { AutoplayType } from 'embla-carousel-autoplay'
 import DashDivider from '~/components/foundational/DashDivider';
 
 import FacebookIcon from '~/assets/social-icons/facebook.svg'
@@ -43,14 +44,7 @@ export default function Homepage() {
   if (isMobile !== null) {
     return (
       <>
-        <Hero
-          title="Outdoor Surface Cleaners"
-          subtitle='Giving your vehicle a showroom look without 
-        damaging or effecting its paintwork, while 
-        keeping it’s gloss finish.'
-          ctaOnClick={() => { return 'b' }}
-          ctaText='Shop Collection'
-          backgroundImage='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774'
+        <HeroSlideShow
           viewport={isMobile ? 'mobile' : 'desktop'}
         />
         <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
@@ -69,6 +63,74 @@ function NavigateToProductPageButton({ handle }: { handle: string }) {
   return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
 }
 
+function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
+
+  const data: HeroProps[] = [
+    {
+      title: "Outdoor Surface Cleaners",
+      subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
+      backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774',
+      ctaOnClick: () => { },
+      ctaText: 'Shop Collection',
+      viewport
+    },
+    {
+      title: "Traffic Film Removers",
+      subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
+      backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/defender_tyre_wash.jpg?v=1718738895',
+      ctaOnClick: () => { },
+      ctaText: 'Shop Collection',
+      viewport
+    },
+    {
+      title: "Snow Foam Shampoo",
+      subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
+      backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/soapy_sports_car.jpg?v=1718738897',
+      ctaOnClick: () => { },
+      ctaText: 'Shop Collection',
+      viewport
+    },
+    {
+      title: "Allow Wheel Cleaner",
+      subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
+      backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/alloys-being-washed.jpg?v=1718738896',
+      ctaOnClick: () => { },
+      ctaText: 'Shop Collection',
+      viewport
+    }
+  ]
+
+  return <Carousel
+    opts={{
+      loop: true,
+      duration: 35
+    }}
+    plugins={[
+      //@ts-ignore
+      Autoplay({
+        delay: 5000,
+      }),
+    ]}
+  >
+    <CarouselContent>
+      {data.map((heroProps) => (
+        <CarouselItem className='pl-0'>
+          <Hero {...heroProps} />
+        </CarouselItem>
+      ))}
+    </CarouselContent>
+  </Carousel>
+}
+
+interface HeroProps {
+  title: string,
+  subtitle: string,
+  ctaText: string,
+  ctaOnClick: () => void,
+  backgroundImage: string
+  viewport?: Viewport
+}
+
 function Hero({
   title,
   subtitle,
@@ -76,17 +138,10 @@ function Hero({
   ctaOnClick,
   backgroundImage,
   viewport = 'desktop'
-}: Readonly<{
-  title: string,
-  subtitle: string,
-  ctaText: string,
-  ctaOnClick: () => void,
-  backgroundImage: string
-  viewport?: Viewport
-}>) {
+}: Readonly<HeroProps>) {
   if (viewport === 'mobile') {
     return <div
-      className="relative bg-cover bg-center "
+      className="relative bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundImage})`, height: '700px' }}
     >
       <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
@@ -106,7 +161,7 @@ function Hero({
     >
       <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
       <div className='container flex items-center justify-left h-full p-10'>
-        <div className="relative z-10 text-left text-white max-w-2xl">
+        <div className="relative z-10 text-left text-white max-w-md">
           <h1 className="text-9xl font-display mb-4">{title}</h1>
           <div className='w-16'><DashDivider /></div>
           <p className="text-xl mb-8">{subtitle}</p>

@@ -18,7 +18,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   return (
     <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
       <header className="container text-white flex justify-between items-center w-full">
-        <NavLink className="flex-1 flex justify-center" prefetch="intent" to="/" end>
+        <NavLink className="flex-1 flex justify-start" prefetch="intent" to="/" end>
           <img className="w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
         </NavLink>
         <HeaderMenu
@@ -50,8 +50,6 @@ export function HeaderMenu({
       window.location.href = event.currentTarget.href;
     }
   }
-
-
 
   return (
     <nav className={className} role="navigation">
