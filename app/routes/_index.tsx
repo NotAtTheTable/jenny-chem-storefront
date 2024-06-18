@@ -50,12 +50,13 @@ export default function Homepage() {
         ctaOnClick={() => { return 'b' }}
         ctaText='Shop Collection'
         backgroundImage='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774'
+        viewport={isMobile ? 'mobile' : 'desktop'}
       />
       <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
       <TrustPilotBanner />
       <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
-      <Tips blog={blog} />
-      <WhyOurFormula />
+      <Tips blog={blog} viewport={isMobile ? 'mobile' : 'desktop'} />
+      <WhyOurFormula viewport={isMobile ? 'mobile' : 'desktop'} />
     </>
   );
 }
@@ -70,28 +71,47 @@ function Hero({
   subtitle,
   ctaText,
   ctaOnClick,
-  backgroundImage
+  backgroundImage,
+  viewport = 'desktop'
 }: Readonly<{
   title: string,
   subtitle: string,
   ctaText: string,
   ctaOnClick: () => void,
   backgroundImage: string
+  viewport?: Viewport
 }>) {
-  return <div
-    className="relative bg-cover bg-center "
-    style={{ backgroundImage: `url(${backgroundImage})`, height: '700px' }}
-  >
-    <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
-    <div className='container flex items-center justify-left h-full p-10'>
-      <div className="relative z-10 text-left text-white max-w-2xl">
-        <h1 className="text-9xl font-display mb-4">{title}</h1>
-        <div className='w-16'><DashDivider /></div>
-        <p className="text-xl mb-8">{subtitle}</p>
-        <ArrowButton label={ctaText} onClick={ctaOnClick} />
+  if (viewport === 'mobile') {
+    return <div
+      className="relative bg-cover bg-center "
+      style={{ backgroundImage: `url(${backgroundImage})`, height: '700px' }}
+    >
+      <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
+      <div className='container flex items-center justify-center h-full p-10'>
+        <div className="relative z-10 text-center text-white max-w-2xl">
+          <h1 className="text-8xl font-display mb-4">{title}</h1>
+          <div className='w-full'><DashDivider light /></div>
+          <p className="text-xl mb-8">{subtitle}</p>
+          <ArrowButton label={ctaText} onClick={ctaOnClick} />
+        </div>
       </div>
     </div>
-  </div>
+  } else {
+    return <div
+      className="relative bg-cover bg-center "
+      style={{ backgroundImage: `url(${backgroundImage})`, height: '700px' }}
+    >
+      <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
+      <div className='container flex items-center justify-left h-full p-10'>
+        <div className="relative z-10 text-left text-white max-w-2xl">
+          <h1 className="text-9xl font-display mb-4">{title}</h1>
+          <div className='w-16'><DashDivider /></div>
+          <p className="text-xl mb-8">{subtitle}</p>
+          <ArrowButton label={ctaText} onClick={ctaOnClick} />
+        </div>
+      </div>
+    </div>
+  }
 }
 
 function BestSellingProducts({
@@ -134,8 +154,8 @@ function BestSellingProducts({
                 )}
               </Await>
             </CarouselContent>
-            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
-            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
+            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-2rem" }} />
+            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2.5rem" }} />
           </Carousel>
         </Suspense>
         <br />
@@ -144,7 +164,7 @@ function BestSellingProducts({
   } else {
     return (
       <div className="flex flex-col items-center p-10 container">
-        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
+        <h2 className='text-center text-7xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
         <DashDivider />
         <Suspense fallback={<div>Loading...</div>}>
           <Carousel opts={{
@@ -171,8 +191,8 @@ function BestSellingProducts({
                 )}
               </Await>
             </CarouselContent>
-            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
-            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
+            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-3rem" }} />
+            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-3.5rem" }} />
           </Carousel>
         </Suspense>
         <br />
@@ -192,7 +212,7 @@ function TrustPilotBanner({ }: {}) {
 function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center p-6 container text-center'>
-      <h1 className='text-center text-8xl text-jc-dark-blue font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
+      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
       <DashDivider />
       <div className="w-full h-auto my-4 shadow">
         <img src="https://placehold.co/400x400" alt="grid-1" />
@@ -260,62 +280,114 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
   }
 }
 
-function Tips({ blog }: Readonly<{
+function Tips({ blog, viewport = 'desktop' }: Readonly<{
   blog: Promise<RecommendedBlogPostsQuery>
+  viewport?: Viewport
 }>) {
 
   const [currentLastIndex, setCurrentLastIndex] = useState<number>(0);
 
-  return <BlueBubbleBackground>
-    <div className="flex flex-col items-center p-10 container ">
-      <h2 className='text-center text-6xl text-jc-light-blue font-display'>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></h2>
-      <DashDivider />
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={blog}>
-          {({ blog }) => (
-            <Carousel opts={{
-              align: "start",
-              loop: true,
-            }}
-              className="w-full max-w-6xl my-6"
-            >
-              <CarouselContent className="-ml-2">
-                {blog?.articles.nodes.map((article) => (
-                  <CarouselItem key={article.id} className="pl-2 md:basis-1/3 lg:basis-1/4">
-                    <ArticleCard
-                      title={article.title}
-                      publishedAt={new Date(article.publishedAt)}
-                      imageUrl={article.image?.url || undefined}
-                      onClick={() => { return '' }}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
-              <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.5rem" }} />
-            </Carousel>
-          )}
-        </Await>
-      </Suspense>
-    </div>
-  </BlueBubbleBackground >
+  if (viewport === 'mobile') {
+    return <BlueBubbleBackground>
+      <div className="flex flex-col items-center p-10 container ">
+        <h2 className='text-center text-6xl text-jc-light-blue font-display'>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></h2>
+        <DashDivider />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={blog}>
+            {({ blog }) => (
+              <Carousel opts={{
+                align: "start",
+                loop: true,
+              }}
+                className="w-72 my-6"
+              >
+                <CarouselContent className="-ml-4">
+                  {blog?.articles.nodes.map((article) => (
+                    <CarouselItem key={article.id} className="pl-9 basis-1/1">
+                      <ArticleCard
+                        title={article.title}
+                        publishedAt={new Date(article.publishedAt)}
+                        imageUrl={article.image?.url || undefined}
+                        onClick={() => { return '' }}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-2rem" }} />
+                <CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2.5rem" }} />
+              </Carousel>
+            )}
+          </Await>
+        </Suspense>
+      </div>
+    </BlueBubbleBackground >
+  } else {
+    return <BlueBubbleBackground>
+      <div className="flex flex-col items-center p-10 container ">
+        <h2 className='text-center text-6xl text-jc-light-blue font-display'>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></h2>
+        <DashDivider />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={blog}>
+            {({ blog }) => (
+              <Carousel opts={{
+                align: "start",
+                loop: true,
+              }}
+                className="w-full max-w-6xl my-6"
+              >
+                <CarouselContent className="-ml-2">
+                  {blog?.articles.nodes.map((article) => (
+                    <CarouselItem key={article.id} className="pl-2 md:basis-1/3 lg:basis-1/4">
+                      <ArticleCard
+                        title={article.title}
+                        publishedAt={new Date(article.publishedAt)}
+                        imageUrl={article.image?.url || undefined}
+                        onClick={() => { return '' }}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-3rem" }} />
+                <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-3.5rem" }} />
+              </Carousel>
+            )}
+          </Await>
+        </Suspense>
+      </div>
+    </BlueBubbleBackground >
+  }
+
+
 }
 
-function WhyOurFormula({ }: {}) {
-  return <div className='flex flex-row p-10 container'>
-    <div className='p-4 w-2/3'>
-      <div className="shadow">
+function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
+  if (viewport === 'mobile') {
+    return <div className='flex flex-col items-center text-center p-6 container text-jc-dark-blue'>
+      <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
+      <div className='w-full'><DashDivider /></div>
+      < div className='w-full' >
         <img src="https://placehold.co/900x500" alt="grid-1" />
+      </div >
+      <p className='mt-5'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
+        Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
+      <div className='mt-5'><ArrowButton label="About Us" onClick={() => ''} /></div>
+    </div >
+  } else {
+    return <div className='flex flex-row p-10 container'>
+      <div className='p-4 w-2/3'>
+        <div className="shadow">
+          <img src="https://placehold.co/900x500" alt="grid-1" />
+        </div>
+      </div>
+      <div className='flex-1 p-4 text-jc-dark-blue'>
+        <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
+        <div className='w-8'><DashDivider /></div>
+        <p>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
+          Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
+        <div className='mt-3'><ArrowButton label="About Us" onClick={() => ''} /></div>
       </div>
     </div>
-    <div className='flex-1 p-4 text-jc-dark-blue'>
-      <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
-      <div className='w-8'><DashDivider /></div>
-      <p>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
-        Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
-      <div className='mt-3'><ArrowButton label="About Us" onClick={() => ''} /></div>
-    </div>
-  </div>
+  }
 }
 
 function BlueBubbleBackground({ children }: { children: React.ReactNode }) {
