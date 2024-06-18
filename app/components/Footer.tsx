@@ -19,15 +19,19 @@ export function Footer({
 }: FooterQuery & { shop: HeaderQuery['shop'] }) {
 
   const isMobile = useViewport();
+  if (isMobile !== null) {
+    return (
+      <footer className="footer">
+        <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
+        {menu && shop?.primaryDomain?.url && (
+          <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+        )}
+      </footer>
+    );
+  } else {
+    return <></>
+  }
 
-  return (
-    <footer className="footer">
-      <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
-      {menu && shop?.primaryDomain?.url && (
-        <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
-      )}
-    </footer>
-  );
 }
 
 function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {

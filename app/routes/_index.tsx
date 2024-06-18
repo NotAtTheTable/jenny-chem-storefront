@@ -15,12 +15,12 @@ import FacebookIcon from '~/assets/social-icons/facebook.svg'
 import YoutubeIcon from '~/assets/social-icons/youtube.svg'
 import TiktokIcon from '~/assets/social-icons/tiktok.svg'
 import InstagramIcon from '~/assets/social-icons/instagram.svg'
-import LightBlueBubble from '~/assets/foundational/light_blue_bubbles.svg'
+
 
 import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
-import { isMobileViewport } from '~/lib/utils';
 import { useViewport } from '~/hooks/useViewport';
+import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -40,25 +40,28 @@ export default function Homepage() {
   const { blog, recommendedProducts } = useLoaderData<typeof loader>();
   const isMobile = useViewport();
 
-  return (
-    <>
-      <Hero
-        title="Outdoor Surface Cleaners"
-        subtitle='Giving your vehicle a showroom look without 
+  if (isMobile !== null) {
+    return (
+      <>
+        <Hero
+          title="Outdoor Surface Cleaners"
+          subtitle='Giving your vehicle a showroom look without 
         damaging or effecting its paintwork, while 
         keeping it’s gloss finish.'
-        ctaOnClick={() => { return 'b' }}
-        ctaText='Shop Collection'
-        backgroundImage='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774'
-        viewport={isMobile ? 'mobile' : 'desktop'}
-      />
-      <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
-      <TrustPilotBanner />
-      <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
-      <Tips blog={blog} viewport={isMobile ? 'mobile' : 'desktop'} />
-      <WhyOurFormula viewport={isMobile ? 'mobile' : 'desktop'} />
-    </>
-  );
+          ctaOnClick={() => { return 'b' }}
+          ctaText='Shop Collection'
+          backgroundImage='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774'
+          viewport={isMobile ? 'mobile' : 'desktop'}
+        />
+        <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
+        <TrustPilotBanner viewport={isMobile ? 'mobile' : 'desktop'} />
+        <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
+        <Tips blog={blog} viewport={isMobile ? 'mobile' : 'desktop'} />
+        <WhyOurFormula viewport={isMobile ? 'mobile' : 'desktop'} />
+      </>
+    );
+  }
+  else return <></>
 }
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
@@ -201,8 +204,8 @@ function BestSellingProducts({
   }
 }
 
-function TrustPilotBanner({ }: {}) {
-  return <BlueBubbleBackground>
+function TrustPilotBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
+  return <BlueBubbleBackground >
     <div className='p-10 container'>
       <TrustBox />
     </div>
@@ -388,14 +391,6 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
       </div>
     </div>
   }
-}
-
-function BlueBubbleBackground({ children }: { children: React.ReactNode }) {
-  return <div className='relative bg-jc-dark-blue-100 overflow-hidden z-0'>
-    <img src={LightBlueBubble} alt="left Bubble Background" className='absolute z-1' style={{ width: '50%', left: '-20%', top: '-30%' }} />
-    <img src={LightBlueBubble} alt="right Bubble Background" className='absolute z-1' style={{ width: '50%', right: '-20%', top: '-30%' }} />
-    <div className='z-2'>{children}</div>
-  </div>
 }
 
 const RECOMMENDED_PRODUCTS_QUERY = `#graphql
