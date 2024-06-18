@@ -9,6 +9,8 @@ import { CircleChevronLeft, CircleChevronRight } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
+import "./carousel.css"
+
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
 type CarouselOptions = UseCarouselParameters[0]
@@ -27,6 +29,8 @@ type CarouselContextProps = {
   scrollPrev: () => void
   scrollNext: () => void
   scrollTo: (index: number) => void
+  snapPoints: number[]
+  selectedSnapPoint: number
   canScrollPrev: boolean
   canScrollNext: boolean
 } & CarouselProps
@@ -68,6 +72,8 @@ const Carousel = React.forwardRef<
     )
     const [canScrollPrev, setCanScrollPrev] = React.useState(false)
     const [canScrollNext, setCanScrollNext] = React.useState(false)
+    const [snapPoints, setSnapPoints] = React.useState<number[]>([]);
+    const [selectedSnapPoint, setSelectedSnapPoint] = React.useState<number>(0);
 
     const onSelect = React.useCallback((api: CarouselApi) => {
       if (!api) {
@@ -76,6 +82,8 @@ const Carousel = React.forwardRef<
 
       setCanScrollPrev(api.canScrollPrev())
       setCanScrollNext(api.canScrollNext())
+      setSnapPoints(api.scrollSnapList())
+      setSelectedSnapPoint(api.selectedScrollSnap())
     }, [])
 
     const scrollPrev = React.useCallback(() => {
@@ -136,6 +144,8 @@ const Carousel = React.forwardRef<
           scrollPrev,
           scrollNext,
           scrollTo,
+          selectedSnapPoint,
+          snapPoints,
           canScrollPrev,
           canScrollNext,
         }}
@@ -264,6 +274,36 @@ const CarouselNext = React.forwardRef<
 })
 CarouselNext.displayName = "CarouselNext"
 
+const CarouselBreadcrumbs = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button>
+>(({ className }, ref) => {
+  const { snapPoints, selectedSnapPoint, scrollTo } = useCarousel();
+
+  const handleClick = (index: number) => {
+    scrollTo(index);
+  }
+  return (
+    <div className="breadcrumbs">
+      {
+        snapPoints.map((point: number, index: number) => (
+          < button
+            key={index}
+            ref={ref}
+            className={cn(
+              'breadcrumb',
+              `${index == selectedSnapPoint ? 'breadcrumb--selected' : ''}`,
+              className)}
+            onClick={() => handleClick(index)}
+          >
+          </button >
+        ))
+      }
+    </div>
+  )
+})
+CarouselBreadcrumbs.displayName = "CarouselBreadcrumbs"
+
 export {
   type CarouselApi,
   Carousel,
@@ -271,4 +311,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselBreadcrumbs
 }

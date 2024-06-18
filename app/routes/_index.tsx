@@ -8,7 +8,7 @@ import type {
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
+import { Carousel, CarouselBreadcrumbs, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import Autoplay, { AutoplayType } from 'embla-carousel-autoplay'
 import DashDivider from '~/components/foundational/DashDivider';
 
@@ -108,7 +108,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
     plugins={[
       //@ts-ignore
       Autoplay({
-        delay: 5000,
+        delay: 7000,
       }),
     ]}
   >
@@ -119,6 +119,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
         </CarouselItem>
       ))}
     </CarouselContent>
+    <CarouselBreadcrumbs />
   </Carousel>
 }
 
