@@ -19,7 +19,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
     <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
       <header className="container text-white flex justify-between items-center w-full">
         <NavLink className="flex-1 flex justify-start" prefetch="intent" to="/" end>
-          <img className="w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
+          <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
         </NavLink>
         <HeaderMenu
           menu={menu}
@@ -115,7 +115,7 @@ function HeaderCtas({
       <NavLink className={"flex flex-col items-center"} prefetch="intent" to="/account">
         <div className="relative">
           <img alt="basket-icon" className="h-7" src={BasketIcon} />
-          <div className="text-xs absolute m-auto" style={{ top: "10px", left: "12px" }}>
+          <div className="text-xs absolute m-auto" style={{ top: "12px", left: "10px" }}>
             <Suspense fallback="0">
               <Await resolve={cart}>
                 {(cart) => {

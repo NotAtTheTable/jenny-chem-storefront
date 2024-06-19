@@ -26,14 +26,15 @@ export function Footer({
   const isMobile = useViewport();
   if (isMobile !== null) {
     return (
-      <BlueBubbleBackground>
-        <footer className="footer">
-          <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
+
+      <footer className="footer">
+        <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
+        <BlueBubbleBackground>
           {menu && shop?.primaryDomain?.url && (
             <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
           )}
-        </footer>
-      </BlueBubbleBackground>
+        </BlueBubbleBackground>
+      </footer>
     );
   } else {
     return <></>
