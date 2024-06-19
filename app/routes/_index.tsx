@@ -23,8 +23,6 @@ import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
-import { Video } from '@shopify/hydrogen';
-import { CirclePlay } from 'lucide-react';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -209,6 +207,7 @@ function BestSellingProducts({
                           title={product.title}
                           handle={product.handle}
                           ActionElement={NavigateToProductPageButton}
+                          sku={product.variants.nodes[0].sku as string}
                         />
                       </CarouselItem>
                     ))}
@@ -246,6 +245,7 @@ function BestSellingProducts({
                           title={product.title}
                           handle={product.handle}
                           ActionElement={NavigateToProductPageButton}
+                          sku={product.variants.nodes[0].sku as string}
                         />
                       </CarouselItem>
                     ))}
@@ -476,10 +476,15 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
                 handle
                 priceRange {
                   minVariantPrice {
-                  amount
-        currencyCode
-      }
-    }
+                    amount
+                    currencyCode
+                  }
+                }
+                variants(first: 1) {
+                  nodes {
+                    sku
+                  }
+                }
                 images(first: 1) {
                   nodes {
                   id
