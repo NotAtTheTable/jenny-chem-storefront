@@ -1,6 +1,6 @@
 import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Await, useLoaderData, Link, type MetaFunction, useNavigate } from '@remix-run/react';
-import { Suspense, useEffect, useState } from 'react';
+import { Await, useLoaderData, type MetaFunction, useNavigate } from '@remix-run/react';
+import { Suspense, useState } from 'react';
 import type {
   RecommendedProductsQuery,
   RecommendedBlogPostsQuery
@@ -9,8 +9,9 @@ import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/product/ProductCard';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselBreadcrumbs, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
-import Autoplay, { AutoplayType } from 'embla-carousel-autoplay'
+import Autoplay from 'embla-carousel-autoplay'
 import DashDivider from '~/components/foundational/DashDivider';
+import ReactPlayer from 'react-player'
 
 import FacebookIcon from '~/assets/social-icons/facebook.svg'
 import YoutubeIcon from '~/assets/social-icons/youtube.svg'
@@ -22,6 +23,8 @@ import { ArticleCard } from '~/components/blog/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
+import { Video } from '@shopify/hydrogen';
+import { CirclePlay } from 'lucide-react';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -269,12 +272,47 @@ function TrustPilotBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
 }
 
 function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
+
+  const socialImages = [{
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/merc-wheel.jpg?v=1718809192',
+    alt: 'mercedes_tyre',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/combine-spray.jpg?v=1718810056',
+    alt: 'spraying_combine_harvester',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jen-protect.jpg?v=1718809189',
+    alt: 'jen_spray',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/100-porsche.jpg?v=1718809192',
+    alt: '100_porsche_interior',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/tfr-ultra.jpg?v=1718809191',
+    alt: 'tfr_ultra',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/kermit-porsche.jpg?v=1718809192',
+    alt: 'kermit_porsche_interior',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/dashboard_spray.jpg?v=1718809190',
+    alt: 'dashboard_spray',
+  },
+  {
+    url: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/discovery-clean.jpg?v=1718809253',
+    alt: 'landrover_discovery',
+  }
+  ]
+
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center p-6 container text-center'>
       <h1 className='text-center text-7xl text-jc-dark-blue font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
       <DashDivider />
-      <div className="w-full h-auto my-4 shadow">
-        <img src="https://placehold.co/400x400" alt="grid-1" />
+      <div className="w-full h-auto my-4 rounded-lg drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
+        <img src="https://cdn.shopify.com/s/files/1/0032/5474/7185/files/kermit-porsche.jpg?v=1718809192" alt="grid-1" />
       </div>
       <span className='mb-2'>
         Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
@@ -292,31 +330,13 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
     </div>
   } else {
     return <div className='flex flex-row-reverse p-10 container'>
-      <div className='grid grid-cols-4 grid-rows-2 gap-4 p-4'>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-1" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-2" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-3" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-4" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-5" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-6" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-7" />
-        </div>
-        <div className="w-48 h-auto shadow">
-          <img src="https://placehold.co/400x400" alt="grid-8" />
-        </div>
+      <div className='grid grid-cols-4 grid-rows-2 gap-4 gap-y-0 p-4 '>
+        {socialImages.map(({ url, alt }) => (
+          <div className="w-48 h-48 overflow-hidden drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
+            <img className='w-full h-full object-cover rounded-lg' src={url} alt={alt} />
+          </div>
+        ))}
+
       </div>
       <div className='flex-1 p-4 text-jc-dark-blue'>
         <h1 className='text-8xl font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
@@ -424,8 +444,8 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
     return <div className='flex flex-col items-center text-center p-6 container text-jc-dark-blue'>
       <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
       <div className='w-full'><DashDivider /></div>
-      < div className='w-full' >
-        <img src="https://placehold.co/900x500" alt="grid-1" />
+      < div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
+        <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
       </div >
       <p className='mt-5'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
         Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
@@ -434,8 +454,8 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
   } else {
     return <div className='flex flex-row p-10 container'>
       <div className='p-4 w-2/3'>
-        <div className="shadow">
-          <img src="https://placehold.co/900x500" alt="grid-1" />
+        <div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden">
+          <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
         </div>
       </div>
       <div className='flex-1 p-4 text-jc-dark-blue'>
