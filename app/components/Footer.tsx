@@ -7,11 +7,15 @@ import TiktokIcon from '~/assets/social-icons/tiktok-white.svg'
 import InstagramIcon from '~/assets/social-icons/instagram-white.svg'
 import { LightBlueArrowButton } from './foundational/ArrowButton';
 import { Viewport } from '~/routes/_index';
-import { useState, useEffect } from 'react';
-import { isMobileViewport } from '~/lib/utils';
 
 import { CircleChevronRight } from "lucide-react"
 import { useViewport } from '~/hooks/useViewport';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
 
 export function Footer({
   menu,
@@ -223,14 +227,30 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
   }]
 
   if (viewport === 'mobile') {
-    return <div className='flex flex-col gap-2 w-full'>
-      {data.map((section) => (
-        <div key={section.heading} className='flex items-center justify-between pb-2 flex-row border-b border-jc-light-blue'>
-          <h3 className='text-white font-body text-xl'>{section.heading}</h3>
+    return <div className='flex flex-col w-full'>
+      <Accordion collapsible type="single">
+        {data.map((section, index) => (
+          <AccordionItem value={`value_${index}`} className="border-b-2 border-jc-light-blue">
+            <AccordionTrigger>
+              <div key={section.heading} className='flex items-center w-full justify-between flex-row '>
+                <h3 className='text-white font-body text-xl'>{section.heading}</h3>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className='flex flex-col gap-4 '>
+              {section.links.map((link) => (
+                <a key={link.href} className='text-white font-body pb-1 text-xsm' href={link.href}>{link.label}</a>
+              ))}
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+      <NavLink to="https://shopify.com/3254747185/account">
+        <div className='flex items-center justify-between py-3 flex-row border-b border-jc-light-blue'>
+          <h3 className='text-white font-body text-xl'>Trade & Customer Login</h3>
           <CircleChevronRight color='white' className='w-6 h-6' strokeWidth={1} />
         </div>
-      ))}
-    </div>
+      </NavLink>
+    </div >
   } else {
     return <div className='flex flex-row gap-6'>
       {
