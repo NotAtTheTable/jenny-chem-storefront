@@ -16,6 +16,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { BlueBubbleBackground } from './foundational/BlueBubbleBackground';
 
 export function Footer({
   menu,
@@ -25,12 +26,14 @@ export function Footer({
   const isMobile = useViewport();
   if (isMobile !== null) {
     return (
-      <footer className="footer">
-        <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
-        {menu && shop?.primaryDomain?.url && (
-          <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
-        )}
-      </footer>
+      <BlueBubbleBackground>
+        <footer className="footer">
+          <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
+          {menu && shop?.primaryDomain?.url && (
+            <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+          )}
+        </footer>
+      </BlueBubbleBackground>
     );
   } else {
     return <></>
