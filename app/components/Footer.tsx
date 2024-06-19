@@ -104,6 +104,35 @@ function FooterMenu({
             <a href="https://www.instagram.com/officialjennychem/"><img alt="Instagram" src={InstagramIcon} /></a>
             <a href="https://tiktok.com/@jennychem.com"><img alt="Tiktok" src={TiktokIcon} /></a>
           </div>
+          <nav className="text-white font-body text-xs divide-x divide-white pt-3" role="navigation">
+            {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
+              if (!item.url) return null;
+              // if the url is internal, we strip the domain
+              const url =
+                item.url.includes('myshopify.com') ||
+                  item.url.includes(publicStoreDomain) ||
+                  item.url.includes(primaryDomainUrl)
+                  ? new URL(item.url).pathname
+                  : item.url;
+              const isExternal = !url.startsWith('/');
+              return isExternal ? (
+                <a className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`} href={url} key={item.id} rel="noopener noreferrer" target="_blank">
+                  {item.title}
+                </a>
+              ) : (
+                <NavLink
+                  className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
+                  end
+                  key={item.id}
+                  prefetch="intent"
+                  style={activeLinkStyle}
+                  to={url}
+                >
+                  {item.title}
+                </NavLink>
+              );
+            })}
+          </nav>
           <p className='text-white text-xs text-center'>
             &copy; 2024, Jennychem Limited | All Rights Reserved.<br />
             Company registration number: 00000000 | VAT number: GB 000000000
