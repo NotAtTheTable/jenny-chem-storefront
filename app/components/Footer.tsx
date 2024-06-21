@@ -263,7 +263,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
     return <div className='flex flex-col w-full'>
       <Accordion collapsible type="single">
         {data.map((section, index) => (
-          <AccordionItem value={`value_${index}`} className="border-b-2 border-jc-light-blue">
+          <AccordionItem key={index} value={`value_${index}`} className="border-b-2 border-jc-light-blue">
             <AccordionTrigger>
               <div key={section.heading} className='flex items-center w-full justify-between flex-row '>
                 <h3 className='text-white font-body text-xl'>{section.heading}</h3>

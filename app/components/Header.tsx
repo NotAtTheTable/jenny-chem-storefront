@@ -1,13 +1,12 @@
 import { Await, NavLink } from '@remix-run/react';
 import { Suspense } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
-import { Image } from "@shopify/hydrogen"
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
 import ContactIcon from "~/assets/foundational/contact_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
-import { Search } from 'lucide-react';
+import { AlignJustify, Search, SearchIcon } from 'lucide-react';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -17,8 +16,12 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
   return (
     <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
-      <header className="container text-white flex justify-between items-center w-full">
-        <NavLink className="flex-1 flex justify-start" prefetch="intent" to="/" end>
+      <header className="container text-white flex justify-between items-center w-full p-4 md:p-0">
+        <div className='flex flex-row gap-4 absolute'>
+          <HeaderMenuMobileToggle />
+          <HeaderMobileSearchToggle />
+        </div>
+        <NavLink className="flex-1 flex justify-center md:justify-start" prefetch="intent" to="/" end>
           <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
         </NavLink>
         <HeaderMenu
@@ -28,7 +31,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
-    </div>
+    </div >
   );
 }
 
@@ -96,13 +99,12 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav className="header-ctas flex-1" role="navigation">
-      <HeaderMenuMobileToggle />
-      <NavLink className={"flex flex-col items-center"} prefetch="intent" to="/account">
+    <nav className="header-ctas md:flex-1" role="navigation">
+      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center"} prefetch="intent" to="/account">
+      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
         <img alt="profile-placeholder" className="h-7" src={ProfilePlaceholderIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>
           <Suspense fallback="Sign in">
@@ -126,7 +128,7 @@ function HeaderCtas({
             </Suspense>
           </div>
         </div>
-        <p className='font-body mt-1' style={{ fontSize: "9px" }}>BASKET</p>
+        <p className='font-body mt-1 desktop-only' style={{ fontSize: "9px" }}>BASKET</p>
       </NavLink>
       <NavLink prefetch="intent" to="/account">
 
@@ -137,10 +139,18 @@ function HeaderCtas({
 
 function HeaderMenuMobileToggle() {
   return (
-    <a className="header-menu-mobile-toggle" href="#mobile-menu-aside">
-      <h3>☰</h3>
+    <a className='mobile-only' href="#mobile-menu-aside">
+      <AlignJustify className='text-jc-light-blue' />
     </a>
   );
+}
+
+function HeaderMobileSearchToggle() {
+  return (
+    <a className='mobile-only' href="#mobile-search">
+      <SearchIcon className='text-jc-light-blue' />
+    </a>
+  )
 }
 
 const FALLBACK_HEADER_MENU = {

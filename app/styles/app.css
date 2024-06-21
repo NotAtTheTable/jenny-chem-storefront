@@ -143,7 +143,15 @@ aside li {
   z-index: 1;
 }
 
-.header-menu-mobile-toggle {
+.desktop-only {
+  display: none !important;
+
+  @media (min-width: 48em) {
+    display: unset;
+  }
+}
+
+.mobile-only {
   @media (min-width: 48em) {
     display: none;
   }
@@ -170,11 +178,20 @@ aside li {
 }
 
 .header-ctas {
-  align-items: center;
-  justify-content: flex-end;
-  display: flex;
-  grid-gap: 1rem;
-  margin-left: auto;
+
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  @media (min-width: 768px) {
+    align-items: center;
+    justify-content: flex-end;
+    display: flex;
+    grid-gap: 1rem;
+    margin-left: auto;
+    position: inherit;
+  }
 }
 
 /*

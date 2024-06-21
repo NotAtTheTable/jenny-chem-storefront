@@ -6,7 +6,7 @@ import type {
   RecommendedBlogPostsQuery
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
-import ProductCard from '~/components/product/ProductCard';
+import ProductCard, { DemoProductCard } from '~/components/product/ProductCard';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselBreadcrumbs, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay'
@@ -115,7 +115,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
   >
     <CarouselContent>
       {data.map((heroProps) => (
-        <CarouselItem className='pl-0'>
+        <CarouselItem key={heroProps.backgroundImage} className='pl-0'>
           <Hero {...heroProps} />
         </CarouselItem>
       ))}
@@ -202,7 +202,7 @@ function BestSellingProducts({
                   <>
                     {products.nodes.map((product) => (
                       <CarouselItem key={product.id} className="pl-9 basis-1/1">
-                        <ProductCard
+                        <DemoProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
                           handle={product.handle}
@@ -240,7 +240,7 @@ function BestSellingProducts({
                   <>
                     {products.nodes.map((product) => (
                       <CarouselItem key={product.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
-                        <ProductCard
+                        <DemoProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
                           handle={product.handle}
