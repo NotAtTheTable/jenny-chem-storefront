@@ -232,14 +232,14 @@ function BestSellingProducts({
             align: "start",
             loop: true,
           }}
-            className="w-full max-w-7xl my-6"
+            className="w-[90%] 2xl:w-full max-w-7xl my-6"
           >
             <CarouselContent className="-ml-2">
               <Await resolve={products}>
                 {({ products }) => (
                   <>
                     {products.nodes.map((product) => (
-                      <CarouselItem key={product.id} className="pl-2 md:basis-1/3 lg:basis-1/5">
+                      <CarouselItem key={product.id} className="pl-2 md:basis-1/3 xl:basis-1/4 2xl:basis-1/5">
                         <DemoProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
@@ -253,8 +253,8 @@ function BestSellingProducts({
                 )}
               </Await>
             </CarouselContent>
-            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-3rem" }} />
-            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-3.5rem" }} />
+            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' className='md:-right-8 lg:-right-12 xl:-right-14' style={{ top: "40%" }} />
+            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' className='md:-left-8 lg:-left-12 xl:-left-14' style={{ top: "40%" }} />
           </Carousel>
         </Suspense>
         <br />
@@ -412,11 +412,11 @@ function Tips({ blog, viewport = 'desktop' }: Readonly<{
                 align: "start",
                 loop: true,
               }}
-                className="w-full max-w-6xl my-6"
+                className="w-[90%] 2xl:w-full max-w-6xl my-6"
               >
                 <CarouselContent className="-ml-2">
                   {blog?.articles.nodes.map((article) => (
-                    <CarouselItem key={article.id} className="pl-2 md:basis-1/3 lg:basis-1/4">
+                    <CarouselItem key={article.id} className="pl-2 md:basis-1/3 xl:basis-1/4">
                       <ArticleCard
                         title={article.title}
                         publishedAt={new Date(article.publishedAt)}
