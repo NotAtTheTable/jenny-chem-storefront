@@ -146,13 +146,13 @@ aside li {
 .desktop-only {
   display: none !important;
 
-  @media (min-width: 48em) {
-    display: unset;
+  @media (min-width: 1024px) {
+    display: unset !important;
   }
 }
 
 .mobile-only {
-  @media (min-width: 48em) {
+  @media (min-width: 1024px) {
     display: none;
   }
 }
@@ -166,7 +166,7 @@ aside li {
 .header-menu-desktop {
   display: none;
 
-  @media (min-width: 45em) {
+  @media (min-width: 1024px) {
     display: flex;
     justify-content: space-between;
   }
@@ -184,13 +184,17 @@ aside li {
   top: 50%;
   transform: translate(-50%, -50%);
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
+    flex: 1 1 0%;
     align-items: center;
     justify-content: flex-end;
     display: flex;
     grid-gap: 1rem;
     margin-left: auto;
-    position: inherit;
+    position: unset;
+    right: unset;
+    top: unset;
+    transform: unset;
   }
 }
 

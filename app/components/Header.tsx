@@ -16,12 +16,12 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
   return (
     <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
-      <header className="container text-white flex justify-between items-center w-full p-4 md:p-0">
+      <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
           <HeaderMobileSearchToggle />
         </div>
-        <NavLink className="flex-1 flex justify-center md:justify-start" prefetch="intent" to="/" end>
+        <NavLink className="flex-1 flex justify-center lg:justify-start" prefetch="intent" to="/" end>
           <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
         </NavLink>
         <HeaderMenu
@@ -99,7 +99,7 @@ function HeaderCtas({
   cart,
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
-    <nav className="header-ctas md:flex-1" role="navigation">
+    <nav className="header-ctas" role="navigation">
       <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
