@@ -148,11 +148,11 @@ function Hero({
     >
       <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
       <div className='container flex items-center justify-center h-full p-10'>
-        <div className="relative z-10 text-center text-white max-w-2xl">
+        <div className="relative z-10 flex items-center flex-col text-center text-white max-w-2xl">
           <h1 className="text-8xl font-display mb-4">{title}</h1>
           <div className='w-full'><DashDivider light /></div>
           <p className="text-xl mb-8">{subtitle}</p>
-          <ArrowButton label={ctaText} onClick={ctaOnClick} />
+          <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
         </div>
       </div>
     </div>
@@ -167,7 +167,7 @@ function Hero({
           <h1 className="text-9xl font-display mb-4">{title}</h1>
           <div className='w-16'><DashDivider /></div>
           <p className="text-xl mb-8">{subtitle}</p>
-          <ArrowButton label={ctaText} onClick={ctaOnClick} />
+          <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
         </div>
       </div>
     </div>
@@ -202,12 +202,11 @@ function BestSellingProducts({
                   <>
                     {products.nodes.map((product) => (
                       <CarouselItem key={product.id} className="pl-9 basis-1/1">
-                        <DemoProductCard
+                        <ProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
                           handle={product.handle}
                           ActionElement={NavigateToProductPageButton}
-                          sku={product.variants.nodes[0].sku as string}
                         />
                       </CarouselItem>
                     ))}
@@ -240,12 +239,11 @@ function BestSellingProducts({
                   <>
                     {products.nodes.map((product) => (
                       <CarouselItem key={product.id} className="pl-2 md:basis-1/3 xl:basis-1/4 2xl:basis-1/5">
-                        <DemoProductCard
+                        <ProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
                           handle={product.handle}
                           ActionElement={NavigateToProductPageButton}
-                          sku={product.variants.nodes[0].sku as string}
                         />
                       </CarouselItem>
                     ))}
@@ -463,7 +461,7 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
         <div className='w-8'><DashDivider /></div>
         <p>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
           Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
-        <div className='mt-3'><ArrowButton label="About Us" onClick={() => ''} /></div>
+        <div className='mt-3 w-36'><ArrowButton label="ABOUT US" onClick={() => ''} /></div>
       </div>
     </div>
   }

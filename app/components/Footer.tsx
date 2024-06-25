@@ -58,7 +58,7 @@ function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
     </div>
   } else {
     return <div className='bg-jc-light-blue'>
-      <div className="flex justify-between py-3 px-12 container">
+      <div className="flex justify-between items-center py-3 px-12 container">
         <div>
           <div className="flex flex-row gap-1">
             <a href="https://www.facebook.com/Officialjennychem/"><img alt="Facebook" src={FacebookIcon} /></a>
@@ -68,10 +68,10 @@ function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
           </div>
         </div>
         <form className='max-w-none'>
-          <div className="flex flex-row gap-2">
-            <h3 style={{ lineHeight: 'inherit' }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
+          <div className="flex flex-row items-center gap-2">
+            <h3 style={{ lineHeight: "0.8em" }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
             <input
-              className='rounded-full px-8 w-64'
+              className='rounded-full px-8 py-1 w-64'
               placeholder='Enter your email address'
             />
             <LightBlueArrowButton onClick={() => { }} label='Sign Up' />

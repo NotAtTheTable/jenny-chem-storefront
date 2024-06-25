@@ -7,6 +7,7 @@ import ContactIcon from "~/assets/foundational/contact_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
 import { AlignJustify, Search, SearchIcon } from 'lucide-react';
+import HeaderDropDown from './header/HeaderDropDown';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -15,7 +16,7 @@ type Viewport = 'desktop' | 'mobile';
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
   return (
-    <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
+    <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
@@ -32,6 +33,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
     </div >
+
   );
 }
 

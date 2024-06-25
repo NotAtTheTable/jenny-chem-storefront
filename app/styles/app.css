@@ -147,7 +147,7 @@ aside li {
   display: none !important;
 
   @media (min-width: 1024px) {
-    display: unset !important;
+    display: flex !important;
   }
 }
 
