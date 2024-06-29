@@ -149,9 +149,9 @@ function Hero({
       <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
       <div className='container flex items-center justify-center h-full p-10'>
         <div className="relative z-10 flex items-center flex-col text-center text-white max-w-2xl">
-          <h1 className="text-8xl font-display mb-4">{title}</h1>
-          <div className='w-full'><DashDivider light /></div>
-          <p className="text-xl mb-8">{subtitle}</p>
+          <h1 className="text-8xl font-display">{title}</h1>
+          <div className='w-full'><DashDivider /></div>
+          <p className="text-xl mb-5 mt-2">{subtitle}</p>
           <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
         </div>
       </div>
@@ -164,9 +164,9 @@ function Hero({
       <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
       <div className='container flex items-center justify-left h-full p-10'>
         <div className="relative z-10 text-left text-white max-w-md">
-          <h1 className="text-9xl font-display mb-4">{title}</h1>
+          <h1 className="text-9xl font-display">{title}</h1>
           <div className='w-16'><DashDivider /></div>
-          <p className="text-xl mb-8">{subtitle}</p>
+          <p className="text-xl mb-5">{subtitle}</p>
           <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
         </div>
       </div>
@@ -231,7 +231,7 @@ function BestSellingProducts({
             align: "start",
             loop: true,
           }}
-            className="w-[90%] 2xl:w-full max-w-7xl my-6"
+            className="w-[90%] 2xl:w-full max-w-7xl mt-3"
           >
             <CarouselContent className="-ml-2">
               <Await resolve={products}>
@@ -255,7 +255,6 @@ function BestSellingProducts({
             <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' className='md:-left-8 lg:-left-12 xl:-left-14' style={{ top: "40%" }} />
           </Carousel>
         </Suspense>
-        <br />
       </div>
     );
   }
@@ -328,9 +327,9 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
     </div>
   } else {
     return <div className='flex flex-row-reverse p-10 container'>
-      <div className='grid grid-cols-4 grid-rows-2 gap-4 gap-y-0 p-4 '>
-        {socialImages.map(({ url, alt }) => (
-          <div className="w-48 h-48 overflow-hidden drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
+      <div style={{ height: 'fit-content' }} className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-4 p-4 '>
+        {socialImages.map(({ url, alt }, index) => (
+          <div className={`w-48 h-48 ${(index == 7) || (index == 6) ? "hidden xl:block" : ""} ${(index == 5) || (index == 4) ? "hidden lg:block" : ""} overflow-hidden drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]`}>
             <img className='w-full h-full object-cover rounded-lg' src={url} alt={alt} />
           </div>
         ))}

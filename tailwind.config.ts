@@ -22,6 +22,14 @@ const config = {
       },
     },
     extend: {
+      height: {
+        '70': '17.4rem'
+      },
+      fontSize: {
+        '7xl': ['4.5rem', { lineHeight: '4.4rem' }],
+        '8xl': ['6rem', { lineHeight: '5.7rem' }],
+        '9xl': ['8rem', { lineHeight: '7rem' }]
+      },
       colors: {
         'jc-light-grey': '#F6F6F8',
         'jc-light-blue': '#7094E0',

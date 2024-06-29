@@ -94,7 +94,7 @@ function FooterMenu({
   const { publicStoreDomain } = useRootLoaderData();
 
   if (viewport === 'mobile') {
-    return <div className="bg-jc-dark-blue">
+    return <div>
       <div className='flex flex-col p-6 justify-between items-center container'>
         <SiteMap viewport={'mobile'} />
         <div className='flex flex-col my-6 items-center justify-end gap-4'>
