@@ -105,7 +105,7 @@ function FooterMenu({
             <a href="https://www.instagram.com/officialjennychem/"><img alt="Instagram" src={InstagramIcon} /></a>
             <a href="https://tiktok.com/@jennychem.com"><img alt="Tiktok" src={TiktokIcon} /></a>
           </div>
-          <nav className="text-white font-body text-xs divide-x divide-white pt-3" role="navigation">
+          <nav className="text-white text-center font-body text-xs divide-x divide-white pt-3" role="navigation">
             {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
               if (!item.url) return null;
               // if the url is internal, we strip the domain
@@ -278,7 +278,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
         ))}
       </Accordion>
       <NavLink to="https://shopify.com/3254747185/account">
-        <div className='flex items-center justify-between py-3 flex-row border-b border-jc-light-blue'>
+        <div className='flex items-center justify-between py-3 flex-row border-b-2 border-jc-light-blue'>
           <h3 className='text-white font-body text-xl'>Trade & Customer Login</h3>
           <CircleChevronRight color='white' className='w-6 h-6' strokeWidth={1} />
         </div>

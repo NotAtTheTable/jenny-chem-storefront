@@ -144,10 +144,10 @@ function Hero({
   if (viewport === 'mobile') {
     return <div
       className="relative bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundImage})`, height: '700px' }}
+      style={{ backgroundImage: `url(${backgroundImage})`, height: '650px' }}
     >
       <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
-      <div className='container flex items-center justify-center h-full p-10'>
+      <div className='container flex h-full py-16 px-10'>
         <div className="relative z-10 flex items-center flex-col text-center text-white max-w-2xl">
           <h1 className="text-8xl font-display">{title}</h1>
           <div className='w-full'><DashDivider /></div>
@@ -194,9 +194,9 @@ function BestSellingProducts({
             align: "start",
             loop: true,
           }}
-            className="w-72 my-6"
+            className="w-72 mt-3"
           >
-            <CarouselContent className="-ml-4">
+            <CarouselContent className="-ml-5">
               <Await resolve={products}>
                 {({ products }) => (
                   <>
@@ -215,10 +215,9 @@ function BestSellingProducts({
               </Await>
             </CarouselContent>
             <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-2rem" }} />
-            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2.5rem" }} />
+            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2rem" }} />
           </Carousel>
         </Suspense>
-        <br />
       </div>
     );
   } else {
@@ -306,7 +305,8 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
 
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center p-6 container text-center'>
-      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
+      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>Get Social </h1>
+      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
       <DashDivider />
       <div className="w-full h-auto my-4 rounded-lg drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
         <img src="https://cdn.shopify.com/s/files/1/0032/5474/7185/files/kermit-porsche.jpg?v=1718809192" alt="grid-1" />
@@ -336,7 +336,8 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
 
       </div>
       <div className='flex-1 p-4 text-jc-dark-blue'>
-        <h1 className='text-8xl font-display'>Get Social & Share <span className='text-jc-light-blue'>!</span></h1>
+        <h1 className='text-8xl font-display'>Get Social</h1>
+        <h1 className='text-8xl font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
         <div className='w-16'><DashDivider /></div>
         <span>
           Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
@@ -375,9 +376,9 @@ function Tips({ blog, viewport = 'desktop' }: Readonly<{
                 align: "start",
                 loop: true,
               }}
-                className="w-72 my-6"
+                className="w-72 mt-3"
               >
-                <CarouselContent className="-ml-4">
+                <CarouselContent className="-ml-3">
                   {blog?.articles.nodes.map((article) => (
                     <CarouselItem key={article.id} className="pl-9 basis-1/1">
                       <ArticleCard
@@ -385,12 +386,13 @@ function Tips({ blog, viewport = 'desktop' }: Readonly<{
                         publishedAt={new Date(article.publishedAt)}
                         imageUrl={article.image?.url || undefined}
                         onClick={() => { return '' }}
+                        className="w-60 h-60"
                       />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-2rem" }} />
-                <CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2.5rem" }} />
+                <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "40%", right: "-1.5rem" }} />
+                <CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "40%", left: "-1.5rem" }} />
               </Carousel>
             )}
           </Await>
@@ -409,22 +411,23 @@ function Tips({ blog, viewport = 'desktop' }: Readonly<{
                 align: "start",
                 loop: true,
               }}
-                className="w-[90%] 2xl:w-full max-w-6xl my-6"
+                className="w-[90%] 2xl:w-full max-w-8xl mt-3"
               >
                 <CarouselContent className="-ml-2">
                   {blog?.articles.nodes.map((article) => (
-                    <CarouselItem key={article.id} className="pl-2 md:basis-1/3 xl:basis-1/4">
+                    <CarouselItem key={article.id} className="pl-2 basis-1/3 2xl:basis-1/4">
                       <ArticleCard
                         title={article.title}
                         publishedAt={new Date(article.publishedAt)}
                         imageUrl={article.image?.url || undefined}
                         onClick={() => { return '' }}
+                        className="w-[310px] h-60"
                       />
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-3rem" }} />
-                <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-3.5rem" }} />
+                <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", right: "-3rem" }} />
+                <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", left: "-3.5rem" }} />
               </Carousel>
             )}
           </Await>
@@ -441,7 +444,7 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
     return <div className='flex flex-col items-center text-center p-6 container text-jc-dark-blue'>
       <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
       <div className='w-full'><DashDivider /></div>
-      < div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
+      < div className="mt-3 drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
         <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
       </div >
       <p className='mt-5'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
@@ -457,8 +460,8 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
       </div>
       <div className='flex-1 p-4 text-jc-dark-blue'>
         <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
-        <div className='w-8'><DashDivider /></div>
-        <p>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
+        <div className='w-16'><DashDivider /></div>
+        <p className='mt-4'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
           Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
         <div className='mt-3 w-36'><ArrowButton label="ABOUT US" onClick={() => ''} /></div>
       </div>

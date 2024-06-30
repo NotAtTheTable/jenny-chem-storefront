@@ -6,7 +6,7 @@ import { useRootLoaderData } from '~/lib/root-data';
 import ContactIcon from "~/assets/foundational/contact_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
-import { AlignJustify, Search, SearchIcon } from 'lucide-react';
+import { AlignJustify, Dot, Search, SearchIcon } from 'lucide-react';
 import HeaderDropDown from './header/HeaderDropDown';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
@@ -117,19 +117,13 @@ function HeaderCtas({
         </p>
       </NavLink>
       <NavLink className={"flex flex-col items-center"} prefetch="intent" to="/account">
-        <div className="relative">
-          <img alt="basket-icon" className="h-7" src={BasketIcon} />
-          <div className="text-xs absolute m-auto" style={{ top: "12px", left: "10px" }}>
-            <Suspense fallback="0">
-              <Await resolve={cart}>
-                {(cart) => {
-                  if (!cart) return 0;
-                  return cart.totalQuantity || 0;
-                }}
-              </Await>
-            </Suspense>
-          </div>
-        </div>
+        <Suspense>
+          <Await resolve={cart}>
+            {(cart) => {
+              return <Basket isActive={cart && cart.totalQuantity > 0} />
+            }}
+          </Await>
+        </Suspense>
         <p className='font-body mt-1 desktop-only' style={{ fontSize: "9px" }}>BASKET</p>
       </NavLink>
       <NavLink prefetch="intent" to="/account">
@@ -137,6 +131,19 @@ function HeaderCtas({
       </NavLink>
     </nav>
   );
+}
+
+function Basket({ isActive = false }: { isActive?: boolean | null }) {
+  return (
+    <div className="relative">
+      <img alt="basket-icon" className="h-7" src={BasketIcon} />
+      {isActive &&
+        <div className="text-xl absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2">
+          <div className="h-2 w-2 bg-white rounded-full"></div>
+        </div>
+      }
+    </div>
+  )
 }
 
 function HeaderMenuMobileToggle() {
