@@ -1,7 +1,6 @@
 
 import { Image } from '@shopify/hydrogen';
 import { Image as ImageType } from '@shopify/hydrogen/storefront-api-types'
-import TrustProductMini from '../trustpilot/TrustPilotProductWidget';
 
 
 interface ProductCardProps {

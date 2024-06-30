@@ -10,7 +10,7 @@ interface ArrowButtonProps {
 
 export const ArrowButton = ({ label, onClick }: ArrowButtonProps) => {
     return (
-        <button onClick={onClick} className="bg-jc-dark-blue py-1 px-1 w-full rounded-full border border-jc-light-blue drop-shadow">
+        <button onClick={onClick} className="bg-jc-dark-blue py-1 px-1 w-full rounded-full border-2 border-jc-light-blue drop-shadow">
             <div className="flex flex-row justify-between">
                 <p className="px-2 flex-1 text-center line-clamp-1 text-base" style={{ color: '#fff' }}>{label.toUpperCase()}</p>
                 <img alt="arrow" src={lbarrow} />
