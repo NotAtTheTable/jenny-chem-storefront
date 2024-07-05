@@ -16,7 +16,7 @@ type Viewport = 'desktop' | 'mobile';
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
   return (
-    <div className='drop-shadow-lg bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
+    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 1 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
