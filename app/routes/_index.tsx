@@ -230,7 +230,7 @@ function BestSellingProducts({
             align: "start",
             loop: true,
           }}
-            className="w-[90%] 2xl:w-full max-w-7xl mt-3"
+            className="w-[90%] 2xl:w-full max-w-8xl mt-3"
           >
             <CarouselContent className="-ml-2">
               <Await resolve={products}>
@@ -250,8 +250,8 @@ function BestSellingProducts({
                 )}
               </Await>
             </CarouselContent>
-            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' className='md:-right-8 lg:-right-12 xl:-right-14' style={{ top: "40%" }} />
-            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' className='md:-left-8 lg:-left-12 xl:-left-14' style={{ top: "40%" }} />
+            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
+            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.3rem" }} />
           </Carousel>
         </Suspense>
       </div>
@@ -313,8 +313,7 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
       </div>
       <span className='mb-2'>
         Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
-        have in development, along with limited time offers.<br /><br />
-
+        have in development, along with limited time offers.<br />
         We also like to see what you can achieve by using our products.
         Use the hashtag <span className='text-jc-light-blue'>#jennychem</span> when posting to show your results!
       </span>
@@ -335,17 +334,20 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
         ))}
 
       </div>
-      <div className='flex-1 p-4 text-jc-dark-blue'>
-        <h1 className='text-8xl font-display'>Get Social</h1>
-        <h1 className='text-8xl font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
-        <div className='w-16'><DashDivider /></div>
-        <span>
-          Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
-          have in development, along with limited time offers.<br /><br />
-
-          We also like to see what you can achieve by using our products.
-          Use the hashtag <span className='text-jc-light-blue'>#jennychem</span> when posting to show your results!
-        </span>
+      <div className='flex-1 flex flex-col justify-between  p-4 text-jc-dark-blue'>
+        <div>
+          <h1 className='text-8xl font-display'>Get Social</h1>
+          <h1 style={{ lineHeight: "5rem" }} className='text-8xl font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
+          <div className='w-16'><DashDivider /></div>
+          <p className='mb-3'>
+            Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
+            have in development, along with limited time offers.
+          </p>
+          <p>
+            We also like to see what you can achieve by using our products.
+            Use the hashtag <span className='text-jc-light-blue'>#jennychem</span> when posting to show your results!
+          </p>
+        </div>
         <div className="flex flex-row gap-1 my-2">
           <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
           <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
@@ -426,8 +428,8 @@ function Tips({ blog, viewport = 'desktop' }: Readonly<{
                     </CarouselItem>
                   ))}
                 </CarouselContent>
-                <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", right: "-3rem" }} />
-                <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", left: "-3.5rem" }} />
+                <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", right: "-4rem" }} />
+                <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-white' style={{ top: "50%", left: "-4.5rem" }} />
               </Carousel>
             )}
           </Await>

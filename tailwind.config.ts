@@ -31,7 +31,7 @@ const config = {
         '9xl': ['8rem', { lineHeight: '7rem' }]
       },
       colors: {
-        'jc-light-grey': '#F6F6F8',
+        'jc-light-grey': '#F0F0F8',
         'jc-light-blue': '#7094E0',
         'jc-dark-blue-100': '#080D3F',
         'jc-dark-blue': '#17255D',

@@ -225,7 +225,7 @@ const CarouselPrevious = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        "absolute  h-8 w-8 rounded-full",
+        "absolute  h-10 w-10 rounded-full",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -235,7 +235,7 @@ const CarouselPrevious = React.forwardRef<
       onClick={handleClick}
       {...props}
     >
-      <CircleChevronLeft className={iconClassName} size={30} strokeWidth={1} />
+      <CircleChevronLeft className={iconClassName} size={40} strokeWidth={1} />
       <span className="sr-only">Previous slide</span>
     </button>
   )
@@ -257,7 +257,7 @@ const CarouselNext = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        "absolute h-8 w-8 rounded-full",
+        "absolute h-10 w-10 rounded-full",
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
@@ -267,7 +267,7 @@ const CarouselNext = React.forwardRef<
       onClick={handleClick}
       {...props}
     >
-      <CircleChevronRight className={iconClassName} size={30} strokeWidth={1} />
+      <CircleChevronRight className={iconClassName} size={40} strokeWidth={1} />
       <span className="sr-only">Next slide</span>
     </button>
   )

@@ -23,7 +23,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
           <HeaderMobileSearchToggle />
         </div>
         <NavLink className="flex-1 flex justify-center lg:justify-start" prefetch="intent" to="/" end>
-          <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
+          <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
         </NavLink>
         <HeaderMenu
           menu={menu}
