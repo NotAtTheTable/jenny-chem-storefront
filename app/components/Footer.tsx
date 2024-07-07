@@ -27,7 +27,7 @@ export function Footer({
   if (isMobile !== null) {
     return (
 
-      <footer className="footer">
+      <footer>
         <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
         <BlueBubbleBackground>
           {menu && shop?.primaryDomain?.url && (
@@ -46,7 +46,7 @@ function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
   if (viewport === 'mobile') {
     return <div className='bg-jc-light-blue'>
       <div className="flex flex-col items-center py-3 container">
-        <h3 style={{ lineHeight: 'inherit' }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
+        <h3 style={{ lineHeight: 'inherit' }} className='text-white font-display text-xl'>Join Our Mailing List For Updates & Offers:</h3>
         <div className='flex flex-row-reverse gap-2 w-full'>
           <LightBlueArrowButton onClick={() => { }} label='Sign Up' />
           <input
@@ -69,9 +69,9 @@ function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
         </div>
         <form className='max-w-none'>
           <div className="flex flex-row items-center gap-2">
-            <h3 style={{ lineHeight: "0.8em" }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
+            <h3 style={{ marginBottom: "-3px" }} className='text-white font-display text-2xl'>Join Our Mailing List For Updates & Offers:</h3>
             <input
-              className='rounded-full px-8 py-1 w-64'
+              className='rounded-full px-4 py-1 w-64'
               placeholder='Enter your email address'
             />
             <LightBlueArrowButton onClick={() => { }} label='Sign Up' />
@@ -94,11 +94,11 @@ function FooterMenu({
   const { publicStoreDomain } = useRootLoaderData();
 
   if (viewport === 'mobile') {
-    return <div>
+    return (
       <div className='flex flex-col p-6 justify-between items-center container'>
         <SiteMap viewport={'mobile'} />
         <div className='flex flex-col my-6 items-center justify-end gap-4'>
-          <img className="w-48 h-auto -ml-6" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
+          <img className="w-48 h-auto -ml-6" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
           <div className="flex flex-row gap-1">
             <a href="https://www.facebook.com/Officialjennychem/"><img alt="Facebook" src={FacebookIcon} /></a>
             <a href="https://www.youtube.com/channel/UC5UXsZSRBnF7sVBi0egZz6g"><img alt="Youtube" src={YoutubeIcon} /></a>
@@ -140,52 +140,52 @@ function FooterMenu({
           </p>
         </div>
       </div>
-    </div>
+    )
   } else {
     return (
-      <div className="bg-jc-dark-blue">
-        <div className='flex flex-row p-10 justify-between container'>
-          <div>
-            <SiteMap />
-            <nav className="text-white font-body text-xs divide-x divide-white flex pt-10" role="navigation">
-              {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
-                if (!item.url) return null;
-                // if the url is internal, we strip the domain
-                const url =
-                  item.url.includes('myshopify.com') ||
-                    item.url.includes(publicStoreDomain) ||
-                    item.url.includes(primaryDomainUrl)
-                    ? new URL(item.url).pathname
-                    : item.url;
-                const isExternal = !url.startsWith('/');
-                return isExternal ? (
-                  <a className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`} href={url} key={item.id} rel="noopener noreferrer" target="_blank">
-                    {item.title}
-                  </a>
-                ) : (
-                  <NavLink
-                    className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
-                    end
-                    key={item.id}
-                    prefetch="intent"
-                    style={activeLinkStyle}
-                    to={url}
-                  >
-                    {item.title}
-                  </NavLink>
-                );
-              })}
-            </nav>
-          </div>
-          <div className='flex flex-col items-end justify-end gap-4'>
-            <img className="w-48 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/LogoImg.webp?v=1686824190' />
-            <p className='text-white text-xs text-right'>
-              &copy; 2024, Jennychem Limited | All Rights Reserved.<br />
-              Company registration number: 00000000 | VAT number: GB 000000000
-            </p>
-          </div>
+
+      <div className='flex flex-row p-10 justify-between container'>
+        <div>
+          <SiteMap />
+          <nav className="text-white font-body text-xs divide-x divide-white flex pt-10" role="navigation">
+            {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
+              if (!item.url) return null;
+              // if the url is internal, we strip the domain
+              const url =
+                item.url.includes('myshopify.com') ||
+                  item.url.includes(publicStoreDomain) ||
+                  item.url.includes(primaryDomainUrl)
+                  ? new URL(item.url).pathname
+                  : item.url;
+              const isExternal = !url.startsWith('/');
+              return isExternal ? (
+                <a className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`} href={url} key={item.id} rel="noopener noreferrer" target="_blank">
+                  {item.title}
+                </a>
+              ) : (
+                <NavLink
+                  className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
+                  end
+                  key={item.id}
+                  prefetch="intent"
+                  style={activeLinkStyle}
+                  to={url}
+                >
+                  {item.title}
+                </NavLink>
+              );
+            })}
+          </nav>
+        </div>
+        <div className='flex flex-col items-end justify-end gap-4'>
+          <img className="w-48 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
+          <p className='text-white text-xs text-right'>
+            &copy; 2024, Jennychem Limited | All Rights Reserved.<br />
+            Company registration number: 00000000 | VAT number: GB 000000000
+          </p>
         </div>
       </div>
+
     );
   }
 
@@ -289,7 +289,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
       {
         data.map((section) => (
           <div key={section.heading} className='flex flex-col gap-2 w-40'>
-            <h3 className='text-white font-body text-xl border-b-2 border-jc-light-blue pb-4 font-bold'>{section.heading}</h3>
+            <h3 className='text-white font-body text-xl border-b-2 border-jc-light-blue pb-2 font-bold'>{section.heading}</h3>
             {section.links.map((link) => (
               <a key={link.href} className='text-white font-body pb-1 text-xs border-b border-jc-light-blue' href={link.href}>{link.label}</a>
             ))}

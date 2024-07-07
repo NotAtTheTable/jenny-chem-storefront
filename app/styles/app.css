@@ -203,10 +203,6 @@ aside li {
 * components/Footer
 * --------------------------------------------------
 */
-.footer {
-  background: var(--color-dark);
-  margin-top: auto;
-}
 
 /*
 * --------------------------------------------------

@@ -136,10 +136,10 @@ function HeaderCtas({
 function Basket({ isActive = false }: { isActive?: boolean | null }) {
   return (
     <div className="relative">
-      <img alt="basket-icon" className="h-7" src={BasketIcon} />
+      <img alt="basket-icon" className="h-6 md:h-7" src={BasketIcon} />
       {isActive &&
         <div className="text-xl absolute top-2/3 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-2 w-2 bg-white rounded-full"></div>
+          <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-white rounded-full"></div>
         </div>
       }
     </div>

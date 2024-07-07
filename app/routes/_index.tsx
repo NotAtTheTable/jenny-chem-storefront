@@ -223,7 +223,7 @@ function BestSellingProducts({
   } else {
     return (
       <div className="flex flex-col items-center p-10 container">
-        <h2 className='text-center text-7xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
+        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
         <DashDivider />
         <Suspense fallback={<div>Loading...</div>}>
           <Carousel opts={{
@@ -449,8 +449,8 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
       < div className="mt-3 drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
         <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
       </div >
-      <p className='mt-5'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
-        Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
+      <p className='mt-5 mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
+      <p>  Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
       <div className='mt-5'><ArrowButton label="About Us" onClick={() => ''} /></div>
     </div >
   } else {
@@ -463,9 +463,9 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
       <div className='flex-1 p-4 text-jc-dark-blue'>
         <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
         <div className='w-16'><DashDivider /></div>
-        <p className='mt-4'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years. <br /><br />
-          Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
-        <div className='mt-3 w-36'><ArrowButton label="ABOUT US" onClick={() => ''} /></div>
+        <p className='mt-4 mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
+        <p>  Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
+        <div className='mt-4 w-36'><ArrowButton label="ABOUT US" onClick={() => ''} /></div>
       </div>
     </div>
   }
