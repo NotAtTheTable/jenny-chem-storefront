@@ -6,7 +6,7 @@ import type {
   RecommendedBlogPostsQuery
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
-import ProductCard, { DemoProductCard } from '~/components/product/ProductCard';
+import ProductCard from '~/components/card/ProductCard';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
 import { Carousel, CarouselBreadcrumbs, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '~/components/ui/carousel';
 import Autoplay from 'embla-carousel-autoplay'
@@ -19,7 +19,7 @@ import TiktokIcon from '~/assets/social-icons/tiktok.svg'
 import InstagramIcon from '~/assets/social-icons/instagram.svg'
 
 
-import { ArticleCard } from '~/components/blog/ArticleCard';
+import { ArticleCard } from '~/components/card/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
@@ -92,7 +92,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
       viewport
     },
     {
-      title: "Allow Wheel Cleaner",
+      title: "Alloy Wheel Cleaner",
       subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
       backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/alloys-being-washed.jpg?v=1718738896',
       ctaOnClick: () => { },

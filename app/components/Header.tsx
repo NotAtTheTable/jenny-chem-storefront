@@ -1,5 +1,5 @@
 import { Await, NavLink } from '@remix-run/react';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
@@ -15,8 +15,11 @@ type Viewport = 'desktop' | 'mobile';
 
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
+
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+
   return (
-    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 1 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
+    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 2 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
@@ -32,6 +35,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
+      <HeaderDropDown menu={menu} selectedIndex={selectedMenuIndex} />
     </div >
 
   );
