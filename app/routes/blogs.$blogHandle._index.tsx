@@ -1,9 +1,14 @@
 import { defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
+import { Await, Link, useLoaderData, type MetaFunction } from '@remix-run/react';
 import { Image, Pagination, getPaginationVariables } from '@shopify/hydrogen';
 import DashDivider from '~/components/foundational/DashDivider';
 import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
 import { useViewport } from '~/hooks/useViewport';
+import { Chip } from '~/components/foundational/Chip';
+import { RecommendedBlogPostsQuery } from 'storefrontapi.generated';
+import { Viewport } from './_index';
+import { Suspense } from 'react';
+import { ArticleCard } from '~/components/card/ArticleCard';
 
 // TODO: Populate the header by using blog information
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -47,19 +52,66 @@ const HeadingSection = () => {
   )
 }
 
+const ArticleList = ({ blog }: Readonly<{
+  blog: Promise<RecommendedBlogPostsQuery>
+  viewport?: Viewport;
+  mode?: "light" | "dark";
+}>) => {
+  //TODO Break this out into properties in the blog 
+  const properties = [
+    "valeting",
+    "workshop",
+    "home",
+    "garden",
+    "spa",
+    "janitorial",
+    "equipment"
+  ]
+
+  return (
+    <>
+      <div className='flex flex-row gap-2 py-10 w-full justify-center'>
+        {properties.map((property) => (
+          <Chip handleSelect={() => { }} isSelected={true} label={property} />
+        ))}
+      </div>
+
+      <Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={blog}>
+          {({ blog }) => (
+            <div className='grid grid-cols-4 gap-5'>
+              {blog?.articles.nodes.map((article) => (
+                <ArticleCard
+                  title={article.title}
+                  publishedAt={new Date(article.publishedAt)}
+                  imageUrl={article.image?.url || undefined}
+                  onClick={() => { return '' }}
+                  className="h-60"
+                />
+              ))}
+            </div>
+          )}
+        </Await>
+      </Suspense>
+
+    </>
+  )
+}
+
 export default function Blog() {
   const isMobile = useViewport();
   const { blog } = useLoaderData<typeof loader>();
   return (
     <div className="blog">
       <HeadingSection />
-      <div className='container py-10'>
+      <div className='container py-16'>
         <h1 className="font-display text-jc-dark-blue text-6xl text-center">POPULAR ARTICLES</h1>
-        <DashDivider className="-mt-1 mb-4 h-[2px]" />
-        <div className='container'>
-          <ArticleCarousel mode={"light"} blog={blog as any} viewport={isMobile ? "mobile" : "desktop"} />
-        </div>
-        <DashDivider className="w-[110%] mt-5 h-[1px] bg-opacity-50" />
+        <DashDivider className="-mt-1 mb-4 h-[3px]" />
+
+        <ArticleCarousel mode={"light"} blog={blog as any} viewport={isMobile ? "mobile" : "desktop"} />
+
+        <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 -mb-3" />
+        <ArticleList blog={blog as any} />
       </div>
     </div>
   );

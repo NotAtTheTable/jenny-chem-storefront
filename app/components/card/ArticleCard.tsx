@@ -14,8 +14,8 @@ export function ArticleCard({
     onClick: () => void,
     className?: string
 }) {
-    return <div style={{ backgroundImage: `url(${imageUrl})` }} className={cn(["bg-cover bg-center relative rounded-md", className])} onClick={onClick}>
-        <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,1), transparent)' }} className="absolute inset-0 rounded"></div>
+    return <div style={{ backgroundImage: `url(${imageUrl})` }} className={cn(["bg-cover bg-center relative rounded-lg", className])} onClick={onClick}>
+        <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,1), transparent)' }} className="absolute inset-0 rounded-lg"></div>
         <div className="relative flex h-full flex-col justify-between align-left p-2">
             <div></div>
             <div className="text-white">

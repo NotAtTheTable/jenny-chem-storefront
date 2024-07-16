@@ -53,7 +53,7 @@ export function HeaderMenu({
   viewport: Viewport;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
-  const className = `header-menu-${viewport} font-display font-bold divide-x divide-jc-light-blue`;
+  const className = `header-menu-${viewport} shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue`;
 
   function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
     if (viewport === 'mobile') {
@@ -86,7 +86,7 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className="header-menu-item px-4 my-6"
+            className="header-menu-item px-4 my-6 "
             end
             key={item.id}
             onClick={closeAside}
