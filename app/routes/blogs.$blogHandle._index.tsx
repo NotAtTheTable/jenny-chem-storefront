@@ -1,162 +1,96 @@
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
-import {Image, Pagination, getPaginationVariables} from '@shopify/hydrogen';
-import type {ArticleItemFragment} from 'storefrontapi.generated';
+import { defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
+import { Image, Pagination, getPaginationVariables } from '@shopify/hydrogen';
+import DashDivider from '~/components/foundational/DashDivider';
+import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
+import { useViewport } from '~/hooks/useViewport';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.blog.title ?? ''} blog`}];
+// TODO: Populate the header by using blog information
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Hydrogen | blog` }];
 };
 
 export async function loader({
   request,
   params,
-  context: {storefront},
+  context: { storefront },
 }: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 4,
   });
 
   if (!params.blogHandle) {
-    throw new Response(`blog not found`, {status: 404});
+    throw new Response(`blog not found`, { status: 404 });
   }
 
-  const {blog} = await storefront.query(BLOGS_QUERY, {
-    variables: {
-      blogHandle: params.blogHandle,
-      ...paginationVariables,
-    },
+  const blog = storefront.query(RECOMMENDED_BLOG_POSTS_QUERY, {
   });
 
-  if (!blog?.articles) {
-    throw new Response('Not found', {status: 404});
-  }
+  return defer({ blog });
+}
 
-  return json({blog});
+const HeadingSection = () => {
+  return (
+    <div className='bg-jc-light-blue bg-opacity-15'>
+      <div className='container relative py-16 text-jc-dark-blue'>
+        <div className='text-center w-full flex flex-col items-center'>
+          <h1 className="font-display text-jc-light-blue text-8xl">TIPS & TRICKS</h1>
+          <h1 className="font-display text-jc-dark-blue text-8xl">WHEN IT COMES TO CLEANING</h1>
+          <DashDivider className="-mt-1 mb-2 h-[3px]" />
+          <div className="max-w-3xl">
+            Aut explicabo quasi et omnis necessitatibus sed alias amet a commodi adipisci sit autem tempore qui quaerat eaque. Et eveniet laudantium qui inventore vitae non maxime consequatur eos omnis debitis id sequi soluta. Aut obcaecati aliquam ut tempora voluptatem et cupiditate consectetur non.
+          </div>
+        </div>
+        <div className='absolute left-0 bottom-5'>Home &gt; Blog</div>
+      </div>
+    </div>
+  )
 }
 
 export default function Blog() {
-  const {blog} = useLoaderData<typeof loader>();
-  const {articles} = blog;
-
+  const isMobile = useViewport();
+  const { blog } = useLoaderData<typeof loader>();
   return (
     <div className="blog">
-      <h1>{blog.title}</h1>
-      <div className="blog-grid">
-        <Pagination connection={articles}>
-          {({nodes, isLoading, PreviousLink, NextLink}) => {
-            return (
-              <>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-                {nodes.map((article, index) => {
-                  return (
-                    <ArticleItem
-                      article={article}
-                      key={article.id}
-                      loading={index < 2 ? 'eager' : 'lazy'}
-                    />
-                  );
-                })}
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
-              </>
-            );
-          }}
-        </Pagination>
+      <HeadingSection />
+      <div className='container py-10'>
+        <h1 className="font-display text-jc-dark-blue text-6xl text-center">POPULAR ARTICLES</h1>
+        <DashDivider className="-mt-1 mb-4 h-[2px]" />
+        <div className='container'>
+          <ArticleCarousel mode={"light"} blog={blog as any} viewport={isMobile ? "mobile" : "desktop"} />
+        </div>
+        <DashDivider className="w-[110%] mt-5 h-[1px] bg-opacity-50" />
       </div>
     </div>
   );
 }
 
-function ArticleItem({
-  article,
-  loading,
-}: {
-  article: ArticleItemFragment;
-  loading?: HTMLImageElement['loading'];
-}) {
-  const publishedAt = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(article.publishedAt!));
-  return (
-    <div className="blog-article" key={article.id}>
-      <Link to={`/blogs/${article.blog.handle}/${article.handle}`}>
-        {article.image && (
-          <div className="blog-article-image">
-            <Image
-              alt={article.image.altText || article.title}
-              aspectRatio="3/2"
-              data={article.image}
-              loading={loading}
-              sizes="(min-width: 768px) 50vw, 100vw"
-            />
-          </div>
-        )}
-        <h3>{article.title}</h3>
-        <small>{publishedAt}</small>
-      </Link>
-    </div>
-  );
-}
-
 // NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
-const BLOGS_QUERY = `#graphql
-  query Blog(
-    $language: LanguageCode
-    $blogHandle: String!
-    $first: Int
-    $last: Int
-    $startCursor: String
-    $endCursor: String
-  ) @inContext(language: $language) {
-    blog(handle: $blogHandle) {
-      title
-      seo {
-        title
-        description
-      }
-      articles(
-        first: $first,
-        last: $last,
-        before: $startCursor,
-        after: $endCursor
-      ) {
-        nodes {
-          ...ArticleItem
+const RECOMMENDED_BLOG_POSTS_QUERY = `#graphql
+                query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)
+                @inContext(country: $country, language: $language) {
+                  blog(handle: "news") {
+                  id
+          seo {
+                  title
+            description
+          }
+                articles(first: 20) {
+                  nodes {
+                  id
+              title
+                image {
+                  id
+                url
+              }
+                publishedAt
+                excerpt
+                seo {
+                  title
+                description
+              }
+            }
+          }
         }
-        pageInfo {
-          hasPreviousPage
-          hasNextPage
-          hasNextPage
-          endCursor
-          startCursor
-        }
-
-      }
     }
-  }
-  fragment ArticleItem on Article {
-    author: authorV2 {
-      name
-    }
-    contentHtml
-    handle
-    id
-    image {
-      id
-      altText
-      url
-      width
-      height
-    }
-    publishedAt
-    title
-    blog {
-      handle
-    }
-  }
-` as const;
+                `;

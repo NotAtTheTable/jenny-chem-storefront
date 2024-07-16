@@ -27,7 +27,7 @@ const config = {
       },
       fontSize: {
         '7xl': ['4.5rem', { lineHeight: '4.4rem' }],
-        '8xl': ['6rem', { lineHeight: '5.7rem' }],
+        '8xl': ['6rem', { lineHeight: '5.7rem', letterSpacing: "0.2rem" }],
         '9xl': ['8rem', { lineHeight: '7rem' }]
       },
       colors: {

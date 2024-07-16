@@ -16,7 +16,7 @@ type Viewport = 'desktop' | 'mobile';
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
 
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number>(0);
+  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
 
   return (
     <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 2 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
@@ -35,7 +35,9 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
-      <HeaderDropDown menu={menu} selectedIndex={selectedMenuIndex} />
+      {selectedMenuIndex &&
+        <HeaderDropDown menu={menu} selectedIndex={selectedMenuIndex} />
+      }
     </div >
 
   );

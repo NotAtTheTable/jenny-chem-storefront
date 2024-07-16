@@ -11,7 +11,13 @@ export default function HeaderDropDown({ menu, selectedIndex = 0 }: { menu: Head
     }
 
     function CollectionList({ title }: { title: string }) {
-        return <div className="font-bold text-jc-dark-blue text-xl">{title}</div>
+        const arr = [1, 2, 3, 4, 5, 6, 7, 8,]
+        return <div className="flex-1">
+            <div className="font-bold leading-loose text-jc-dark-blue text-xl border-b-2 border-jc-dark-blue border-opacity-60">{title}</div>
+            {arr.map((val) => (
+                <div className="leading-loose text-lg text-jc-dark-blue border-b border-[#c7c7c7]">Collection {val}</div>
+            ))}
+        </div>
     }
 
     return <div className="w-full absolute bg-white" style={{ zIndex: 1 }}>
