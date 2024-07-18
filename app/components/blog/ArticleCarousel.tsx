@@ -2,11 +2,11 @@ import { Await } from "@remix-run/react"
 import { Suspense, useState } from "react"
 import { ArticleCard } from "../card/ArticleCard"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "../ui/carousel"
-import { RecommendedBlogPostsQuery } from "storefrontapi.generated"
 import { Viewport } from "~/routes/_index"
+import { RecommendedBlogArticlesQuery } from "storefrontapi.generated"
 
-export const ArticleCarousel = ({ blog, viewport = "desktop", mode = "dark" }: Readonly<{
-    blog: Promise<RecommendedBlogPostsQuery>
+export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" }: Readonly<{
+    articles: RecommendedBlogArticlesQuery["articles"]
     viewport?: Viewport;
     mode?: "light" | "dark";
 }>) => {
@@ -16,8 +16,8 @@ export const ArticleCarousel = ({ blog, viewport = "desktop", mode = "dark" }: R
     if (viewport == "mobile") {
         return (
             <Suspense fallback={<div>Loading...</div>}>
-                <Await resolve={blog}>
-                    {({ blog }) => (
+                <Await resolve={articles}>
+                    {({ nodes }) => (
                         <Carousel opts={{
                             align: "start",
                             loop: true,
@@ -25,7 +25,7 @@ export const ArticleCarousel = ({ blog, viewport = "desktop", mode = "dark" }: R
                             className="w-72 mt-3"
                         >
                             <CarouselContent className="-ml-3">
-                                {blog?.articles.nodes.map((article) => (
+                                {nodes.map((article) => (
                                     <CarouselItem key={article.id} className="pl-9 basis-1/1">
                                         <ArticleCard
                                             title={article.title}
@@ -47,8 +47,8 @@ export const ArticleCarousel = ({ blog, viewport = "desktop", mode = "dark" }: R
     } else {
         return (
             <Suspense fallback={<div>Loading...</div>}>
-                <Await resolve={blog}>
-                    {({ blog }) => (
+                <Await resolve={articles}>
+                    {({ nodes }) => (
                         <Carousel opts={{
                             align: "start",
                             loop: true,
@@ -56,7 +56,7 @@ export const ArticleCarousel = ({ blog, viewport = "desktop", mode = "dark" }: R
                             className="w-[90%] 2xl:w-full max-w-8xl mt-3"
                         >
                             <CarouselContent className="-ml-2">
-                                {blog?.articles.nodes.map((article) => (
+                                {nodes.map((article) => (
                                     <CarouselItem key={article.id} className="pl-2 basis-1/3 2xl:basis-1/4">
                                         <ArticleCard
                                             title={article.title}

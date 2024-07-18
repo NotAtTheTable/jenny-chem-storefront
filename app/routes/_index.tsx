@@ -1,9 +1,9 @@
-import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Await, useLoaderData, type MetaFunction, useNavigate } from '@remix-run/react';
 import { Suspense, useState } from 'react';
 import type {
+  RecommendedBlogArticlesQuery,
   RecommendedProductsQuery,
-  RecommendedBlogPostsQuery
 } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import ProductCard from '~/components/card/ProductCard';
@@ -24,6 +24,7 @@ import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
 import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
+import { RECOMMENDED_BLOG_ARTICLES_QUERY } from './blogs.$blogHandle._index';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -33,14 +34,14 @@ export const meta: MetaFunction = () => {
 
 export async function loader({ context }: LoaderFunctionArgs) {
   const { storefront } = context;
-  const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
-  const blog = storefront.query(RECOMMENDED_BLOG_POSTS_QUERY);
+  const recommendedProducts = await storefront.query(RECOMMENDED_PRODUCTS_QUERY);
+  const recommendedArticles = await storefront.query(RECOMMENDED_BLOG_ARTICLES_QUERY);
 
-  return defer({ recommendedProducts, blog });
+  return json({ recommendedProducts, recommendedArticles });
 }
 
 export default function Homepage() {
-  const { blog, recommendedProducts } = useLoaderData<typeof loader>();
+  const { recommendedArticles, recommendedProducts } = useLoaderData<typeof loader>();
   const isMobile = useViewport();
 
   if (isMobile !== null) {
@@ -52,7 +53,7 @@ export default function Homepage() {
         <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
         <TrustPilotBanner viewport={isMobile ? 'mobile' : 'desktop'} />
         <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
-        <Tips blog={blog} viewport={isMobile ? 'mobile' : 'desktop'} />
+        <Tips articles={recommendedArticles} viewport={isMobile ? 'mobile' : 'desktop'} />
         <WhyOurFormula viewport={isMobile ? 'mobile' : 'desktop'} />
       </>
     );
@@ -179,7 +180,7 @@ function BestSellingProducts({
   products,
   viewport = 'desktop'
 }: Readonly<{
-  products: Promise<RecommendedProductsQuery>;
+  products: RecommendedProductsQuery;
   viewport?: Viewport;
 }>) {
 
@@ -360,15 +361,15 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
   }
 }
 
-function Tips({ blog, viewport = 'desktop' }: Readonly<{
-  blog: Promise<RecommendedBlogPostsQuery>
+function Tips({ articles, viewport = 'desktop' }: Readonly<{
+  articles: RecommendedBlogArticlesQuery
   viewport?: Viewport
 }>) {
   return <BlueBubbleBackground>
     <div className="flex flex-col items-center p-10 container ">
       <h2 className='text-center text-6xl text-jc-light-blue font-display'>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></h2>
       <DashDivider />
-      <ArticleCarousel blog={blog} viewport={viewport} />
+      <ArticleCarousel articles={articles.articles} viewport={viewport} />
     </div>
   </BlueBubbleBackground >
 }
@@ -439,31 +440,3 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
   }
                 `;
 
-const RECOMMENDED_BLOG_POSTS_QUERY = `#graphql
-                query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)
-                @inContext(country: $country, language: $language) {
-                  blog(handle: "news") {
-                  id
-          seo {
-                  title
-            description
-          }
-                articles(first: 20) {
-                  nodes {
-                  id
-              title
-                image {
-                  id
-                url
-              }
-                publishedAt
-                excerpt
-                seo {
-                  title
-                description
-              }
-            }
-          }
-        }
-    }
-                `;

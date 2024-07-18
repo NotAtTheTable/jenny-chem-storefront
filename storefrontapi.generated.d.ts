@@ -299,36 +299,6 @@ export type RecommendedProductsQuery = {
   };
 };
 
-export type RecommendedBlogPostsQueryVariables = StorefrontAPI.Exact<{
-  country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
-  language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
-}>;
-
-export type RecommendedBlogPostsQuery = {
-  blog?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Blog, 'id'> & {
-      seo?: StorefrontAPI.Maybe<
-        Pick<StorefrontAPI.Seo, 'title' | 'description'>
-      >;
-      articles: {
-        nodes: Array<
-          Pick<
-            StorefrontAPI.Article,
-            'id' | 'title' | 'publishedAt' | 'excerpt'
-          > & {
-            image?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.Image, 'id' | 'url'>
-            >;
-            seo?: StorefrontAPI.Maybe<
-              Pick<StorefrontAPI.Seo, 'title' | 'description'>
-            >;
-          }
-        >;
-      };
-    }
-  >;
-};
-
 export type PredictiveArticleFragment = {__typename: 'Article'} & Pick<
   StorefrontAPI.Article,
   'id' | 'title' | 'handle' | 'trackingParameters'
@@ -468,6 +438,66 @@ export type ArticleQuery = {
       }
     >;
   }>;
+};
+
+export type ArticleCardFragment = Pick<
+  StorefrontAPI.Article,
+  'id' | 'title' | 'excerpt' | 'publishedAt'
+> & {
+  image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
+  seo?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Seo, 'title' | 'description'>>;
+};
+
+export type BlogArticlesQueryVariables = StorefrontAPI.Exact<{
+  first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
+  startCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  endCursor?: StorefrontAPI.InputMaybe<
+    StorefrontAPI.Scalars['String']['input']
+  >;
+  reverse?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Boolean']['input']>;
+}>;
+
+export type BlogArticlesQuery = {
+  articles: {
+    nodes: Array<
+      Pick<
+        StorefrontAPI.Article,
+        'id' | 'title' | 'excerpt' | 'publishedAt'
+      > & {
+        image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
+        seo?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Seo, 'title' | 'description'>
+        >;
+      }
+    >;
+    pageInfo: Pick<
+      StorefrontAPI.PageInfo,
+      'hasNextPage' | 'hasPreviousPage' | 'endCursor' | 'startCursor'
+    >;
+  };
+};
+
+export type RecommendedBlogArticlesQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type RecommendedBlogArticlesQuery = {
+  articles: {
+    nodes: Array<
+      Pick<
+        StorefrontAPI.Article,
+        'id' | 'title' | 'excerpt' | 'publishedAt'
+      > & {
+        image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
+        seo?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Seo, 'title' | 'description'>
+        >;
+      }
+    >;
+  };
 };
 
 export type BlogsQueryVariables = StorefrontAPI.Exact<{
@@ -1089,10 +1119,6 @@ interface GeneratedQueryTypes {
     return: RecommendedProductsQuery;
     variables: RecommendedProductsQueryVariables;
   };
-  '#graphql\n                query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)\n                @inContext(country: $country, language: $language) {\n                  blog(handle: "news") {\n                  id\n          seo {\n                  title\n            description\n          }\n                articles(first: 20) {\n                  nodes {\n                  id\n              title\n                image {\n                  id\n                url\n              }\n                publishedAt\n                excerpt\n                seo {\n                  title\n                description\n              }\n            }\n          }\n        }\n    }\n                ': {
-    return: RecommendedBlogPostsQuery;
-    variables: RecommendedBlogPostsQueryVariables;
-  };
   '#graphql\n  fragment PredictiveArticle on Article {\n    __typename\n    id\n    title\n    handle\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n  fragment PredictiveCollection on Collection {\n    __typename\n    id\n    title\n    handle\n    image {\n      url\n      altText\n      width\n      height\n    }\n    trackingParameters\n  }\n  fragment PredictivePage on Page {\n    __typename\n    id\n    title\n    handle\n    trackingParameters\n  }\n  fragment PredictiveProduct on Product {\n    __typename\n    id\n    title\n    handle\n    trackingParameters\n    variants(first: 1) {\n      nodes {\n        id\n        image {\n          url\n          altText\n          width\n          height\n        }\n        price {\n          amount\n          currencyCode\n        }\n      }\n    }\n  }\n  fragment PredictiveQuery on SearchQuerySuggestion {\n    __typename\n    text\n    styledText\n    trackingParameters\n  }\n  query predictiveSearch(\n    $country: CountryCode\n    $language: LanguageCode\n    $limit: Int!\n    $limitScope: PredictiveSearchLimitScope!\n    $searchTerm: String!\n    $types: [PredictiveSearchType!]\n  ) @inContext(country: $country, language: $language) {\n    predictiveSearch(\n      limit: $limit,\n      limitScope: $limitScope,\n      query: $searchTerm,\n      types: $types,\n    ) {\n      articles {\n        ...PredictiveArticle\n      }\n      collections {\n        ...PredictiveCollection\n      }\n      pages {\n        ...PredictivePage\n      }\n      products {\n        ...PredictiveProduct\n      }\n      queries {\n        ...PredictiveQuery\n      }\n    }\n  }\n': {
     return: PredictiveSearchQuery;
     variables: PredictiveSearchQueryVariables;
@@ -1100,6 +1126,14 @@ interface GeneratedQueryTypes {
   '#graphql\n  query Article(\n    $articleHandle: String!\n    $blogHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    blog(handle: $blogHandle) {\n      articleByHandle(handle: $articleHandle) {\n        title\n        contentHtml\n        publishedAt\n        author: authorV2 {\n          name\n        }\n        image {\n          id\n          altText\n          url\n          width\n          height\n        }\n        seo {\n          description\n          title\n        }\n      }\n    }\n  }\n': {
     return: ArticleQuery;
     variables: ArticleQueryVariables;
+  };
+  '#graphql\n  query BlogArticles(\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n    $reverse: Boolean\n  ) {\n\n      articles(first: $first, last: $last, before: $startCursor, after: $endCursor, query: "blog:handle:news", sortKey:PUBLISHED_AT, reverse: $reverse) {\n        nodes {\n          ...ArticleCard\n        }\n        pageInfo {\n          hasNextPage\n          hasPreviousPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
+    return: BlogArticlesQuery;
+    variables: BlogArticlesQueryVariables;
+  };
+  '#graphql\n  query RecommendedBlogArticles \n  {\n      articles(first:20, query: "blog:handle:news") {\n        nodes {\n          ...ArticleCard\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
+    return: RecommendedBlogArticlesQuery;
+    variables: RecommendedBlogArticlesQueryVariables;
   };
   '#graphql\n  query Blogs(\n    $country: CountryCode\n    $endCursor: String\n    $first: Int\n    $language: LanguageCode\n    $last: Int\n    $startCursor: String\n  ) @inContext(country: $country, language: $language) {\n    blogs(\n      first: $first,\n      last: $last,\n      before: $startCursor,\n      after: $endCursor\n    ) {\n      pageInfo {\n        hasNextPage\n        hasPreviousPage\n        startCursor\n        endCursor\n      }\n      nodes {\n        title\n        handle\n        seo {\n          title\n          description\n        }\n      }\n    }\n  }\n': {
     return: BlogsQuery;

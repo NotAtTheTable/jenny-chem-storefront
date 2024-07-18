@@ -1,18 +1,20 @@
-import { defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Await, Link, useLoaderData, type MetaFunction } from '@remix-run/react';
-import { Image, Pagination, getPaginationVariables } from '@shopify/hydrogen';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, useNavigate, type MetaFunction } from '@remix-run/react';
+import { Pagination, getPaginationVariables } from '@shopify/hydrogen';
 import DashDivider from '~/components/foundational/DashDivider';
 import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
 import { useViewport } from '~/hooks/useViewport';
 import { Chip } from '~/components/foundational/Chip';
-import { RecommendedBlogPostsQuery } from 'storefrontapi.generated';
+import { ArticleCardFragment, BlogArticlesQuery } from 'storefrontapi.generated';
 import { Viewport } from './_index';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { ArticleCard } from '~/components/card/ArticleCard';
+import { ChevronDownIcon, ChevronUpIcon, CircleChevronDownIcon, CircleChevronUpIcon } from 'lucide-react';
+import { ArrowButton, DownArrowButton } from '~/components/foundational/ArrowButton';
 
 // TODO: Populate the header by using blog information
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return [{ title: `Hydrogen | blog` }];
+  return [{ title: `JennyChem | blog` }];
 };
 
 export async function loader({
@@ -20,18 +22,26 @@ export async function loader({
   params,
   context: { storefront },
 }: LoaderFunctionArgs) {
-  const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
-  });
+  const paginationVariables = getPaginationVariables(request);
+
+  const url = new URL(request.url);
+  const reverse = url.searchParams.get("reverse");
+  const tags = url.searchParams.get("tags");
+  // TODO : Fetch data based on the tags
 
   if (!params.blogHandle) {
     throw new Response(`blog not found`, { status: 404 });
   }
 
-  const blog = storefront.query(RECOMMENDED_BLOG_POSTS_QUERY, {
+  //console.log(reverse);
+
+  const articles = await storefront.query(BLOG_ARTICLES_QUERY, {
+    variables: { ...paginationVariables, reverse: reverse === "true" }
   });
 
-  return defer({ blog });
+  const recommendedArticles = await storefront.query(RECOMMENDED_BLOG_ARTICLES_QUERY);
+
+  return json({ articles, recommendedArticles });
 }
 
 const HeadingSection = () => {
@@ -52,12 +62,29 @@ const HeadingSection = () => {
   )
 }
 
-const ArticleList = ({ blog }: Readonly<{
-  blog: Promise<RecommendedBlogPostsQuery>
+const ArticleList = ({ articles }: Readonly<{
+  articles: BlogArticlesQuery["articles"]
   viewport?: Viewport;
   mode?: "light" | "dark";
 }>) => {
-  //TODO Break this out into properties in the blog 
+
+  const [sortByDate, setSortByDate] = useState<"ascending" | "descending">("descending");
+  const [selectedProperties, setSelectedProperties] = useState<string[]>([]);
+  const navigate = useNavigate();
+
+  const handleSortByChange = (value: "ascending" | "descending"): void => {
+    setSortByDate(value)
+    navigate(`?reverse=${value === "ascending"}`)
+  };
+
+  const handleSelectProperty = (value: string): void => {
+    if (selectedProperties.includes(value)) {
+      setSelectedProperties(selectedProperties.filter(property => property !== value));
+    } else {
+      setSelectedProperties([...selectedProperties, value])
+    }
+  }
+
   const properties = [
     "valeting",
     "workshop",
@@ -72,15 +99,38 @@ const ArticleList = ({ blog }: Readonly<{
     <>
       <div className='flex flex-row gap-2 py-10 w-full justify-center'>
         {properties.map((property) => (
-          <Chip handleSelect={() => { }} isSelected={true} label={property} />
+          <Chip key={property} handleSelect={() => handleSelectProperty(property)} isSelected={selectedProperties.includes(property)} label={property} />
         ))}
       </div>
 
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={blog}>
-          {({ blog }) => (
-            <div className='grid grid-cols-4 gap-5'>
-              {blog?.articles.nodes.map((article) => (
+      <Pagination connection={articles}>
+        {({ nodes, NextLink, isLoading }) => (
+          <>
+            <div className='relative grid grid-cols-4 gap-5'>
+              <div className='absolute right-0 -top-10 flex flex-row gap-2 text-jc-dark-blue font-bold text-sm'>
+                <p>Sort by date:</p>
+                <button
+                  onClick={() => handleSortByChange("descending")}
+                >{
+                    sortByDate === "ascending" ?
+                      <CircleChevronDownIcon className={"text-jc-light-blue"} />
+                      :
+                      <div className="bg-jc-dark-blue rounded-full h-[21px] w-[21px] flex justify-center items-center">
+                        <ChevronDownIcon strokeWidth={3} className={"text-white h-[16px] w-[16px]"} />
+                      </div>
+                  }</button>
+                <button
+                  onClick={() => handleSortByChange("ascending")}
+                >{
+                    sortByDate === "descending" ?
+                      <CircleChevronUpIcon className={"text-jc-light-blue"} />
+                      :
+                      <div className="bg-jc-dark-blue rounded-full h-[21px] w-[21px] flex justify-center items-center">
+                        <ChevronUpIcon strokeWidth={3} className={"text-white h-[16px] w-[16px]"} />
+                      </div>
+                  }</button>
+              </div>
+              {nodes.map((article: ArticleCardFragment) => (
                 <ArticleCard
                   title={article.title}
                   publishedAt={new Date(article.publishedAt)}
@@ -90,17 +140,22 @@ const ArticleList = ({ blog }: Readonly<{
                 />
               ))}
             </div>
-          )}
-        </Await>
-      </Suspense>
-
+            <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 mb-3" />
+            <div className='flex justify-center'>
+              <NextLink><DownArrowButton label="View More" onClick={() => { }} /></NextLink>
+            </div>
+          </>
+        )}
+      </Pagination>
     </>
   )
 }
 
 export default function Blog() {
+
+  const { articles, recommendedArticles } = useLoaderData<typeof loader>();
+
   const isMobile = useViewport();
-  const { blog } = useLoaderData<typeof loader>();
   return (
     <div className="blog">
       <HeadingSection />
@@ -108,41 +163,68 @@ export default function Blog() {
         <h1 className="font-display text-jc-dark-blue text-6xl text-center">POPULAR ARTICLES</h1>
         <DashDivider className="-mt-1 mb-4 h-[3px]" />
 
-        <ArticleCarousel mode={"light"} blog={blog as any} viewport={isMobile ? "mobile" : "desktop"} />
+        <ArticleCarousel mode={"light"} articles={recommendedArticles.articles} viewport={isMobile ? "mobile" : "desktop"} />
 
         <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 -mb-3" />
-        <ArticleList blog={blog as any} />
+        <ArticleList articles={articles.articles} />
       </div>
     </div>
   );
 }
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog
-const RECOMMENDED_BLOG_POSTS_QUERY = `#graphql
-                query RecommendedBlogPosts ($country: CountryCode, $language: LanguageCode)
-                @inContext(country: $country, language: $language) {
-                  blog(handle: "news") {
-                  id
-          seo {
-                  title
-            description
-          }
-                articles(first: 20) {
-                  nodes {
-                  id
-              title
-                image {
-                  id
-                url
-              }
-                publishedAt
-                excerpt
-                seo {
-                  title
-                description
-              }
-            }
-          }
+
+
+const ARTICLE_CARD_FRAGMENT = `#graphql
+fragment ArticleCard on Article {
+        id
+        title
+        excerpt
+        publishedAt
+        image {
+          id
+          url
         }
+        seo {
+          title
+          description
+        }
+      }
+`;
+
+const BLOG_ARTICLES_QUERY = `#graphql
+  query BlogArticles(
+    $first: Int
+    $last: Int
+    $startCursor: String
+    $endCursor: String
+    $reverse: Boolean
+  ) {
+
+      articles(first: $first, last: $last, before: $startCursor, after: $endCursor, query: "blog:handle:news", sortKey:PUBLISHED_AT, reverse: $reverse) {
+        nodes {
+          ...ArticleCard
+        }
+        pageInfo {
+          hasNextPage
+          hasPreviousPage
+          endCursor
+          startCursor
+        }
+      }
     }
-                `;
+  
+  ${ARTICLE_CARD_FRAGMENT}
+`;
+
+export const RECOMMENDED_BLOG_ARTICLES_QUERY = `#graphql
+  query RecommendedBlogArticles 
+  {
+      articles(first:20, query: "blog:handle:news") {
+        nodes {
+          ...ArticleCard
+        }
+      }
+    }
+  
+  ${ARTICLE_CARD_FRAGMENT}
+`;
