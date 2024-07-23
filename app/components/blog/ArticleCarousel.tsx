@@ -28,6 +28,7 @@ export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" 
                                 {nodes.map((article) => (
                                     <CarouselItem key={article.id} className="pl-9 basis-1/1">
                                         <ArticleCard
+                                            handle={article.handle}
                                             title={article.title}
                                             publishedAt={new Date(article.publishedAt)}
                                             imageUrl={article.image?.url || undefined}
@@ -59,6 +60,7 @@ export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" 
                                 {nodes.map((article) => (
                                     <CarouselItem key={article.id} className="pl-2 basis-1/3 2xl:basis-1/4">
                                         <ArticleCard
+                                            handle={article.handle}
                                             title={article.title}
                                             publishedAt={new Date(article.publishedAt)}
                                             imageUrl={article.image?.url || undefined}

@@ -33,8 +33,6 @@ export async function loader({
     throw new Response(`blog not found`, { status: 404 });
   }
 
-  //console.log(reverse);
-
   const articles = await storefront.query(BLOG_ARTICLES_QUERY, {
     variables: { ...paginationVariables, reverse: reverse === "true" }
   });
@@ -132,6 +130,7 @@ const ArticleList = ({ articles }: Readonly<{
               </div>
               {nodes.map((article: ArticleCardFragment) => (
                 <ArticleCard
+                  handle={article.handle}
                   title={article.title}
                   publishedAt={new Date(article.publishedAt)}
                   imageUrl={article.image?.url || undefined}
@@ -177,6 +176,7 @@ export default function Blog() {
 const ARTICLE_CARD_FRAGMENT = `#graphql
 fragment ArticleCard on Article {
         id
+        handle
         title
         excerpt
         publishedAt

@@ -442,7 +442,7 @@ export type ArticleQuery = {
 
 export type ArticleCardFragment = Pick<
   StorefrontAPI.Article,
-  'id' | 'title' | 'excerpt' | 'publishedAt'
+  'id' | 'handle' | 'title' | 'excerpt' | 'publishedAt'
 > & {
   image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
   seo?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Seo, 'title' | 'description'>>;
@@ -465,7 +465,7 @@ export type BlogArticlesQuery = {
     nodes: Array<
       Pick<
         StorefrontAPI.Article,
-        'id' | 'title' | 'excerpt' | 'publishedAt'
+        'id' | 'handle' | 'title' | 'excerpt' | 'publishedAt'
       > & {
         image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
         seo?: StorefrontAPI.Maybe<
@@ -489,7 +489,7 @@ export type RecommendedBlogArticlesQuery = {
     nodes: Array<
       Pick<
         StorefrontAPI.Article,
-        'id' | 'title' | 'excerpt' | 'publishedAt'
+        'id' | 'handle' | 'title' | 'excerpt' | 'publishedAt'
       > & {
         image?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'id' | 'url'>>;
         seo?: StorefrontAPI.Maybe<
@@ -1127,11 +1127,11 @@ interface GeneratedQueryTypes {
     return: ArticleQuery;
     variables: ArticleQueryVariables;
   };
-  '#graphql\n  query BlogArticles(\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n    $reverse: Boolean\n  ) {\n\n      articles(first: $first, last: $last, before: $startCursor, after: $endCursor, query: "blog:handle:news", sortKey:PUBLISHED_AT, reverse: $reverse) {\n        nodes {\n          ...ArticleCard\n        }\n        pageInfo {\n          hasNextPage\n          hasPreviousPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
+  '#graphql\n  query BlogArticles(\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n    $reverse: Boolean\n  ) {\n\n      articles(first: $first, last: $last, before: $startCursor, after: $endCursor, query: "blog:handle:news", sortKey:PUBLISHED_AT, reverse: $reverse) {\n        nodes {\n          ...ArticleCard\n        }\n        pageInfo {\n          hasNextPage\n          hasPreviousPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        handle\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
     return: BlogArticlesQuery;
     variables: BlogArticlesQueryVariables;
   };
-  '#graphql\n  query RecommendedBlogArticles \n  {\n      articles(first:20, query: "blog:handle:news") {\n        nodes {\n          ...ArticleCard\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
+  '#graphql\n  query RecommendedBlogArticles \n  {\n      articles(first:20, query: "blog:handle:news") {\n        nodes {\n          ...ArticleCard\n        }\n      }\n    }\n  \n  #graphql\nfragment ArticleCard on Article {\n        id\n        handle\n        title\n        excerpt\n        publishedAt\n        image {\n          id\n          url\n        }\n        seo {\n          title\n          description\n        }\n      }\n\n': {
     return: RecommendedBlogArticlesQuery;
     variables: RecommendedBlogArticlesQueryVariables;
   };

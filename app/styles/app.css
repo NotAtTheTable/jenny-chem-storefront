@@ -469,9 +469,47 @@ aside li {
 * routes/blog.$articlehandle.tsx
 * --------------------------------------------------
 */
+.article {
+  column-count: 2;
+  column-gap: 78px;
+  color: #17255D;
+}
+
+.article>* {
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+
+
 .article img {
   height: auto;
   width: 100%;
+}
+
+.article h1 {
+  color: #7094E0;
+  font-size: 28px;
+}
+
+.article h2 {
+  color: #7094E0;
+  font-size: 24px;
+}
+
+.article h3 {
+  color: #7094E0;
+  font-size: 20px;
+}
+
+.article p {
+  color: #17255D;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.article a {
+  color: #7094E0;
+  text-decoration: underline;
 }
 
 /*
