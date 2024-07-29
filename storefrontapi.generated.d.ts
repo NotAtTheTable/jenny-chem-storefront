@@ -540,10 +540,15 @@ export type BlogsQuery = {
   };
 };
 
-export type ProductPreviewFragment = Pick<StorefrontAPI.Product, 'title'> & {
-  featuredImage?: StorefrontAPI.Maybe<
-    Pick<StorefrontAPI.Image, 'url' | 'altText' | 'id'>
-  >;
+export type ProductPreviewFragment = Pick<
+  StorefrontAPI.Product,
+  'handle' | 'title'
+> & {
+  images: {
+    nodes: Array<
+      Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+    >;
+  };
   seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
   priceRange: {
     minVariantPrice: Pick<StorefrontAPI.MoneyV2, 'amount' | 'currencyCode'>;
@@ -552,17 +557,22 @@ export type ProductPreviewFragment = Pick<StorefrontAPI.Product, 'title'> & {
 
 export type CollectionPreviewFragment = Pick<
   StorefrontAPI.Collection,
-  'id' | 'handle' | 'description'
+  'id' | 'handle' | 'title' | 'description'
 > & {
   image?: StorefrontAPI.Maybe<
     Pick<StorefrontAPI.Image, 'url' | 'altText' | 'id'>
   >;
   products: {
     nodes: Array<
-      Pick<StorefrontAPI.Product, 'title'> & {
-        featuredImage?: StorefrontAPI.Maybe<
-          Pick<StorefrontAPI.Image, 'url' | 'altText' | 'id'>
-        >;
+      Pick<StorefrontAPI.Product, 'handle' | 'title'> & {
+        images: {
+          nodes: Array<
+            Pick<
+              StorefrontAPI.Image,
+              'id' | 'url' | 'altText' | 'width' | 'height'
+            >
+          >;
+        };
         seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
         priceRange: {
           minVariantPrice: Pick<
@@ -594,6 +604,11 @@ export type CollectionGroupByHandleQuery = {
     Pick<StorefrontAPI.Metaobject, 'id'> & {
       fields: Array<
         Pick<StorefrontAPI.MetaobjectField, 'value' | 'key'> & {
+          reference?: StorefrontAPI.Maybe<{
+            image?: StorefrontAPI.Maybe<
+              Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText'>
+            >;
+          }>;
           references?: StorefrontAPI.Maybe<{
             pageInfo: Pick<
               StorefrontAPI.PageInfo,
@@ -602,17 +617,22 @@ export type CollectionGroupByHandleQuery = {
             nodes: Array<
               Pick<
                 StorefrontAPI.Collection,
-                'id' | 'handle' | 'description'
+                'id' | 'handle' | 'title' | 'description'
               > & {
                 image?: StorefrontAPI.Maybe<
                   Pick<StorefrontAPI.Image, 'url' | 'altText' | 'id'>
                 >;
                 products: {
                   nodes: Array<
-                    Pick<StorefrontAPI.Product, 'title'> & {
-                      featuredImage?: StorefrontAPI.Maybe<
-                        Pick<StorefrontAPI.Image, 'url' | 'altText' | 'id'>
-                      >;
+                    Pick<StorefrontAPI.Product, 'handle' | 'title'> & {
+                      images: {
+                        nodes: Array<
+                          Pick<
+                            StorefrontAPI.Image,
+                            'id' | 'url' | 'altText' | 'width' | 'height'
+                          >
+                        >;
+                      };
                       seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
                       priceRange: {
                         minVariantPrice: Pick<
@@ -1242,7 +1262,7 @@ interface GeneratedQueryTypes {
     return: BlogsQuery;
     variables: BlogsQueryVariables;
   };
-  '#graphql\n\n  query CollectionGroupByHandle(\n    $collectionGroupHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(language: $language, country: $country) {\n\n    metaobject(handle: {handle: $collectionGroupHandle, type: "collection_group"}) {\n        id\n        fields {\n            value\n            key\n            references(\n                first: $first\n                last: $last\n                before: $startCursor\n                after: $endCursor\n            ) {\n                pageInfo {\n                    endCursor\n                    hasNextPage\n                    hasPreviousPage\n                    startCursor\n                }\n                nodes {\n                    ... on Collection {\n                        ...CollectionPreview\n                    }   \n                }\n            }\n        }\n    }\n    \n}\n#graphql\n    fragment CollectionPreview on Collection {\n        id\n        handle\n        image {\n          url\n          altText\n          id\n        }\n        description(truncateAt: 30)\n        products(first: 3) {\n          nodes {\n           ...ProductPreview\n          }\n        }\n        image {\n          url\n          altText\n          id\n        }\n      }\n      #graphql\n    fragment ProductPreview on Product {\n        featuredImage {\n          url\n          altText\n          id\n        }\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            amount\n            currencyCode\n          }\n        }\n    }\n\n\n': {
+  '#graphql\n\n  query CollectionGroupByHandle(\n    $collectionGroupHandle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(language: $language, country: $country) {\n\n    metaobject(handle: {handle: $collectionGroupHandle, type: "collection_group"}) {\n        id\n        fields {\n            value\n            key\n            reference {\n                ... on MediaImage {\n                    image {\n                        id\n                        url\n                        altText\n                    }\n                }\n            }\n            references(\n                first: $first\n                last: $last\n                before: $startCursor\n                after: $endCursor\n            ) {\n                pageInfo {\n                    endCursor\n                    hasNextPage\n                    hasPreviousPage\n                    startCursor\n                }\n                nodes {\n                    ... on Collection {\n                        ...CollectionPreview\n                    }   \n                }\n            }\n        }\n    }\n    \n}\n#graphql\n    fragment CollectionPreview on Collection {\n        id\n        handle\n        title\n        image {\n          url\n          altText\n          id\n        }\n        description(truncateAt: 30)\n        products(first: 3) {\n          nodes {\n           ...ProductPreview\n          }\n        }\n        image {\n          url\n          altText\n          id\n        }\n      }\n      #graphql\n    fragment ProductPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            amount\n            currencyCode\n          }\n        }\n    }\n\n\n': {
     return: CollectionGroupByHandleQuery;
     variables: CollectionGroupByHandleQueryVariables;
   };
