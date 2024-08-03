@@ -58,7 +58,7 @@ export default function Collections() {
                     subTextNode={<>
                         <div style={{ fontSize: "18px" }} className='text w-[35%]'>{description}</div>
                         <br />
-                        <div className='pb-6'><Link to={`/`}>Home</Link>&nbsp;&gt;&nbsp;<Link to={`/blogs/news`}>Blog</Link>&nbsp;&gt;&nbsp;{title}</div>
+                        <div className='pb-6'><Link to={`/`}>Home</Link>&nbsp;&gt;&nbsp;{title}</div>
                     </>}
                 />
             </div>
@@ -69,12 +69,12 @@ export default function Collections() {
                             <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 mb-3" />
                             {
                                 nodes.map((node) => (
-                                    <>
+                                    <div key={node.id}>
                                         <CollectionSummary
                                             {...node}
                                         />
                                         <DashDivider className="w-[100%] mt-3 h-[1px] bg-opacity-50 mb-3" />
-                                    </>
+                                    </div>
                                 ))
                             }
                             <div className='flex justify-center mb-12'>
