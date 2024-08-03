@@ -1,4 +1,4 @@
-import { defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Await, useLoaderData, type MetaFunction, useNavigate } from '@remix-run/react';
 import { Suspense, useState } from 'react';
 import type {
@@ -18,8 +18,6 @@ import YoutubeIcon from '~/assets/social-icons/youtube.svg'
 import TiktokIcon from '~/assets/social-icons/tiktok.svg'
 import InstagramIcon from '~/assets/social-icons/instagram.svg'
 
-
-import { ArticleCard } from '~/components/card/ArticleCard';
 import TrustBox from '~/components/trustpilot/TrustPilotWidget';
 import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
@@ -208,6 +206,7 @@ function BestSellingProducts({
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
                           handle={product.handle}
+                          price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
                           ActionElement={NavigateToProductPageButton}
                         />
                       </CarouselItem>
@@ -243,6 +242,7 @@ function BestSellingProducts({
                         <ProductCard
                           imageData={product.images.nodes[0] as StorefrontAPI.Image}
                           title={product.title}
+                          price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
                           handle={product.handle}
                           ActionElement={NavigateToProductPageButton}
                         />

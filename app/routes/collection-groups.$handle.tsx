@@ -1,8 +1,7 @@
 import { useLoaderData, Link, useNavigate } from '@remix-run/react';
 import { json, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Pagination, getPaginationVariables, Image } from '@shopify/hydrogen';
-import type { CollectionFragment, CollectionGroupByHandleQuery, CollectionPreviewFragment } from 'storefrontapi.generated';
-import { MetaobjectField } from '@shopify/hydrogen/storefront-api-types';
+import type { CollectionGroupByHandleQuery, CollectionPreviewFragment } from 'storefrontapi.generated';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 import { PageHeader } from '~/components/foundational/PageHeader';
 import { ArrowButton, DownArrowButton } from '~/components/foundational/ArrowButton';
@@ -13,7 +12,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const { handle } = params;
     const { storefront } = context;
     const paginationVariables = getPaginationVariables(request, {
-        pageBy: 8,
+        pageBy: 3,
     });
 
     if (!handle) {
@@ -78,7 +77,7 @@ export default function Collections() {
                                     </>
                                 ))
                             }
-                            <div className='flex justify-center'>
+                            <div className='flex justify-center mb-12'>
                                 <NextLink><DownArrowButton label="View More" onClick={() => { }} /></NextLink>
                             </div>
                         </div>
@@ -90,28 +89,31 @@ export default function Collections() {
 }
 
 const CollectionSummary = (props: CollectionPreviewFragment) => {
+    const navigate = useNavigate();
     return <div className='flex flex-row justify-center'>
-        {props?.image &&
-            <Image
-                className='mr-[6px]'
-                alt={props.image?.altText || props?.title}
-                aspectRatio="1/1"
-                data={props.image}
-                loading={'eager'}
-                sizes="(min-width: 45em) 400px, 100vw"
-            />
-        }
-        <img className='mr-[6px]' src='https://placehold.co/495x457' />
-        {props.products.nodes.map((product) => (
-            <div key={product.handle}>
-                <ProductCard
-                    imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                    title={product.title}
-                    handle={product.handle}
-                    ActionElement={NavigateToProductPageButton}
-                />
+        <div className="p-5 relative bg-cover bg-center w-[457px] mr-[6px] flex flex-col justify-end"
+            style={{ backgroundImage: `url(https://placehold.co/495x457)` }}>
+            <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " />
+            <div className='relative pt-14 z-10 text-white'>
+                <h1 className='w-[50%] font-display text-6xl tracking-large'>{props.title}</h1>
+                <div className='w-16'><DashDivider className='-mt-3 h-[3px]' /></div>
+                {props.description}
+                <div className="mt-3 w-40"><ArrowButton label="Shop Now" onClick={() => navigate(`/collections/${props.handle}`)} /></div>
             </div>
-        ))}
+        </div>
+        {props.products.nodes.map((product) => {
+            return (
+                <div key={product.handle}>
+                    <ProductCard
+                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                        title={product.title}
+                        price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                        handle={product.handle}
+                        ActionElement={NavigateToProductPageButton}
+                    />
+                </div>
+            )
+        })}
     </div>
 }
 
@@ -156,7 +158,7 @@ const COLLECTION_PREVIEW_FRAGMENT = `#graphql
           altText
           id
         }
-        description(truncateAt: 30)
+        description(truncateAt: 150)
         products(first: 3) {
           nodes {
            ...ProductPreview
