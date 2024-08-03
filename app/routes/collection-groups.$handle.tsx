@@ -12,7 +12,7 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const { handle } = params;
     const { storefront } = context;
     const paginationVariables = getPaginationVariables(request, {
-        pageBy: 3,
+        pageBy: 4,
     });
 
     if (!handle) {
