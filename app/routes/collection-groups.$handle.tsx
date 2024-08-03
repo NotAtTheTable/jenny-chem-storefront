@@ -164,11 +164,6 @@ const COLLECTION_PREVIEW_FRAGMENT = `#graphql
            ...ProductPreview
           }
         }
-        image {
-          url
-          altText
-          id
-        }
       }
       ${PRODUCT_PREVIEW_FRAGMENT}
 `;

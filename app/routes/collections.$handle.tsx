@@ -1,31 +1,33 @@
-import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {useLoaderData, Link, type MetaFunction} from '@remix-run/react';
+import { json, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData, Link, type MetaFunction, useNavigate } from '@remix-run/react';
 import {
   Pagination,
   getPaginationVariables,
-  Image,
-  Money,
 } from '@shopify/hydrogen';
-import type {ProductItemFragment} from 'storefrontapi.generated';
-import {useVariantUrl} from '~/lib/variants';
+import type { CollectionGroupLightQuery, ProductCardPreviewFragment } from 'storefrontapi.generated';
+import { PageHeader } from '~/components/foundational/PageHeader';
+import ProductCard from '~/components/card/ProductCard';
+import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
+import DashDivider from '~/components/foundational/DashDivider';
+import { ArrowButton, DownArrowButton } from '~/components/foundational/ArrowButton';
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Hydrogen | ${data?.collection.title ?? ''} Collection` }];
 };
 
-export async function loader({request, params, context}: LoaderFunctionArgs) {
-  const {handle} = params;
-  const {storefront} = context;
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
+  const { handle } = params;
+  const { storefront } = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 10,
   });
 
   if (!handle) {
     return redirect('/collections');
   }
 
-  const {collection} = await storefront.query(COLLECTION_QUERY, {
-    variables: {handle, ...paginationVariables},
+  const { collection } = await storefront.query(COLLECTION_QUERY, {
+    variables: { handle, ...paginationVariables },
   });
 
   if (!collection) {
@@ -33,121 +35,119 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
       status: 404,
     });
   }
-  return json({collection});
+
+  const collectionGroups: CollectionGroupLightQuery = await storefront.query(COLLECTION_GROUP_LIGHT_QUERY)
+  // Is this collection part of any collectionGroups for breadcrumb 
+  const metaObject = collectionGroups.metaobjects.nodes.find((node) => {
+    return node.fields.some((field) => {
+      return field.value?.includes(collection.id)
+    })
+  })
+
+  const collectionGroup = {
+    title: metaObject?.fields.find(field => field.key === "title")?.value,
+    handle: metaObject?.handle
+  }
+
+
+  return json({ collection, collectionGroup });
 }
 
 export default function Collection() {
-  const {collection} = useLoaderData<typeof loader>();
+  const { collection, collectionGroup } = useLoaderData<typeof loader>();
 
   return (
     <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <Pagination connection={collection.products}>
-        {({nodes, isLoading, PreviousLink, NextLink}) => (
-          <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-            </PreviousLink>
-            <ProductsGrid products={nodes} />
+      <div className='bg-jc-dark-blue'>
+        <PageHeader
+          gradientCurtain={false}
+          imageUrl={collection.image?.url}
+          title={collection.title || ""}
+          headingTextNode={<h1 className='w-[20%] font-display text-8xl tracking-large'>{collection.title}</h1>}
+          subTextNode={<>
+            <div style={{ fontSize: "18px" }} className='text w-[35%]'>{collection.description}</div>
             <br />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-            </NextLink>
-          </>
-        )}
-      </Pagination>
+            <div className='pb-6'>
+              <Link to={`/`}>Home</Link>
+              {collectionGroup.title && <>&nbsp;&gt;&nbsp;<Link to={`/collection-groups/${collectionGroup.handle}`}>{collectionGroup.title}</Link></>}
+              &nbsp;&gt;&nbsp;{collection.title}
+            </div>
+          </>}
+        />
+      </div>
+      <div className='container center'>
+        <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 mb-3" />
+        <Pagination connection={collection.products}>
+          {({ nodes, isLoading, NextLink }) => (
+            <>
+              <ProductsGrid products={nodes} />
+              <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 mb-3" />
+              <div className='flex justify-center mb-12'>
+                <NextLink><DownArrowButton label="View More" onClick={() => { }} /></NextLink>
+              </div>
+            </>
+          )}
+        </Pagination>
+      </div>
+
     </div>
   );
 }
 
-function ProductsGrid({products}: {products: ProductItemFragment[]}) {
+function ProductsGrid({ products }: { products: ProductCardPreviewFragment[] }) {
+  const navigate = useNavigate();
   return (
-    <div className="products-grid">
-      {products.map((product, index) => {
+    <div className='relative m-auto w-max grid xs:grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5'>
+      {products.map((product) => {
         return (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
+          <div key={product.id}>
+            <ProductCard
+              imageData={product.images.nodes[0] as StorefrontAPI.Image}
+              title={product.title}
+              price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+              handle={product.handle}
+              ActionElement={() => <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${product.handle}`)} />}
+            />
+
+          </div>
         );
       })}
     </div>
   );
 }
 
-function ProductItem({
-  product,
-  loading,
-}: {
-  product: ProductItemFragment;
-  loading?: 'eager' | 'lazy';
-}) {
-  const variant = product.variants.nodes[0];
-  const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
-  return (
-    <Link
-      className="product-item"
-      key={product.id}
-      prefetch="intent"
-      to={variantUrl}
-    >
-      {product.featuredImage && (
-        <Image
-          alt={product.featuredImage.altText || product.title}
-          aspectRatio="1/1"
-          data={product.featuredImage}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
-    </Link>
-  );
-}
-
-const PRODUCT_ITEM_FRAGMENT = `#graphql
-  fragment MoneyProductItem on MoneyV2 {
-    amount
-    currencyCode
-  }
-  fragment ProductItem on Product {
-    id
-    handle
-    title
-    featuredImage {
-      id
-      altText
-      url
-      width
-      height
+const PRODUCT_PREVIEW_FRAGMENT = `#graphql
+    fragment MoneyProductItem on MoneyV2 {
+      amount
+      currencyCode
     }
-    priceRange {
-      minVariantPrice {
-        ...MoneyProductItem
-      }
-      maxVariantPrice {
-        ...MoneyProductItem
-      }
-    }
-    variants(first: 1) {
-      nodes {
-        selectedOptions {
-          name
-          value
+    fragment ProductCardPreview on Product {
+        images(first: 1) {
+            nodes {
+                id
+                url
+                altText
+                width
+                height
+            }
         }
-      }
+        id
+        handle
+        title
+        seo {
+          description
+          title
+        }
+        priceRange {
+          minVariantPrice {
+            ...MoneyProductItem
+          }
+        }
     }
-  }
-` as const;
+`
 
 // NOTE: https://shopify.dev/docs/api/storefront/2022-04/objects/collection
 const COLLECTION_QUERY = `#graphql
-  ${PRODUCT_ITEM_FRAGMENT}
   query Collection(
     $handle: String!
     $country: CountryCode
@@ -161,7 +161,12 @@ const COLLECTION_QUERY = `#graphql
       id
       handle
       title
-      description
+      description(truncateAt: 150)
+      image {
+          url
+          altText
+          id
+        }
       products(
         first: $first,
         last: $last,
@@ -169,7 +174,7 @@ const COLLECTION_QUERY = `#graphql
         after: $endCursor
       ) {
         nodes {
-          ...ProductItem
+          ...ProductCardPreview
         }
         pageInfo {
           hasPreviousPage
@@ -180,4 +185,26 @@ const COLLECTION_QUERY = `#graphql
       }
     }
   }
+  ${PRODUCT_PREVIEW_FRAGMENT}
+` as const;
+
+const COLLECTION_GROUP_LIGHT_QUERY = `#graphql
+
+  query CollectionGroupLight(
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(language: $language, country: $country) {
+    metaobjects(type: "collection_group", first:250) {
+      nodes {
+        id
+        handle
+        updatedAt
+        type
+        fields {
+          value
+          key
+        }
+      }
+    }
+}
 ` as const;
