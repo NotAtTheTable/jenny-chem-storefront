@@ -1,4 +1,4 @@
-import { Suspense, useState } from 'react';
+import { Profiler, Suspense, useState } from 'react';
 import { defer, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Await,
@@ -141,9 +141,26 @@ function ProductMain({
   return <div className='bg-jc-light-blue bg-opacity-30'>
     <div className='container flex flex-row py-10'>
       <div className='w-1/2'>
-        <ProductImages
-          image={selectedVariant?.image}
-        />
+        <Suspense
+          fallback={
+            <ProductImages
+              image={selectedVariant?.image}
+              variants={[]}
+            />
+          }
+        >
+          <Await
+            errorElement="There was a problem loading product variants"
+            resolve={variants}
+          >
+            {(data) => (
+              <ProductImages
+                image={selectedVariant?.image}
+                variants={data.product?.variants.nodes || []}
+              />
+            )}
+          </Await>
+        </Suspense>
       </div>
       <div className='w-1/2 py-16'>
         <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
@@ -177,7 +194,7 @@ function ProductMain({
   </div>
 }
 
-function ProductImages({ image }: { image: ProductVariantFragment['image'] }) {
+function ProductImages({ image, variants }: { image: ProductVariantFragment['image'], variants: Array<ProductVariantFragment>; }) {
   if (!image) {
     return <div className="product-image" />;
   }
@@ -280,8 +297,6 @@ function ProductForm({
 
   // Store the quantity of products in the form
   const [quantity, setQuantity] = useState<number>(1);
-
-  // TODO : Form validation
 
   return (
     <div className="product-form">
