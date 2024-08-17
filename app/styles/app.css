@@ -439,10 +439,6 @@ aside li {
   grid-gap: 0.75rem;
 }
 
-.product-options-item {
-  padding: 0.25rem 0.5rem;
-}
-
 /*
 * --------------------------------------------------
 * routes/blog._index.tsx

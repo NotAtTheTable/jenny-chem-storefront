@@ -3,7 +3,7 @@ import wbarrow from "../../assets/foundational/white_arrow_right.svg"
 
 interface ArrowButtonProps {
     label: string;
-    onClick: () => void;
+    onClick: (() => void) | undefined;
 }
 
 // NOTE: Some Images are inconsistent and have a background so this looks strange

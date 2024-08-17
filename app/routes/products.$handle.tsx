@@ -1,5 +1,5 @@
-import {Suspense} from 'react';
-import {defer, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import { Suspense, useState } from 'react';
+import { defer, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Await,
   Link,
@@ -24,15 +24,17 @@ import type {
   CartLineInput,
   SelectedOption,
 } from '@shopify/hydrogen/storefront-api-types';
-import {getVariantUrl} from '~/lib/variants';
+import { getVariantUrl } from '~/lib/variants';
+import DashDivider from '~/components/foundational/DashDivider';
+import Select, { SelectProps } from '~/components/foundational/Select';
 
-export const meta: MetaFunction<typeof loader> = ({data, location}) => {
-  return [{title: `Hydrogen | ${data?.product.title ?? ''}`}];
+export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
+  return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
 };
 
-export async function loader({params, request, context}: LoaderFunctionArgs) {
-  const {handle} = params;
-  const {storefront} = context;
+export async function loader({ params, request, context }: LoaderFunctionArgs) {
+  const { handle } = params;
+  const { storefront } = context;
 
   const selectedOptions = getSelectedProductOptions(request).filter(
     (option) =>
@@ -51,12 +53,12 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   }
 
   // await the query for the critical product data
-  const {product} = await storefront.query(PRODUCT_QUERY, {
-    variables: {handle, selectedOptions},
+  const { product } = await storefront.query(PRODUCT_QUERY, {
+    variables: { handle, selectedOptions },
   });
 
   if (!product?.id) {
-    throw new Response(null, {status: 404});
+    throw new Response(null, { status: 404 });
   }
 
   const firstVariant = product.variants.nodes[0];
@@ -73,7 +75,7 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
     // if no selected variant was returned from the selected options,
     // we redirect to the first variant's url with it's selected options applied
     if (!product.selectedVariant) {
-      throw redirectToFirstVariant({product, request});
+      throw redirectToFirstVariant({ product, request });
     }
   }
 
@@ -83,10 +85,10 @@ export async function loader({params, request, context}: LoaderFunctionArgs) {
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
   const variants = storefront.query(VARIANTS_QUERY, {
-    variables: {handle},
+    variables: { handle },
   });
 
-  return defer({product, variants});
+  return defer({ product, variants });
 }
 
 function redirectToFirstVariant({
@@ -112,22 +114,70 @@ function redirectToFirstVariant({
   );
 }
 
+
+
 export default function Product() {
-  const {product, variants} = useLoaderData<typeof loader>();
-  const {selectedVariant} = product;
+  const { product, variants } = useLoaderData<typeof loader>();
+  const { selectedVariant } = product;
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <ProductMain
-        selectedVariant={selectedVariant}
-        product={product}
-        variants={variants}
-      />
-    </div>
+    <ProductMain
+      selectedVariant={selectedVariant}
+      product={product}
+      variants={variants}
+    />
   );
 }
 
-function ProductImage({image}: {image: ProductVariantFragment['image']}) {
+function ProductMain({
+  selectedVariant,
+  product,
+  variants,
+}: {
+  product: ProductFragment;
+  selectedVariant: ProductFragment['selectedVariant'];
+  variants: Promise<ProductVariantsQuery>;
+}) {
+  const { title, descriptionHtml } = product;
+  return <div className='bg-jc-light-blue bg-opacity-30'>
+    <div className='container flex flex-row py-10'>
+      <div className='w-1/2'>
+        <ProductImages
+          image={selectedVariant?.image}
+        />
+      </div>
+      <div className='w-1/2 py-16'>
+        <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
+        <div className='w-16'><DashDivider /></div>
+        <div>TrustPilot</div>
+        <div className='text-jc-dark-blue' dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
+        <Suspense
+          fallback={
+            <ProductForm
+              product={product}
+              selectedVariant={selectedVariant}
+              variants={[]}
+            />
+          }
+        >
+          <Await
+            errorElement="There was a problem loading product variants"
+            resolve={variants}
+          >
+            {(data) => (
+              <ProductForm
+                product={product}
+                selectedVariant={selectedVariant}
+                variants={data.product?.variants.nodes || []}
+              />
+            )}
+          </Await>
+        </Suspense>
+      </div>
+    </div>
+  </div>
+}
+
+function ProductImages({ image }: { image: ProductVariantFragment['image'] }) {
   if (!image) {
     return <div className="product-image" />;
   }
@@ -144,7 +194,7 @@ function ProductImage({image}: {image: ProductVariantFragment['image']}) {
   );
 }
 
-function ProductMain({
+function ProductMainOld({
   selectedVariant,
   product,
   variants,
@@ -153,7 +203,7 @@ function ProductMain({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Promise<ProductVariantsQuery>;
 }) {
-  const {title, descriptionHtml} = product;
+  const { title, descriptionHtml } = product;
   return (
     <div className="product-main">
       <h1>{title}</h1>
@@ -187,7 +237,7 @@ function ProductMain({
         <strong>Description</strong>
       </p>
       <br />
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+      <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
       <br />
     </div>
   );
@@ -199,7 +249,7 @@ function ProductPrice({
   selectedVariant: ProductFragment['selectedVariant'];
 }) {
   return (
-    <div className="product-price">
+    <div className="pr-4 py-2">
       {selectedVariant?.compareAtPrice ? (
         <>
           <p>Sale</p>
@@ -212,7 +262,7 @@ function ProductPrice({
           </div>
         </>
       ) : (
-        selectedVariant?.price && <Money data={selectedVariant?.price} />
+        selectedVariant?.price && <Money style={{ letterSpacing: "0.12rem" }} className='font-display text-jc-dark-blue text-5xl' data={selectedVariant?.price} />
       )}
     </div>
   );
@@ -227,6 +277,12 @@ function ProductForm({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Array<ProductVariantFragment>;
 }) {
+
+  // Store the quantity of products in the form
+  const [quantity, setQuantity] = useState<number>(1);
+
+  // TODO : Form validation
+
   return (
     <div className="product-form">
       <VariantSelector
@@ -234,48 +290,67 @@ function ProductForm({
         options={product.options}
         variants={variants}
       >
-        {({option}) => <ProductOptions key={option.name} option={option} />}
+        {({ option }) => <ProductOptions key={option.name} option={option} />}
       </VariantSelector>
-      <br />
-      <AddToCartButton
-        disabled={!selectedVariant || !selectedVariant.availableForSale}
-        onClick={() => {
-          window.location.href = window.location.href + '#cart-aside';
-        }}
-        lines={
-          selectedVariant
-            ? [
+      <QuantityInput
+        value={`${quantity}`}
+        onChange={(value) => { setQuantity(Number(value)) }}
+      />
+      <div className='flex flex-row divide-x-2 divide-jc-light-blue'>
+        <ProductPrice
+          selectedVariant={selectedVariant}
+        />
+        <AddToCartButton
+          disabled={!selectedVariant || !selectedVariant.availableForSale}
+          onClick={() => {
+            window.location.href = window.location.href + '#cart-aside';
+          }}
+          lines={
+            selectedVariant
+              ? [
                 {
                   merchandiseId: selectedVariant.id,
-                  quantity: 1,
+                  quantity: quantity,
                 },
               ]
-            : []
-        }
-      >
-        {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-      </AddToCartButton>
+              : []
+          }
+        >
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+      </div>
     </div>
   );
 }
 
-function ProductOptions({option}: {option: VariantOption}) {
+function ProductOptions({ option }: { option: VariantOption }) {
   return (
-    <div className="product-options" key={option.name}>
-      <h5>{option.name}</h5>
+    <div className="product-options my-4" key={option.name}>
+      <h3 className='font-display tracking-wide text-2xl text-jc-dark-blue mb-2'>{option.name}</h3>
       <div className="product-options-grid">
-        {option.values.map(({value, isAvailable, isActive, to}) => {
+        {option.values.map(({ value, isAvailable, isActive, to }) => {
           return (
             <Link
-              className="product-options-item"
+              className={`
+                border-[1.5px]
+                border-jc-light-blue
+                rounded
+                font-display
+                tracking-wide
+                px-4
+                py-1
+                leading-none
+                text-lg
+                ${isActive ? "text-white bg-jc-dark-blue" : "text-jc-dark-blue"}
+                ${isAvailable ? "text-opacity-100" : "text-opacity-30"}
+              `}
               key={option.name + value}
               prefetch="intent"
               preventScrollReset
               replace
               to={to}
               style={{
-                border: isActive ? '1px solid black' : '1px solid transparent',
-                opacity: isAvailable ? 1 : 0.3,
+                boxShadow: isActive ? "0 0 6px rgba(23,34,93,0.35)" : '',
               }}
             >
               {value}
@@ -283,11 +358,35 @@ function ProductOptions({option}: {option: VariantOption}) {
           );
         })}
       </div>
-      <br />
     </div>
   );
 }
 
+function QuantityInput({ value, onChange }: { value: SelectProps['value'], onChange: SelectProps['onChange'] }) {
+  return (
+    <div className='flex items-center my-6'>
+      <label className='font-display tracking-wide text-2xl text-jc-dark-blue mr-4'>Quantity:</label>
+      <Select
+        className='w-20 text-jc-dark-blue text-xl font-display leading-none'
+        options={[
+          { value: '1', label: '1' },
+          { value: '2', label: '2' },
+          { value: '3', label: '3' },
+          { value: '4', label: '4' },
+          { value: '5', label: '5' },
+          { value: '6', label: '6' },
+          { value: '7', label: '7' },
+          { value: '8', label: '8' },
+          { value: '9', label: '9' },
+          { value: '10', label: '10' }
+        ]}
+        value={value} onChange={onChange} />
+    </div>
+  )
+}
+
+
+// TODO: Create a whole new one of these
 function AddToCartButton({
   analytics,
   children,
@@ -302,24 +401,26 @@ function AddToCartButton({
   onClick?: () => void;
 }) {
   return (
-    <CartForm route="/cart" inputs={{lines}} action={CartForm.ACTIONS.LinesAdd}>
-      {(fetcher: FetcherWithComponents<any>) => (
-        <>
-          <input
-            name="analytics"
-            type="hidden"
-            value={JSON.stringify(analytics)}
-          />
-          <button
-            type="submit"
-            onClick={onClick}
-            disabled={disabled ?? fetcher.state !== 'idle'}
-          >
-            {children}
-          </button>
-        </>
-      )}
-    </CartForm>
+    <div className="pl-4 py-2">
+      <CartForm route="/cart" inputs={{ lines }} action={CartForm.ACTIONS.LinesAdd}>
+        {(fetcher: FetcherWithComponents<any>) => (
+          <>
+            <input
+              name="analytics"
+              type="hidden"
+              value={JSON.stringify(analytics)}
+            />
+            <button
+              type="submit"
+              onClick={onClick}
+              disabled={disabled ?? fetcher.state !== 'idle'}
+            >
+              {children}
+            </button>
+          </>
+        )}
+      </CartForm>
+    </div>
   );
 }
 
