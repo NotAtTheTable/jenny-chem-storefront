@@ -27,6 +27,7 @@ import type {
 import { getVariantUrl } from '~/lib/variants';
 import DashDivider from '~/components/foundational/DashDivider';
 import Select, { SelectProps } from '~/components/foundational/Select';
+import { ArrowButton, Button } from '~/components/foundational/ArrowButton';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -266,7 +267,7 @@ function ProductPrice({
   selectedVariant: ProductFragment['selectedVariant'];
 }) {
   return (
-    <div className="pr-4 py-2">
+    <div className="py-2">
       {selectedVariant?.compareAtPrice ? (
         <>
           <p>Sale</p>
@@ -279,7 +280,7 @@ function ProductPrice({
           </div>
         </>
       ) : (
-        selectedVariant?.price && <Money style={{ letterSpacing: "0.12rem" }} className='font-display text-jc-dark-blue text-5xl' data={selectedVariant?.price} />
+        selectedVariant?.price && <Money style={{ letterSpacing: "0.12rem" }} className='font-display text-jc-dark-blue text-5xl -mb-1' data={selectedVariant?.price} />
       )}
     </div>
   );
@@ -311,28 +312,38 @@ function ProductForm({
         value={`${quantity}`}
         onChange={(value) => { setQuantity(Number(value)) }}
       />
-      <div className='flex flex-row divide-x-2 divide-jc-light-blue'>
+      <div className='flex flex-row items-center'>
         <ProductPrice
           selectedVariant={selectedVariant}
         />
-        <AddToCartButton
-          disabled={!selectedVariant || !selectedVariant.availableForSale}
-          onClick={() => {
-            window.location.href = window.location.href + '#cart-aside';
-          }}
-          lines={
-            selectedVariant
-              ? [
-                {
-                  merchandiseId: selectedVariant.id,
-                  quantity: quantity,
-                },
-              ]
-              : []
-          }
-        >
-          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
-        </AddToCartButton>
+        <div className='w-[2px] mx-6 h-16 bg-jc-light-blue' />
+        {
+          !selectedVariant?.availableForSale ?
+            <div>
+              <Button
+                disabled={true}
+                label='Sold Out'
+              />
+            </div>
+            :
+            <AddToCartButton
+              disabled={!selectedVariant}
+              onClick={() => {
+                window.location.href = window.location.href + '#cart-aside';
+              }}
+              lines={
+                selectedVariant
+                  ? [
+                    {
+                      merchandiseId: selectedVariant.id,
+                      quantity: quantity,
+                    },
+                  ]
+                  : []
+              }
+              label={'Add to basket'}
+            />
+        }
       </div>
     </div>
   );
@@ -400,23 +411,21 @@ function QuantityInput({ value, onChange }: { value: SelectProps['value'], onCha
   )
 }
 
-
-// TODO: Create a whole new one of these
 function AddToCartButton({
   analytics,
-  children,
   disabled,
   lines,
   onClick,
+  label,
 }: {
   analytics?: unknown;
-  children: React.ReactNode;
   disabled?: boolean;
   lines: CartLineInput[];
   onClick?: () => void;
+  label: string;
 }) {
   return (
-    <div className="pl-4 py-2">
+    <div>
       <CartForm route="/cart" inputs={{ lines }} action={CartForm.ACTIONS.LinesAdd}>
         {(fetcher: FetcherWithComponents<any>) => (
           <>
@@ -425,18 +434,17 @@ function AddToCartButton({
               type="hidden"
               value={JSON.stringify(analytics)}
             />
-            <button
+            <ArrowButton
               type="submit"
               onClick={onClick}
               disabled={disabled ?? fetcher.state !== 'idle'}
-            >
-              {children}
-            </button>
+              label={label}
+            />
           </>
         )}
       </CartForm>
     </div>
-  );
+  )
 }
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
