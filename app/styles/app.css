@@ -413,11 +413,6 @@ aside li {
   margin-top: 0;
 }
 
-.product-image img {
-  height: auto;
-  width: 100%;
-}
-
 .product-main {
   align-self: start;
   position: sticky;
@@ -516,4 +511,16 @@ aside li {
 
 .account-logout {
   display: inline-block;
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer 10+ */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+  /* WebKit */
 }

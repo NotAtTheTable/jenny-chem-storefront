@@ -1,4 +1,4 @@
-import { Profiler, Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { defer, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Await,
@@ -28,6 +28,8 @@ import { getVariantUrl } from '~/lib/variants';
 import DashDivider from '~/components/foundational/DashDivider';
 import Select, { SelectProps } from '~/components/foundational/Select';
 import { ArrowButton, Button } from '~/components/foundational/ArrowButton';
+import TrustProductMini from '~/components/trustpilot/TrustPilotProductWidget';
+import { Loader } from '~/components/ui/Loading/loading';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -145,8 +147,9 @@ function ProductMain({
         <Suspense
           fallback={
             <ProductImages
-              image={selectedVariant?.image}
+              selectedVariant={selectedVariant}
               variants={[]}
+              images={{ nodes: [] }}
             />
           }
         >
@@ -156,8 +159,9 @@ function ProductMain({
           >
             {(data) => (
               <ProductImages
-                image={selectedVariant?.image}
+                selectedVariant={selectedVariant}
                 variants={data.product?.variants.nodes || []}
+                images={product.images || []}
               />
             )}
           </Await>
@@ -166,7 +170,7 @@ function ProductMain({
       <div className='w-1/2 py-16'>
         <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
         <div className='w-16'><DashDivider /></div>
-        <div>TrustPilot</div>
+        <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant?.sku || ""} /></div>
         <div className='text-jc-dark-blue' dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
         <Suspense
           fallback={
@@ -195,19 +199,50 @@ function ProductMain({
   </div>
 }
 
-function ProductImages({ image, variants }: { image: ProductVariantFragment['image'], variants: Array<ProductVariantFragment>; }) {
-  if (!image) {
-    return <div className="product-image" />;
+function ProductImages({ selectedVariant, variants, images }: {
+  selectedVariant: ProductFragment['selectedVariant'],
+  variants: Array<ProductVariantFragment>,
+  images: ProductFragment["images"];
+}) {
+
+  useEffect(() => {
+    setLargeImage(selectedVariant?.image)
+  }, [selectedVariant])
+
+  const [largeImage, setLargeImage] = useState(selectedVariant?.image)
+
+  if (!largeImage) {
+    return <div className="h-full w-auto"></div>;
   }
   return (
-    <div className="product-image">
-      <Image
-        alt={image.altText || 'Product Image'}
-        aspectRatio="1/1"
-        data={image}
-        key={image.id}
-        sizes="(min-width: 45em) 50vw, 100vw"
-      />
+    <div className="flex flex-row">
+      <div className="h-[550px] py-8 flex flex-col h-full" style={{ maxHeight: '100%' }}>
+        <div className="" style={{ maxHeight: '100%' }}>
+          {images.nodes.map((image) => (
+            image && (
+              <div onClick={() => setLargeImage(image)} key={image.id} className={`h-auto w-auto rounded ${image.id === largeImage.id ? 'border-2' : 'border'} border-${image.id === largeImage.id ? "jc-light-blue" : "jc-light-blue-100"}`}>
+                <Image
+                  alt={image.altText || 'Product Image'}
+                  aspectRatio="1/1"
+                  data={image}
+                  width={100}
+                  height={100}
+                  sizes="70px"
+                />
+              </div>
+            )
+          ))}
+        </div>
+      </div>
+      <div className="h-[550px] w-auto px-8">
+        <Image
+          alt={largeImage.altText || 'Product Image'}
+          aspectRatio="1/1"
+          data={largeImage}
+          key={largeImage.id}
+          sizes="(min-width: 45em) 50vw, 100vw"
+        />
+      </div>
     </div>
   );
 }
@@ -299,11 +334,14 @@ function ProductForm({
   // Store the quantity of products in the form
   const [quantity, setQuantity] = useState<number>(1);
 
+  // Remove the product.options which have name "title" so we don't get default
+  const filteredOptions = product.options.filter(option => option.name.toLowerCase() !== 'title');
+
   return (
-    <div className="product-form">
+    <div>
       <VariantSelector
         handle={product.handle}
-        options={product.options}
+        options={filteredOptions}
         variants={variants}
       >
         {({ option }) => <ProductOptions key={option.name} option={option} />}
@@ -317,6 +355,9 @@ function ProductForm({
           selectedVariant={selectedVariant}
         />
         <div className='w-[2px] mx-6 h-16 bg-jc-light-blue' />
+        <p>KLARNA</p>
+      </div>
+      <div className='my-6 w-56'>
         {
           !selectedVariant?.availableForSale ?
             <div>
@@ -325,6 +366,7 @@ function ProductForm({
                 label='Sold Out'
               />
             </div>
+
             :
             <AddToCartButton
               disabled={!selectedVariant}
@@ -376,7 +418,7 @@ function ProductOptions({ option }: { option: VariantOption }) {
               replace
               to={to}
               style={{
-                boxShadow: isActive ? "0 0 6px rgba(23,34,93,0.35)" : '',
+                boxShadow: isActive ? "0 0 6px rgba(23,34,93,0.35)" : 'unset',
               }}
             >
               {value}
@@ -492,6 +534,16 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    images(first: 20) {
+      nodes {
+          __typename
+          id
+          url
+          altText
+          width
+          height
+      }
+    }
     options {
       name
       values

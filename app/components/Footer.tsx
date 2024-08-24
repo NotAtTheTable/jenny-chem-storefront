@@ -241,19 +241,19 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
     links: [
       {
         label: "Sample Kit",
-        href: "/privacy-policy"
+        href: "/privacy-policy1"
       },
       {
         label: "Dilution Calculator",
-        href: "/terms-of-service"
+        href: "/terms-of-service2"
       },
       {
         label: "Services",
-        href: "/privacy-policy"
+        href: "/privacy-policy3"
       },
       {
         label: "Basket",
-        href: "/terms-of-service"
+        href: "/terms-of-service4"
       }
     ]
 
