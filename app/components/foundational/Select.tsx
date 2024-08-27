@@ -64,14 +64,14 @@ const Select: React.FC<SelectProps> = ({
                 aria-expanded={isOpen}
                 aria-labelledby="select-label"
                 disabled={disabled}
-                className={`w-full px-4 py-1 flex flex-row items-center text-left border-[1.5px] border-jc-light-blue rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-jc-light-blue focus:border-jc-light-blue ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+                className={`w-full pl-3 pr-3 py-1 flex flex-row items-center text-left border-[1.5px] border-jc-light-blue rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-jc-light-blue focus:border-jc-light-blue ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                     }`}
             >
                 <span className="block truncate -mb-[3px]">
                     {selectedOption ? selectedOption.label : placeholder}
                 </span>
                 <span className='absolute right-0 top-1/2 transform -translate-y-1/2 pr-2'>
-                    <div className="w-0 h-0 border-l-[6px] border-r-[6px] border-t-[8px] border-l-transparent border-r-transparent border-jc-dark-blue"></div>
+                    <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent border-jc-dark-blue"></div>
                 </span>
             </button>
 

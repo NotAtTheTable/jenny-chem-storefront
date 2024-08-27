@@ -16,7 +16,7 @@ export const ArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...p
             {...props}
         >
             <div className="flex flex-row justify-between">
-                <p className="px-2 flex-1 text-center line-clamp-1 text-base" style={{ color: '#fff' }}>{label.toUpperCase()}</p>
+                <p className="px-2 flex-1 text-center line-clamp-1 text-base font-semibold" style={{ color: '#fff' }}>{label.toUpperCase()}</p>
                 <img alt="arrow" src={lbarrow} />
             </div>
         </button>

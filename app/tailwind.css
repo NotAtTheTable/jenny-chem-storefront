@@ -9,5 +9,6 @@
   html,
   body {
     font-family: "Cabin", sans-serif;
+    font-weight: 500;
   }
 }

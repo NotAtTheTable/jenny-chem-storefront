@@ -14,6 +14,9 @@ const config = {
       body: ["Cabin", "Roboto", "sans-serif"],
       display: ["Bebas Neue", "Roboto", "sans-serif"]
     },
+    fontWeight: {
+      body: "500", // Medium weight
+    },
     container: {
       center: true,
       padding: "2rem",

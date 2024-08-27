@@ -22,6 +22,7 @@ import {
 } from '@shopify/hydrogen';
 import type {
   CartLineInput,
+  Product,
   SelectedOption,
 } from '@shopify/hydrogen/storefront-api-types';
 import { getVariantUrl } from '~/lib/variants';
@@ -30,6 +31,8 @@ import Select, { SelectProps } from '~/components/foundational/Select';
 import { ArrowButton, Button } from '~/components/foundational/ArrowButton';
 import TrustProductMini from '~/components/trustpilot/TrustPilotProductWidget';
 import { Loader } from '~/components/ui/Loading/loading';
+import { CircleChevronLeft, CircleChevronRight } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -117,17 +120,20 @@ function redirectToFirstVariant({
   );
 }
 
-
-
 export default function Product() {
   const { product, variants } = useLoaderData<typeof loader>();
   const { selectedVariant } = product;
   return (
-    <ProductMain
-      selectedVariant={selectedVariant}
-      product={product}
-      variants={variants}
-    />
+    <>
+      <ProductMain
+        selectedVariant={selectedVariant}
+        product={product}
+        variants={variants}
+      />
+      <ProductTabs
+        product={product}
+      />
+    </>
   );
 }
 
@@ -199,99 +205,105 @@ function ProductMain({
   </div>
 }
 
+function ProductTabs({
+  product
+}: { product: ProductFragment; }) {
+  return (
+    <Tabs defaultValue="overview" className='container'>
+      <TabsList className="flex w-full overflow-x-auto overflow-y-hidden">
+        <TabsTrigger value="overview" className="min-w-[200px] flex-shrink-0 px-10">PRODUCT OVERVIEW</TabsTrigger>
+        <TabsTrigger value="faq" className="min-w-[100px] flex-shrink-0 px-10">FAQ's</TabsTrigger>
+        <TabsTrigger value="reviews" className="min-w-[100px] flex-shrink-0 px-10">REVIEWS</TabsTrigger>
+        <TabsTrigger value="shipping" className="min-w-[200px] flex-shrink-0 px-10">SHIPPING & RETURNS</TabsTrigger>
+        <TabsTrigger value="related" className="min-w-[200px] flex-shrink-0 px-10">RELATED PRODUCTS</TabsTrigger>
+      </TabsList>
+      <TabsContent value="overview" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
+      </TabsContent>
+      <TabsContent value="faq" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+      </TabsContent>
+      <TabsContent value="reviews" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+      </TabsContent>
+      <TabsContent value="shipping" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+      </TabsContent>
+      <TabsContent value="related" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+      </TabsContent>
+    </Tabs>
+  )
+}
+
 function ProductImages({ selectedVariant, variants, images }: {
   selectedVariant: ProductFragment['selectedVariant'],
   variants: Array<ProductVariantFragment>,
   images: ProductFragment["images"];
 }) {
 
+  const getImageIndex = (selectedImage: ProductVariantFragment["image"]) => {
+    return images.nodes.findIndex(image => selectedImage?.id == image.id)
+  }
+
+  const [largeImageIndex, setLargeImageIndex] = useState(getImageIndex(selectedVariant?.image))
+
+
   useEffect(() => {
-    setLargeImage(selectedVariant?.image)
+    if (!selectedVariant?.image) {
+      return
+    }
+
+    setLargeImageIndex(getImageIndex(selectedVariant.image))
   }, [selectedVariant])
 
-  const [largeImage, setLargeImage] = useState(selectedVariant?.image)
+  const handleNavigationClick = (indexChange: number) => {
+    const newIndex = (largeImageIndex + indexChange + images.nodes.length) % images.nodes.length;
+    setLargeImageIndex(newIndex);
+  }
 
-  if (!largeImage) {
+  const selectedImage = images.nodes[largeImageIndex];
+
+  if (!selectedImage) {
     return <div className="h-full w-auto"></div>;
   }
   return (
     <div className="flex flex-row">
-      <div className="h-[550px] py-8 flex flex-col h-full" style={{ maxHeight: '100%' }}>
-        <div className="" style={{ maxHeight: '100%' }}>
-          {images.nodes.map((image) => (
+      <div className="h-[550px] flex flex-col h-full" style={{ maxHeight: '100%' }}>
+        <div className="flex flex-col space-y-" style={{ maxHeight: '100%' }}>
+          {images.nodes.length > 1 && images.nodes.map((image, index) => (
             image && (
-              <div onClick={() => setLargeImage(image)} key={image.id} className={`h-auto w-auto rounded ${image.id === largeImage.id ? 'border-2' : 'border'} border-${image.id === largeImage.id ? "jc-light-blue" : "jc-light-blue-100"}`}>
+              <button onClick={() => setLargeImageIndex(getImageIndex(image))} key={image.id} className={`h-auto w-auto rounded ${largeImageIndex === index ? 'border-2' : 'border'} border-${largeImageIndex === index ? "jc-light-blue" : "jc-light-blue-100"}`}>
                 <Image
                   alt={image.altText || 'Product Image'}
                   aspectRatio="1/1"
                   data={image}
-                  width={100}
-                  height={100}
+                  width={70}
+                  height={70}
                   sizes="70px"
                 />
-              </div>
+              </button>
             )
           ))}
         </div>
       </div>
-      <div className="h-[550px] w-auto px-8">
-        <Image
-          alt={largeImage.altText || 'Product Image'}
-          aspectRatio="1/1"
-          data={largeImage}
-          key={largeImage.id}
-          sizes="(min-width: 45em) 50vw, 100vw"
-        />
-      </div>
-    </div>
-  );
-}
-
-function ProductMainOld({
-  selectedVariant,
-  product,
-  variants,
-}: {
-  product: ProductFragment;
-  selectedVariant: ProductFragment['selectedVariant'];
-  variants: Promise<ProductVariantsQuery>;
-}) {
-  const { title, descriptionHtml } = product;
-  return (
-    <div className="product-main">
-      <h1>{title}</h1>
-      <ProductPrice selectedVariant={selectedVariant} />
-      <br />
-      <Suspense
-        fallback={
-          <ProductForm
-            product={product}
-            selectedVariant={selectedVariant}
-            variants={[]}
-          />
+      <div className="h-[550px] w-auto px-10 mx-8 relative flex items-center justify-center">
+        {images.nodes.length > 1 && <>
+          <button onClick={() => handleNavigationClick(-1)} className='absolute left-[40px] top-1/2 transform -translate-y-1/2'>
+            <CircleChevronLeft className={'text-jc-light-blue'} size={40} strokeWidth={1} />
+          </button>
+          <button onClick={() => handleNavigationClick(1)} className='absolute right-[40px] top-1/2 transform -translate-y-1/2'>
+            <CircleChevronRight className={'text-jc-light-blue'} size={40} strokeWidth={1} />
+          </button>
+        </>
         }
-      >
-        <Await
-          errorElement="There was a problem loading product variants"
-          resolve={variants}
-        >
-          {(data) => (
-            <ProductForm
-              product={product}
-              selectedVariant={selectedVariant}
-              variants={data.product?.variants.nodes || []}
-            />
-          )}
-        </Await>
-      </Suspense>
-      <br />
-      <br />
-      <p>
-        <strong>Description</strong>
-      </p>
-      <br />
-      <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
-      <br />
+        <div className="h-full w-full flex items-center justify-center">
+          <Image
+            alt={selectedImage.altText || 'Product Image'}
+            aspectRatio="1/1"
+            data={selectedImage}
+            key={selectedImage.id}
+            sizes="(min-width: 45em) 50vw, 100vw"
+            className="max-h-full max-w-full object-contain"
+          />
+        </div>
+
+      </div>
     </div>
   );
 }
@@ -302,7 +314,7 @@ function ProductPrice({
   selectedVariant: ProductFragment['selectedVariant'];
 }) {
   return (
-    <div className="py-2">
+    <div>
       {selectedVariant?.compareAtPrice ? (
         <>
           <p>Sale</p>
@@ -351,10 +363,12 @@ function ProductForm({
         onChange={(value) => { setQuantity(Number(value)) }}
       />
       <div className='flex flex-row items-center'>
-        <ProductPrice
-          selectedVariant={selectedVariant}
-        />
-        <div className='w-[2px] mx-6 h-16 bg-jc-light-blue' />
+        <div className='flex items-center'>
+          <ProductPrice
+            selectedVariant={selectedVariant}
+          />
+        </div>
+        <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
         <p>KLARNA</p>
       </div>
       <div className='my-6 w-56'>
@@ -435,7 +449,7 @@ function QuantityInput({ value, onChange }: { value: SelectProps['value'], onCha
     <div className='flex items-center my-6'>
       <label className='font-display tracking-wide text-2xl text-jc-dark-blue mr-4'>Quantity:</label>
       <Select
-        className='w-20 text-jc-dark-blue text-xl font-display leading-none'
+        className='w-14 text-jc-dark-blue text-xl font-display leading-none'
         options={[
           { value: '1', label: '1' },
           { value: '2', label: '2' },
