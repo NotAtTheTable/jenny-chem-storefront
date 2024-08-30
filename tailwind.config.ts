@@ -39,6 +39,7 @@ const config = {
         'jc-light-blue-100': '#B2C1E0',
         'jc-dark-blue-100': '#080D3F',
         'jc-dark-blue': '#17255D',
+        'jc-green': '#00B67A'
       },
       keyframes: {
         "accordion-down": {
@@ -57,7 +58,7 @@ const config = {
     },
   },
   safelist: [{
-    pattern: /(bg|text|border)-jc-(light|dark)-(blue|grey)/
+    pattern: /(bg|text|border)-jc-./
   }],
   plugins: [require("tailwindcss-animate")],
 } satisfies Config
