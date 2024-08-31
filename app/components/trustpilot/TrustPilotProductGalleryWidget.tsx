@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect } from 'react';
-const TrustProductMini = ({ sku }: { sku: string }) => {
+const TrustProductReviews = ({ sku }: { sku: string }) => {
     // Create a reference to the <div> element which will represent the TrustBox
     const ref = React.useRef(null);
     React.useEffect(() => {
@@ -14,21 +14,21 @@ const TrustProductMini = ({ sku }: { sku: string }) => {
     }, []);
 
     useEffect(() => {
+        if (sku)
+            console.log(sku)
     }, [sku])
     return (
         <div
             ref={ref}
             className="trustpilot-widget"
             data-locale="en-GB"
-            data-template-id="54d39695764ea907c0f34825"
+            data-template-id="5717796816f630043868e2e8"
             data-businessunit-id="5d6ec855f44b80000110a29d"
-            data-style-height="24px"
+            data-style-height="700px"
             data-style-width="100%"
             data-theme="light"
             data-sku={sku || ""}
             data-no-reviews="show"
-            data-scroll-to-list="true"
-            data-style-alignment="left"
         >
             <a
                 href="https://uk.trustpilot.com/review/jennychem.com"
@@ -40,4 +40,4 @@ const TrustProductMini = ({ sku }: { sku: string }) => {
         </div>
     );
 };
-export default TrustProductMini;
+export default TrustProductReviews;

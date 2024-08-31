@@ -182,8 +182,7 @@ function ProductMain({
       <div className='w-1/2 pt-16'>
         <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
         <div className='w-16'><DashDivider /></div>
-        <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant?.sku || ""} /></div>
-        <div className='text-jc-dark-blue' dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
+        {selectedVariant?.sku && <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant.sku} /></div>}
         <Suspense
           fallback={
             <ProductForm
