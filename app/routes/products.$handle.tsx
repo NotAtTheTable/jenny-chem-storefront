@@ -39,6 +39,7 @@ import { QuantityInput } from '~/components/product/ProductQuantityInput';
 import { ProductTabs } from '~/components/product/ProductTabs';
 import { ProductOptions } from '~/components/product/ProductOptions';
 import { ProductForm } from '~/components/product/ProductForm';
+import TrustProductReviews from '~/components/trustpilot/TrustPilotProductGalleryWidget';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -47,7 +48,6 @@ export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
 export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const { handle } = params;
   const { storefront } = context;
-
   const selectedOptions = getSelectedProductOptions(request).filter(
     (option) =>
       // Filter out Shopify predictive search query params
@@ -139,6 +139,11 @@ export default function Product() {
       <ProductTabs
         product={product}
       />
+      <div className='container'>
+        <div className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
+          <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
+        </div>
+      </div>
     </>
   );
 }
@@ -153,7 +158,7 @@ function ProductMain({
   variants: Promise<ProductVariantsQuery>;
 }) {
   const { title, descriptionHtml } = product;
-  return <div className='bg-jc-light-blue bg-opacity-30'>
+  return <div className='bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
     <div className='container flex flex-row py-10'>
       <div className='w-1/2'>
         <Suspense
@@ -179,7 +184,7 @@ function ProductMain({
           </Await>
         </Suspense>
       </div>
-      <div className='w-1/2 pt-16'>
+      <div className='w-1/2 py-8'>
         <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
         <div className='w-16'><DashDivider /></div>
         {selectedVariant?.sku && <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant.sku} /></div>}
@@ -280,6 +285,12 @@ const PRODUCT_FRAGMENT = `#graphql
     seo {
       description
       title
+    }
+    tags
+    collections(first: 5) {
+      nodes {
+        id
+      }
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}

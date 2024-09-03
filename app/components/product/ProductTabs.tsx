@@ -1,8 +1,9 @@
 import { ProductFragment } from "storefrontapi.generated";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { ProductOverview } from "./ProductOverview";
-import TrustProductGallery from "../trustpilot/TrustPilotProductGalleryWidget";
 import TrustProductReviews from "../trustpilot/TrustPilotProductGalleryWidget";
+import { ProductShipping } from "./ProductShipping";
+import { ProductFAQs } from "./ProductFAQs";
 
 export function ProductTabs({
     product
@@ -13,7 +14,6 @@ export function ProductTabs({
                 <TabsTrigger value="overview" className="min-w-[200px] flex-shrink-0 px-10">PRODUCT OVERVIEW</TabsTrigger>
                 <TabsTrigger value="faq" className="min-w-[100px] flex-shrink-0 px-10">FAQs</TabsTrigger>
                 {/* Only show when Video Demo available */}<TabsTrigger disabled value="demo" className='min-w-[100px] flex-shrink-0 px-10'>VIDEO DEMO</TabsTrigger>
-                <TabsTrigger value="reviews" className="min-w-[100px] flex-shrink-0 px-10">REVIEWS</TabsTrigger>
                 <TabsTrigger value="shipping" className="min-w-[200px] flex-shrink-0 px-10">SHIPPING & RETURNS</TabsTrigger>
                 <TabsTrigger value="related" className="min-w-[200px] flex-shrink-0 px-10">RELATED PRODUCTS</TabsTrigger>
             </TabsList>
@@ -23,11 +23,10 @@ export function ProductTabs({
             {/* Only show when video demo is available<TabsContent value="demo" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
             </TabsContent> */}
             <TabsContent value="faq" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
-            </TabsContent>
-            <TabsContent value="reviews" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
-                <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
+                <ProductFAQs product={product} shop={null} />
             </TabsContent>
             <TabsContent value="shipping" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+                <ProductShipping />
             </TabsContent>
             <TabsContent value="related" className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
             </TabsContent>

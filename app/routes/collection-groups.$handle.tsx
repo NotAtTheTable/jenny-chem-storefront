@@ -54,7 +54,7 @@ export default function Collections() {
                     gradientCurtain={false}
                     imageUrl={coverImage?.url}
                     title={title || ""}
-                    headingTextNode={<h1 className='w-[20%] font-display text-8xl tracking-large'>{title}</h1>}
+                    headingTextNode={<h1 className='w-[30%] font-display text-8xl tracking-large'>{title}</h1>}
                     subTextNode={<>
                         <div style={{ fontSize: "18px" }} className='text w-[35%]'>{description}</div>
                         <br />
@@ -92,7 +92,7 @@ const CollectionSummary = (props: CollectionPreviewFragment) => {
     const navigate = useNavigate();
     return <div className='flex flex-row justify-center'>
         <div className="p-5 relative bg-cover bg-center w-[457px] mr-[6px] flex flex-col justify-end"
-            style={{ backgroundImage: `url(https://placehold.co/495x457)` }}>
+            style={{ backgroundImage: `url(${props.image?.url})` }}>
             <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " />
             <div className='relative pt-14 z-10 text-white'>
                 <h1 className='w-[50%] font-display text-6xl tracking-large'>{props.title}</h1>

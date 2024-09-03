@@ -2,7 +2,7 @@ import Select, { SelectProps } from "../foundational/Select";
 
 export function QuantityInput({ value, onChange }: { value: SelectProps['value'], onChange: SelectProps['onChange'] }) {
     return (
-        <div className='flex items-center my-6'>
+        <div className='flex items-center my-4'>
             <label className='font-display tracking-wide text-2xl text-jc-dark-blue mr-4'>Quantity:</label>
             <Select
                 className='w-14 text-jc-dark-blue text-xl font-display leading-none'

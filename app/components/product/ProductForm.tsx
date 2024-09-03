@@ -45,7 +45,7 @@ export function ProductForm({
                 <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
                 <p>KLARNA</p>
             </div>
-            <div className='my-6 w-56'>
+            <div className='mt-6 w-56'>
                 {
                     !selectedVariant?.availableForSale ?
                         <div>

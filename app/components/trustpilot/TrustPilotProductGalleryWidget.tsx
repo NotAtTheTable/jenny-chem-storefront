@@ -14,7 +14,7 @@ const TrustProductReviews = ({ sku }: { sku: string }) => {
     }, []);
 
     useEffect(() => {
-        if (sku)
+        if (!sku)
             console.log(sku)
     }, [sku])
     return (
@@ -22,9 +22,9 @@ const TrustProductReviews = ({ sku }: { sku: string }) => {
             ref={ref}
             className="trustpilot-widget"
             data-locale="en-GB"
-            data-template-id="5717796816f630043868e2e8"
+            data-template-id="60f537b5b0f1639de1fe048c"
             data-businessunit-id="5d6ec855f44b80000110a29d"
-            data-style-height="700px"
+            data-style-height="140px"
             data-style-width="100%"
             data-theme="light"
             data-sku={sku || ""}

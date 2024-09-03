@@ -53,7 +53,7 @@ export function ProductImages({ selectedVariant, variants, images }: {
                             ref={el => thumbnailRefs.current[index] = el}
                             onClick={() => setLargeImageIndex(getImageIndex(image))}
                             key={image.id}
-                            className={`h-auto w-auto rounded ${largeImageIndex === index ? 'border-2' : 'border'} border-${largeImageIndex === index ? "jc-light-blue" : "jc-light-blue-100"}`}
+                            className={`bg-[#EBF2FF] h-auto w-auto rounded ${largeImageIndex === index ? 'border-2' : 'border'} border-${largeImageIndex === index ? "jc-light-blue" : "jc-light-blue-100"}`}
                         >
                             <Image
                                 alt={image.altText || 'Product Image'}

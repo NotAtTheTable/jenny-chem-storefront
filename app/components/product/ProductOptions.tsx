@@ -4,7 +4,7 @@ import { VariantOption } from "@shopify/hydrogen";
 export function ProductOptions({ option }: { option: VariantOption }) {
     return (
         <div className="product-options my-4" key={option.name}>
-            <h3 className='font-display tracking-wide text-2xl text-jc-dark-blue mb-2'>{option.name}</h3>
+            {/* having this is a great battle, see if we put it back , let jenny decide <h3 className='font-display tracking-wide text-2xl text-jc-dark-blue mb-2'>{option.name}</h3> */}
             <div className="product-options-grid">
                 {option.values.map(({ value, isAvailable, isActive, to }) => {
                     return (
@@ -16,7 +16,7 @@ export function ProductOptions({ option }: { option: VariantOption }) {
                   font-display
                   tracking-wide
                   px-4
-                  py-1
+                  pt-1
                   leading-none
                   text-lg
                   ${isActive ? "text-white bg-jc-dark-blue" : "text-jc-dark-blue"}
