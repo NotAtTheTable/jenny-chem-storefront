@@ -63,7 +63,7 @@ export default function Collection() {
           gradientCurtain={false}
           imageUrl={collection.image?.url}
           title={collection.title || ""}
-          headingTextNode={<h1 className='w-[20%] font-display text-8xl tracking-large'>{collection.title}</h1>}
+          headingTextNode={<h1 className='w-[40%] font-display text-8xl tracking-large'>{collection.title}</h1>}
           subTextNode={<>
             <div style={{ fontSize: "18px" }} className='text w-[35%]'>{collection.description}</div>
             <br />

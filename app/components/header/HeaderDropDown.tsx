@@ -1,38 +1,81 @@
-import { HeaderQuery } from "storefrontapi.generated";
+import { HeaderQuery, MenuItemFragment, ParentMenuItemFragment } from "storefrontapi.generated";
 import CollectionCard from "../card/CollectionCard";
-import { useNavigate } from "@remix-run/react";
+import { NavLink, useNavigate } from "@remix-run/react";
 import { ArrowButton } from "../foundational/ArrowButton";
+import { useRootLoaderData } from "~/lib/root-data";
 
-export default function HeaderDropDown({ menu, selectedIndex = 0 }: { menu: HeaderQuery['menu'], selectedIndex: number }) {
+export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelectedMenuItemIndex, isHidden = true, primaryDomainUrl }:
+    {
+        menu: HeaderQuery['menu'],
+        selectedIndex: number,
+        handleSelectedMenuItemIndex: (index: number | null) => void,
+        isHidden: boolean,
+        primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url']
+    }) {
 
     function NavigateToCollectionPageButton({ handle }: { handle: string }) {
         const navigate = useNavigate();
         return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/products/${handle}`)} />
     }
 
-    function CollectionList({ title }: { title: string }) {
-        const arr = [1, 2, 3, 4, 5, 6, 7, 8,]
+    function CollectionList({ menuItem, primaryDomainUrl }: {
+        menuItem: ParentMenuItemFragment;
+        primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
+    }) {
+        const { publicStoreDomain } = useRootLoaderData();
         return <div className="flex-1">
-            <div className="font-bold leading-loose text-jc-dark-blue text-xl border-b-2 border-jc-dark-blue border-opacity-60">{title}</div>
-            {arr.map((val) => (
-                <div className="leading-loose text-lg text-jc-dark-blue border-b border-[#c7c7c7]">Collection {val}</div>
-            ))}
+            <div className="font-bold leading-loose text-jc-dark-blue text-xl border-b border-jc-dark-blue border-opacity-60">{menuItem.title}</div>
+            {menuItem.items.map((item) => {
+                if (!item.url) return null;
+                const url =
+                    item.url.includes('myshopify.com') ||
+                        item.url.includes(publicStoreDomain) ||
+                        item.url.includes(primaryDomainUrl)
+                        ? new URL(item.url).pathname
+                        : item.url;
+                return (
+                    <div className={"leading-loose text-md text-jc-dark-blue border-b border-jc-dark-blu border-opacity-50"}>
+                        <NavLink
+                            end
+                            key={item.id}
+                            prefetch="intent"
+                            to={url}
+                            onClick={() => handleSelectedMenuItemIndex(null)}
+                        >
+                            {item.title}
+                        </NavLink>
+                    </div>
+                )
+            })}
         </div>
     }
 
-    return <div className="w-full absolute bg-white" style={{ zIndex: 1 }}>
-        <div className="container px-0 py-10 flex flex-row">
-            <CollectionCard title={menu?.items[selectedIndex].title || ""} handle={"some random  garbage"} ActionElement={NavigateToCollectionPageButton}
-            />
-            <div className="flex-1 flex flex-row px-10 py-3 p gap-10">
-                {
-                    menu?.items[selectedIndex].items.map(({ title }) => (
-                        <CollectionList
-                            title={title}
-                        />
-                    ))
-                }
+    console.log(menu)
+
+    return (
+        <div
+            className="w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out"
+            style={{
+                zIndex: 2,
+                maxHeight: isHidden ? '1000px' : '0'
+            }}
+            onMouseLeave={() => handleSelectedMenuItemIndex(null)}
+        >
+            <div className="container px-0 py-10 flex flex-row">
+                <CollectionCard title={menu?.items[selectedIndex].title || ""} handle={"some random  garbage"} ActionElement={NavigateToCollectionPageButton}
+                />
+                <div className="flex-1 flex flex-row px-10 py-3 p gap-10">
+                    {
+                        menu?.items[selectedIndex]?.items?.map((menuItem) => (
+                            <CollectionList
+                                key={menuItem.id}
+                                menuItem={menuItem as ParentMenuItemFragment}
+                                primaryDomainUrl={primaryDomainUrl}
+                            />
+                        ))
+                    }
+                </div>
             </div>
         </div>
-    </div>
+    )
 }

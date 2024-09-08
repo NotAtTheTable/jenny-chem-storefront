@@ -16,30 +16,35 @@ type Viewport = 'desktop' | 'mobile';
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
 
-  const [selectedMenuIndex, setSelectedMenuIndex] = useState<number | null>(null);
+  const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
 
-  return (
-    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 2 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
+  return (<>
+    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 3 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
           <HeaderMobileSearchToggle />
         </div>
-        <NavLink className="flex-1 flex justify-center lg:justify-start" prefetch="intent" to="/" end>
+        <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center lg:justify-start" prefetch="intent" to="/" end>
           <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
         </NavLink>
         <HeaderMenu
           menu={menu}
           viewport="desktop"
-          primaryDomainUrl={header.shop.primaryDomain.url}
+          primaryDomainUrl={shop.primaryDomain.url}
+          handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
+          selectedMenuItemIndex={selectedMenuItemIndex}
         />
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
-      {selectedMenuIndex &&
-        <HeaderDropDown menu={menu} selectedIndex={selectedMenuIndex} />
-      }
-    </div >
-
+      <HeaderDropDown
+        isHidden={(selectedMenuItemIndex !== null && [0, 1, 2, 3].includes(selectedMenuItemIndex))}
+        menu={menu} selectedIndex={selectedMenuItemIndex || 0}
+        handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
+        primaryDomainUrl={shop.primaryDomain.url}
+      />
+    </div>
+  </>
   );
 }
 
@@ -47,10 +52,14 @@ export function HeaderMenu({
   menu,
   primaryDomainUrl,
   viewport,
+  handleSelectedMenuItemIndex,
+  selectedMenuItemIndex
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
   viewport: Viewport;
+  handleSelectedMenuItemIndex: (index: number | null) => void;
+  selectedMenuItemIndex: number | null;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
   const className = `header-menu-${viewport} shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue`;
@@ -74,7 +83,7 @@ export function HeaderMenu({
           Home
         </NavLink>
       )}
-      {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
+      {(menu || FALLBACK_HEADER_MENU).items.map((item, index) => {
         if (!item.url) return null;
 
         // if the url is internal, we strip the domain
@@ -86,12 +95,14 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className="header-menu-item px-4 my-6 "
+            className={`header-menu-item px-4 my-6 ${(selectedMenuItemIndex === index) ? "text-jc-light-blue" : ""}`}
             end
             key={item.id}
+            onTouchStart={() => handleSelectedMenuItemIndex(index)}
             onClick={closeAside}
             prefetch="intent"
             to={url}
+            onMouseEnter={() => handleSelectedMenuItemIndex(index)}
           >
             {item.title}
           </NavLink>

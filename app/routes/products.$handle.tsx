@@ -157,7 +157,7 @@ function ProductMain({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Promise<ProductVariantsQuery>;
 }) {
-  const { title, descriptionHtml } = product;
+  const { title } = product;
   return <div className='bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
     <div className='container flex flex-row py-10'>
       <div className='w-1/2'>
@@ -188,6 +188,7 @@ function ProductMain({
         <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
         <div className='w-16'><DashDivider /></div>
         {selectedVariant?.sku && <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant.sku} /></div>}
+        {product.shortDescription?.value && <div className='text-jc-dark-blue'>{product.shortDescription.value}</div>}
         <Suspense
           fallback={
             <ProductForm
@@ -291,6 +292,12 @@ const PRODUCT_FRAGMENT = `#graphql
       nodes {
         id
       }
+    }
+    howToSteps: metafield(namespace: "custom", key: "howtosteps") {
+      value
+    }
+    shortDescription: metafield(namespace: "custom", key: "short_description") {
+      value
     }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
