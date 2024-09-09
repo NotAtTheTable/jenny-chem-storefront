@@ -26,7 +26,7 @@ export const ProductHowTos: React.FC<ProductTodosProps> = ({ video, howToStepLis
                                         {index + 1 < 10 ? `0${index + 1}` : index + 1}
                                     </div>
                                     {index < howToStepList.length - 1 && (
-                                        <div className="absolute top-[45px] left-[23px] transform -translate-x-1/2 w-[2.5px] h-4 bg-jc-dark-blue"></div>
+                                        <div className="absolute top-[45px] left-[23px] transform -translate-x-1/2 w-[2.5px] h-full bg-jc-dark-blue"></div>
                                     )}
                                 </div>
                                 <span className='text-jc-dark-blue'>{step.value}</span>
