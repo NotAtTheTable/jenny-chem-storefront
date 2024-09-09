@@ -3,9 +3,9 @@ import Warning from "@/assets/foundational/warning.svg"
 export function ProductShipping() {
 
     return (
-        <div className="flex gap-8">
+        <div className="flex gap-6">
             <img src={"https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Shipping_and_return.png?v=1725394077"} className="w-[300px] flex-shrink-0" />
-            <div className="flex flex-grow gap-8">
+            <div className="flex flex-grow gap-6">
                 <div className="w-1/2">
                     <h3 className="text-jc-light-blue text-lg mb-3">SHIPPING INFORMATION</h3>
                     <p className="text-sm text-jc-dark-blue mb-3">Orders are shipped using the DHL&#44; Yodel&#44; Royal Mail&#44; DPD & APC network and the delivery rates depend on order amount and location within the UK&#44; Not all orders will fall under the free delivery option&#44;</p>
