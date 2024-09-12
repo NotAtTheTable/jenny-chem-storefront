@@ -265,7 +265,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
         {data.map((section, index) => (
           <AccordionItem key={index} value={`value_${index}`} className="border-b-2 border-jc-light-blue">
             <AccordionTrigger>
-              <div key={section.heading} className='flex items-center w-full justify-between flex-row '>
+              <div key={section.heading} className='flex items-center w-full hover:underline justify-between flex-row '>
                 <h3 className='text-white font-body text-xl'>{section.heading}</h3>
               </div>
             </AccordionTrigger>

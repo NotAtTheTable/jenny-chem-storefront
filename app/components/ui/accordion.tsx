@@ -19,22 +19,27 @@ const AccordionItem = React.forwardRef<
   />
 ))
 AccordionItem.displayName = "AccordionItem"
-
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger> & {
+    hideDefaultToggle?: boolean;
+    customDataStateClass?: string;
+  }
+>(({ className, children, hideDefaultToggle = false, customDataStateClass, ...props }, ref) => (
   <AccordionPrimitive.Header className="flex">
     <AccordionPrimitive.Trigger
       ref={ref}
       className={cn(
-        "flex flex-1 items-center justify-between py-3 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+        "flex flex-1 items-center justify-between py-3 font-medium transition-all",
+        customDataStateClass || "[&[data-state=open]>svg]:rotate-180",
         className
       )}
       {...props}
     >
       {children}
-      <CircleChevronDown color='white' className='w-6 h-6' strokeWidth={1} />
+      {!hideDefaultToggle && (
+        <CircleChevronDown color='white' className='w-6 h-6' strokeWidth={1} />
+      )}
     </AccordionPrimitive.Trigger>
   </AccordionPrimitive.Header>
 ))

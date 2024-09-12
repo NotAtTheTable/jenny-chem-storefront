@@ -293,6 +293,9 @@ const PRODUCT_FRAGMENT = `#graphql
         id
       }
     }
+    faqs: metafield(namespace: "custom", key: "faqs") {
+      value
+    }
     howToSteps: metafield(namespace: "custom", key: "howtosteps") {
       value
     }
