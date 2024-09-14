@@ -3,7 +3,8 @@ import EmailIcon from "~/assets/foundational/email_icon.svg";
 import MessageIcon from "~/assets/foundational/message_icon.svg";
 import { ArrowButton } from "~/components/foundational/ArrowButton";
 
-import { json, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+import { json, LoaderFunctionArgs, redirect, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+import { useLoaderData } from "@remix-run/react";
 
 export async function action({ request, context }: ActionFunctionArgs) {
     const formData = await request.formData();
@@ -26,11 +27,20 @@ export async function action({ request, context }: ActionFunctionArgs) {
         message,
     });
 
-    return json({ success: true, message: 'Your message has been sent successfully!' });
+    return redirect('/contact?success=true')
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+    const url = new URL(request.url);
+    const success = url.searchParams.get('success');
+    return json({ success: success === "true" });
 }
 
 
 export default function Contact() {
+
+    const { success } = useLoaderData<typeof loader>();
+
     const data = {
         number: "01634 245666",
         email: "customerservices@jennychem.com",
@@ -108,7 +118,12 @@ export default function Contact() {
                         aria-required="true"
                         aria-describedby="messageHelp"
                     ></textarea>
-                    <ArrowButton className="w-fit" type="submit" label={"Submit Message"} />
+                    <ArrowButton className="w-max" type="submit" label={"Submit Message"} />
+                    {success && (
+                        <div className="mt-4 p-4 bg-green-100 text-green-800 border border-green-300 rounded">
+                            Your message has been successfully sent!
+                        </div>
+                    )}
                 </form>
             </div>
         </div>
