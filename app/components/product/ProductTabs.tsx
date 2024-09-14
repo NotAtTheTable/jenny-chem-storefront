@@ -33,9 +33,9 @@ export function ProductTabs({
             <TabsContent value="overview" className='bg-jc-light-grey p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
                 <ProductOverview descriptionHtml={product.descriptionHtml} image={"https://placehold.co/600x400?text=No+Image"} />
             </TabsContent>
-            {howToStepList.steps.length > 0 &&
+            {(howToStepList.steps.length > 0 || product.howToVideoUrl?.value) &&
                 <TabsContent value="howto" className='bg-jc-light-grey p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
-                    <ProductHowTos howToStepList={howToStepList} />
+                    <ProductHowTos howToStepList={howToStepList} howToVideoUrl={product.howToVideoUrl?.value} />
                 </TabsContent>
             }
             {faqList.faqs.length > 0 &&

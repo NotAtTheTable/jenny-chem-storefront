@@ -1,8 +1,7 @@
-import { useEffect } from "react";
-import { ProductFragment } from "storefrontapi.generated";
 import { FAQList } from "./ProductTabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../ui/accordion";
 import { Plus } from "lucide-react";
+import { Image } from "@shopify/hydrogen";
 
 export function ProductFAQs({ faqList }: { faqList: FAQList }) {
 
@@ -29,17 +28,24 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
                     ))}
                 </Accordion>
             </div>
-
-            <div className={'md:w-2/5'}>
-                <div
-                    className="h-full rounded-lg shadow-md bg-cover bg-center"
-                    style={{ backgroundImage: "url('https://placehold.co/400')" }}
-                    role="img"
-                    aria-label="FAQ Image"
-                >
+            <div
+                className="relative min-h-[250px] rounded-lg shadow-md bg-cover bg-center md:w-2/5"
+                style={{ backgroundImage: "url('https://placehold.co/400')" }}
+                role="img"
+                aria-label="FAQ Image"
+            >
+                <div className="w-[400px] absolute top-1/2 left-1/2 transform -translate-x-[230px] -translate-y-[90px]">
+                    <Image
+                        data={{
+                            altText: "Product FAQ image",
+                            url: "https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895",
+                            width: 400,
+                        }}
+                        sizes="(min-width: 45em) 50vw, 100vw"
+                        aspectRatio="27/10"
+                    />
                 </div>
             </div>
-
         </div>
     )
 }

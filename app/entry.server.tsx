@@ -27,11 +27,19 @@ export default async function handleRequest(
     ],
     scriptSrc: [
       "'self'",
-      'http://widget.trustpilot.com'
+      'http://widget.trustpilot.com',
+      'https://www.youtube.com',
+      'https://player.vimeo.com',
+      'https://cdn.shopify.com',
+      'https://www.youtube-nocookie.com',
     ],
     frameSrc: [
       "'self'",
-      'https://widget.trustpilot.com'
+      'https://widget.trustpilot.com',
+      'https://www.youtube.com',
+      'https://player.vimeo.com',
+      'https://cdn.shopify.com',
+      'https://www.youtube-nocookie.com',
     ]
   });
 

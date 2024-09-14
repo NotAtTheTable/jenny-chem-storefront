@@ -299,6 +299,9 @@ const PRODUCT_FRAGMENT = `#graphql
     howToSteps: metafield(namespace: "custom", key: "howtosteps") {
       value
     }
+    howToVideoUrl: metafield(namespace: "custom", key: "how_to_video_url") {
+      value
+    }
     shortDescription: metafield(namespace: "custom", key: "short_description") {
       value
     }

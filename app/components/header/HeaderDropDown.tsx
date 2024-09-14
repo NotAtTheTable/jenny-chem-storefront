@@ -18,12 +18,13 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
         return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/products/${handle}`)} />
     }
 
-    function CollectionList({ menuItem, primaryDomainUrl }: {
+    function CollectionList({ menuItem, primaryDomainUrl, key = "" }: {
         menuItem: ParentMenuItemFragment;
         primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
+        key?: string;
     }) {
         const { publicStoreDomain } = useRootLoaderData();
-        return <div className="flex-1">
+        return <div className="flex-1" key={key}>
             <div className="font-bold leading-loose text-jc-dark-blue text-xl border-b border-jc-dark-blue border-opacity-60">{menuItem.title}</div>
             {menuItem.items.map((item) => {
                 if (!item.url) return null;
@@ -49,8 +50,6 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
             })}
         </div>
     }
-
-    console.log(menu)
 
     return (
         <div
