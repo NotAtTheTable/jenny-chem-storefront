@@ -35,7 +35,7 @@ export function ProductTabs({
         <Tabs defaultValue="overview" className='container py-10'>
             <TabsList className="flex w-full overflow-x-auto overflow-y-hidden">
                 <TabsTrigger value="overview" className="min-w-[200px] flex-shrink-0 px-10">PRODUCT OVERVIEW</TabsTrigger>
-                <TabsTrigger disabled={howToStepList.steps.length > 0} value="howto" className="min-w-[100px] flex-shrink-0 px-10">HOW TO USE</TabsTrigger>
+                <TabsTrigger disabled={(howToStepList.steps.length > 0 || !!product?.howToVideoUrl)} value="howto" className="min-w-[100px] flex-shrink-0 px-10">HOW TO USE</TabsTrigger>
                 <TabsTrigger disabled={faqList.faqs.length > 0} value="faq" className='min-w-[100px] flex-shrink-0 px-10'>FAQS</TabsTrigger>
                 <TabsTrigger value="shipping" className="min-w-[200px] flex-shrink-0 px-10">SHIPPING & RETURNS</TabsTrigger>
                 <TabsTrigger value="related" className="min-w-[200px] flex-shrink-0 px-10">RELATED PRODUCTS</TabsTrigger>
