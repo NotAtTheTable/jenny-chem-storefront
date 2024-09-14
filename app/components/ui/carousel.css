@@ -4,6 +4,7 @@
     left: 50%;
     bottom: 20px;
     display: flex;
+    justify-content: center;
     flex-direction: row;
     transform: translateX(-50%);
     width: 100px;
@@ -12,7 +13,7 @@
 
 .breadcrumb {
     border-radius: 50%;
-    height: 17px;
+    height: 19px;
     width: 19px;
     border-color: white;
     border-width: 2px;
@@ -24,7 +25,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-6px, -6px);
     width: 11px;
     /* Diameter of the inner circle (2 * radius 11) */
     height: 11px;

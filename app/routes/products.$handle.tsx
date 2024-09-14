@@ -253,6 +253,35 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
   }
 ` as const;
 
+const MEDIA_IMAGE_FRAGMENT = `#graphql
+  fragment MediaImage on MediaImage {
+    id
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+  }
+` as const;
+
+const VIDEO_FRAGMENT = `#graphql
+  fragment Video on Video {
+    id
+    alt
+    previewImage {
+      url
+    }
+    sources {
+      url
+      mimeType
+    }
+  }
+` as const;
+
+
+
 const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
@@ -305,8 +334,19 @@ const PRODUCT_FRAGMENT = `#graphql
     shortDescription: metafield(namespace: "custom", key: "short_description") {
       value
     }
+    overviewMedia: metafield(namespace: "custom", key: "overview_media") {
+      references(first: 5) {
+        nodes {
+          __typename
+          ...MediaImage
+          ...Video
+        }
+      }
+    }
   }
   ${PRODUCT_VARIANT_FRAGMENT}
+  ${MEDIA_IMAGE_FRAGMENT}
+  ${VIDEO_FRAGMENT}
 ` as const;
 
 const PRODUCT_QUERY = `#graphql

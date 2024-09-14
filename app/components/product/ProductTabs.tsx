@@ -19,6 +19,7 @@ export type FAQList = {
 export function ProductTabs({
     product
 }: { product: ProductFragment; }) {
+    console.log(product.overviewMedia)
     const howToStepList = (JSON.parse(product.howToSteps?.value || "{\"steps\":[]}")) as HowToStepList;
     const faqList = (JSON.parse(product.faqs?.value || "{\"faqs\":[]}")) as FAQList;
     return (
@@ -31,7 +32,7 @@ export function ProductTabs({
                 <TabsTrigger value="related" className="min-w-[200px] flex-shrink-0 px-10">RELATED PRODUCTS</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className='bg-jc-light-grey p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
-                <ProductOverview descriptionHtml={product.descriptionHtml} image={"https://placehold.co/600x400?text=No+Image"} />
+                <ProductOverview descriptionHtml={product.descriptionHtml} overviewMedia={product.overviewMedia} />
             </TabsContent>
             {(howToStepList.steps.length > 0 || product.howToVideoUrl?.value) &&
                 <TabsContent value="howto" className='bg-jc-light-grey p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >

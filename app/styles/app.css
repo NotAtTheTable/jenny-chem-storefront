@@ -505,6 +505,52 @@ aside li {
 
 /*
 * --------------------------------------------------
+* routes/products.$handle.tsx
+* --------------------------------------------------
+*/
+.productOverview {
+  color: #17255D;
+}
+
+.productOverview>* {
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+
+
+.productOverview img {
+  height: auto;
+  width: 100%;
+}
+
+.productOverview h1 {
+  color: #7094E0;
+  font-size: 28px;
+}
+
+.productOverview h2 {
+  color: #7094E0;
+  font-size: 24px;
+}
+
+.productOverview h3 {
+  color: #7094E0;
+  font-size: 20px;
+}
+
+.productOverview p {
+  color: #17255D;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.productOverview a {
+  color: #7094E0;
+  text-decoration: underline;
+}
+
+/*
+* --------------------------------------------------
 * routes/account
 * --------------------------------------------------
 */
