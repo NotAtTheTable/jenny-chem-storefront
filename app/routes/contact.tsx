@@ -1,56 +1,116 @@
+import DashDivider from "~/components/foundational/DashDivider";
+import EmailIcon from "~/assets/foundational/email_icon.svg";
+import MessageIcon from "~/assets/foundational/message_icon.svg";
+import { ArrowButton } from "~/components/foundational/ArrowButton";
+
+import { json, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+
+export async function action({ request, context }: ActionFunctionArgs) {
+    const formData = await request.formData();
+
+    const fullName = formData.get("fullName");
+    const email = formData.get("email");
+    const orderNumber = formData.get("orderNumber");
+    const message = formData.get("message");
+
+    if (!fullName || !email || !orderNumber || !message) {
+        throw new Error('All fields are required');
+    }
+
+    // Here you can handle the form submission logic, e.g., sending an email or saving to a database
+    // For demonstration, we will just log the data
+    console.log({
+        fullName,
+        email,
+        orderNumber,
+        message,
+    });
+
+    return json({ success: true, message: 'Your message has been sent successfully!' });
+}
 
 
 export default function Contact() {
-    const data = null;
+    const data = {
+        number: "01634 245666",
+        email: "customerservices@jennychem.com",
+        paragraph: 'Get in contact with a member of our team for any general enquiries or product support. Please note, any new orders placed over the phone will be charged an administration fee to process. Our opening hours are: Monday to Friday 9:00am to 5: 30pm, and Saturday 9:00am to 1:30pm.'
+    };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-            <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
-                        Name
-                    </label>
+        <div className="flex flex-row">
+            <div className="w-[80%]">
+                <iframe
+                    width={"100%"}
+                    height={"100%"}
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJw70hYpU030cRICkT5XaCvjs&key=AIzaSyDq9Cf_nF6vcnU44kb80fyY3RUCZZw8BG8"
+                />
+            </div>
+            <div className="w-4/10 m-10 max-w-lg m-w-sm">
+                <h1 className="text-8xl text-jc-dark-blue font-display">
+                    GET IN <br /> CONTACT
+                    <span className="text-jc-light-blue">&#46;</span></h1>
+                <div className='w-16 -mt-2 mb-4'><DashDivider className="h-[3px]" /></div>
+                <div style={{ fontWeight: "700" }} className="flex items-center text-jc-dark-blue mb-3">
+                    <img src={MessageIcon} className="mr-2" />
+                    {data.number}
+                </div>
+                <div style={{ fontWeight: "700" }} className="flex items-center text-jc-dark-blue mb-4">
+                    <img src={EmailIcon} className="mr-2" />
+                    {data.email}
+                </div>
+                <div className="text-jc-dark-blue">
+                    {data.paragraph}
+                </div>
+                <DashDivider className="!w-full h-[1px] opacity-25" />
+                <form className="flex flex-col max-w-[unset]" aria-labelledby="contact-form" method="post" action="/contact">
+                    <h2 id="contact-form" className="sr-only">Contact Form</h2>
+                    <label className="mb-2 text-jc-dark-blue" htmlFor="fullName">FULL NAME</label>
                     <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="name"
                         type="text"
-                        placeholder="Your Name"
+                        id="fullName"
+                        name="fullName"
+                        className="mb-4 p-2 bg-jc-light-grey-100 rounded border-none"
                         required
+                        aria-required="true"
+                        aria-describedby="fullNameHelp"
                     />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                        Email
-                    </label>
+
+                    <label className="mb-2 text-jc-dark-blue" htmlFor="email">EMAIL*</label>
                     <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="email"
                         type="email"
-                        placeholder="Your Email"
+                        id="email"
+                        name="email"
+                        className="mb-4 p-2 bg-jc-light-grey-100 rounded border-none"
                         required
+                        aria-required="true"
+                        aria-describedby="emailHelp"
                     />
-                </div>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="message">
-                        Message
-                    </label>
+                    <label className="mb-2 text-jc-dark-blue" htmlFor="orderNumber">ORDER NUMBER / PRODUCT SKU</label>
+                    <input
+                        type="text"
+                        id="orderNumber"
+                        name="orderNumber"
+                        className="mb-4 p-2 bg-jc-light-grey-100 rounded border-none"
+                        required
+                        aria-required="true"
+                        aria-describedby="orderNumberHelp"
+                    />
+                    <label className="mb-2 text-jc-dark-blue" htmlFor="message">YOUR MESSAGE*</label>
                     <textarea
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="message"
-                        placeholder="Your Message"
+                        name="message"
+                        className="mb-4 p-2 bg-jc-light-grey-100 rounded border-none"
+                        rows={4}
                         required
-                    />
-                </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                        type="submit"
-                    >
-                        Send
-                    </button>
-                </div>
-            </form>
+                        aria-required="true"
+                        aria-describedby="messageHelp"
+                    ></textarea>
+                    <ArrowButton className="w-fit" type="submit" label={"Submit Message"} />
+                </form>
+            </div>
         </div>
     );
 }

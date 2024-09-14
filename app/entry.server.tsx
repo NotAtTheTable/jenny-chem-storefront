@@ -43,6 +43,7 @@ export default async function handleRequest(
       'https://player.vimeo.com',
       'https://cdn.shopify.com',
       'https://www.youtube-nocookie.com',
+      'https://www.google.com/'
     ]
   });
 
