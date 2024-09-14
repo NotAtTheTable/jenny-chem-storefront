@@ -1,13 +1,7 @@
-import { json, LoaderFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 
-export const loader: LoaderFunction = async () => {
-    // You can fetch any necessary data here
-    return json({});
-};
 
 export default function Contact() {
-    const data = useLoaderData();
+    const data = null;
 
     return (
         <div className="container mx-auto p-4">
