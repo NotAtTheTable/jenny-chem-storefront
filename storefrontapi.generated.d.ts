@@ -995,7 +995,7 @@ export type MediaImageFragment = Pick<StorefrontAPI.MediaImage, 'id'> & {
 
 export type VideoFragment = Pick<StorefrontAPI.Video, 'id' | 'alt'> & {
   previewImage?: StorefrontAPI.Maybe<Pick<StorefrontAPI.Image, 'url'>>;
-  sources: Array<Pick<StorefrontAPI.VideoSource, 'url'>>;
+  sources: Array<Pick<StorefrontAPI.VideoSource, 'url' | 'mimeType'>>;
 };
 
 export type ProductFragment = Pick<
@@ -1100,7 +1100,9 @@ export type ProductFragment = Pick<
               previewImage?: StorefrontAPI.Maybe<
                 Pick<StorefrontAPI.Image, 'url'>
               >;
-              sources: Array<Pick<StorefrontAPI.VideoSource, 'url'>>;
+              sources: Array<
+                Pick<StorefrontAPI.VideoSource, 'url' | 'mimeType'>
+              >;
             })
       >;
     }>;
@@ -1228,12 +1230,42 @@ export type ProductQuery = {
                   previewImage?: StorefrontAPI.Maybe<
                     Pick<StorefrontAPI.Image, 'url'>
                   >;
-                  sources: Array<Pick<StorefrontAPI.VideoSource, 'url'>>;
+                  sources: Array<
+                    Pick<StorefrontAPI.VideoSource, 'url' | 'mimeType'>
+                  >;
                 })
           >;
         }>;
       }>;
     }
+  >;
+};
+
+export type ProductRecommendationsQueryVariables = StorefrontAPI.Exact<{
+  productId: StorefrontAPI.Scalars['ID']['input'];
+}>;
+
+export type ProductRecommendationsQuery = {
+  productRecommendations?: StorefrontAPI.Maybe<
+    Array<
+      Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+        images: {
+          nodes: Array<
+            Pick<
+              StorefrontAPI.Image,
+              'id' | 'url' | 'altText' | 'width' | 'height'
+            >
+          >;
+        };
+        seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
+        priceRange: {
+          minVariantPrice: Pick<
+            StorefrontAPI.MoneyV2,
+            'amount' | 'currencyCode'
+          >;
+        };
+      }
+    >
   >;
 };
 
@@ -1480,9 +1512,13 @@ interface GeneratedQueryTypes {
     return: PoliciesQuery;
     variables: PoliciesQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    images(first: 20) {\n      nodes {\n          __typename\n          id\n          url\n          altText\n          width\n          height\n      }\n    }\n    options {\n      name\n      values\n    }\n    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariant\n      }\n    }\n    seo {\n      description\n      title\n    }\n    tags\n    collections(first: 5) {\n      nodes {\n        id\n      }\n    }\n    faqs: metafield(namespace: "custom", key: "faqs") {\n      value\n    }\n    howToSteps: metafield(namespace: "custom", key: "howtosteps") {\n      value\n    }\n    howToVideoUrl: metafield(namespace: "custom", key: "how_to_video_url") {\n      value\n    }\n    shortDescription: metafield(namespace: "custom", key: "short_description") {\n      value\n    }\n    overviewMedia: metafield(namespace: "custom", key: "overview_media") {\n      references(first: 5) {\n        nodes {\n          __typename\n          ...MediaImage\n          ...Video\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n  #graphql\n  fragment MediaImage on MediaImage {\n    id\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  #graphql\n  fragment Video on Video {\n    id\n    alt\n    previewImage {\n      url\n    }\n    sources {\n      url\n    }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode\n    $handle: String!\n    $language: LanguageCode\n    $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...Product\n    }\n  }\n  #graphql\n  fragment Product on Product {\n    id\n    title\n    vendor\n    handle\n    descriptionHtml\n    description\n    images(first: 20) {\n      nodes {\n          __typename\n          id\n          url\n          altText\n          width\n          height\n      }\n    }\n    options {\n      name\n      values\n    }\n    selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    variants(first: 1) {\n      nodes {\n        ...ProductVariant\n      }\n    }\n    seo {\n      description\n      title\n    }\n    tags\n    collections(first: 5) {\n      nodes {\n        id\n      }\n    }\n    faqs: metafield(namespace: "custom", key: "faqs") {\n      value\n    }\n    howToSteps: metafield(namespace: "custom", key: "howtosteps") {\n      value\n    }\n    howToVideoUrl: metafield(namespace: "custom", key: "how_to_video_url") {\n      value\n    }\n    shortDescription: metafield(namespace: "custom", key: "short_description") {\n      value\n    }\n    overviewMedia: metafield(namespace: "custom", key: "overview_media") {\n      references(first: 5) {\n        nodes {\n          __typename\n          ...MediaImage\n          ...Video\n        }\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n  #graphql\n  fragment MediaImage on MediaImage {\n    id\n    image {\n      id\n      url\n      altText\n      width\n      height\n    }\n  }\n\n  #graphql\n  fragment Video on Video {\n    id\n    alt\n    previewImage {\n      url\n    }\n    sources {\n      url\n      mimeType\n    }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
+  };
+  '#graphql\n  query ProductRecommendations($productId: ID!) {\n    productRecommendations(productId: $productId) {\n      id\n      ...ProductCardPreview\n    }\n  }\n  #graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n': {
+    return: ProductRecommendationsQuery;
+    variables: ProductRecommendationsQueryVariables;
   };
   '#graphql\n  #graphql\n  fragment ProductVariants on Product {\n    variants(first: 250) {\n      nodes {\n        ...ProductVariant\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n  query ProductVariants(\n    $country: CountryCode\n    $language: LanguageCode\n    $handle: String!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...ProductVariants\n    }\n  }\n': {
     return: ProductVariantsQuery;

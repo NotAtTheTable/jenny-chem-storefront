@@ -116,7 +116,7 @@ function ProductsGrid({ products }: { products: ProductCardPreviewFragment[] }) 
   );
 }
 
-const PRODUCT_PREVIEW_FRAGMENT = `#graphql
+export const PRODUCT_PREVIEW_FRAGMENT = `#graphql
     fragment MoneyProductItem on MoneyV2 {
       amount
       currencyCode

@@ -10,6 +10,9 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext,
 ) {
+
+  const ABORT_DELAY = 5_000;
+
   const { nonce, header, NonceProvider } = createContentSecurityPolicy({
     styleSrc: [
       "'self'",
@@ -45,7 +48,11 @@ export default async function handleRequest(
 
   const body = await renderToReadableStream(
     <NonceProvider>
-      <RemixServer context={remixContext} url={request.url} />
+      <RemixServer
+        context={remixContext}
+        url={request.url}
+        abortDelay={ABORT_DELAY}
+      />
     </NonceProvider>,
     {
       nonce,

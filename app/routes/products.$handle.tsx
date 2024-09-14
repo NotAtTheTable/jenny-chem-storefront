@@ -40,6 +40,7 @@ import { ProductTabs } from '~/components/product/ProductTabs';
 import { ProductOptions } from '~/components/product/ProductOptions';
 import { ProductForm } from '~/components/product/ProductForm';
 import TrustProductReviews from '~/components/trustpilot/TrustPilotProductGalleryWidget';
+import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -63,6 +64,15 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   if (!handle) {
     throw new Error('Expected product handle to be defined');
   }
+
+  // In order to show which variants are available in the UI, we need to query
+  // all of them. But there might be a *lot*, so instead separate the variants
+  // into it's own separate query that is deferred. So there's a brief moment
+  // where variant options might show as available when they're not, but after
+  // this deffered query resolves, the UI will update.
+  const variantsPromise = storefront.query(VARIANTS_QUERY, {
+    variables: { handle },
+  });
 
   // await the query for the critical product data
   const { product } = await storefront.query(PRODUCT_QUERY, {
@@ -90,17 +100,17 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
       throw redirectToFirstVariant({ product, request });
     }
   }
+  const productRecommendations = await storefront.query(PRODUCT_RECOMMENDATIONS_QUERY, {
+    variables: {
+      productId: product.id
+    }
+  })
 
-  // In order to show which variants are available in the UI, we need to query
-  // all of them. But there might be a *lot*, so instead separate the variants
-  // into it's own separate query that is deferred. So there's a brief moment
-  // where variant options might show as available when they're not, but after
-  // this deffered query resolves, the UI will update.
-  const variants = storefront.query(VARIANTS_QUERY, {
-    variables: { handle },
+  return defer({
+    product,
+    variants: variantsPromise,
+    productRecommendations
   });
-
-  return defer({ product, variants });
 }
 
 function redirectToFirstVariant({
@@ -127,8 +137,9 @@ function redirectToFirstVariant({
 }
 
 export default function Product() {
-  const { product, variants } = useLoaderData<typeof loader>();
+  const { product, variants, productRecommendations } = useLoaderData<typeof loader>();
   const { selectedVariant } = product;
+
   return (
     <>
       <ProductMain
@@ -138,6 +149,7 @@ export default function Product() {
       />
       <ProductTabs
         product={product}
+        productRecommendations={productRecommendations}
       />
       <div className='container'>
         <div className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
@@ -362,6 +374,16 @@ const PRODUCT_QUERY = `#graphql
   }
   ${PRODUCT_FRAGMENT}
 ` as const;
+
+const PRODUCT_RECOMMENDATIONS_QUERY = `#graphql
+  query ProductRecommendations($productId: ID!) {
+    productRecommendations(productId: $productId) {
+      id
+      ...ProductCardPreview
+    }
+  }
+  ${PRODUCT_PREVIEW_FRAGMENT}
+`
 
 const PRODUCT_VARIANTS_FRAGMENT = `#graphql
   fragment ProductVariants on Product {
