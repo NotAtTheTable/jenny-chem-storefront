@@ -22,7 +22,7 @@ export default function ProductCard({ imageData, title, handle, price, ActionEle
                     data={imageData}
                 />
             </div>
-            <div className='p-4 flex-1 flex flex-col justify-between text-center w-full'>
+            <div className='p-4 flex-1 flex flex-col justify-between text-center w-full bg-white'>
                 <div className="line-clamp-2 text-jc-dark-blue font-semibold text-xl leading-tight">{title}</div>
                 <div className="flex flex-col items-center justify-end">
                     <div className='w-10 border-t-2 border-jc-light-blue mt-2' />

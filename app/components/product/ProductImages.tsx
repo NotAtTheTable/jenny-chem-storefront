@@ -17,6 +17,16 @@ export function ProductImages({ selectedVariant, variants, images }: {
     const [largeImageIndex, setLargeImageIndex] = useState(getImageIndex(selectedVariant?.image))
     const thumbnailRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+    // Preload images
+    useEffect(() => {
+        if (images.nodes) {
+            images.nodes.forEach((image) => {
+                const img = new window.Image(); // Use window.Image to avoid type issues
+                img.src = image.url; // Preload the image
+            });
+        }
+    }, [images])
+
     useEffect(() => {
         if (!selectedVariant?.image) {
             return
@@ -85,6 +95,7 @@ export function ProductImages({ selectedVariant, variants, images }: {
                         key={selectedImage.id}
                         sizes="(min-width: 45em) 50vw, 100vw"
                         className="max-h-full max-w-full object-contain"
+                        loader={({ src }) => `${src}?w=200&h=200&fit=cover`}
                     />
                 </div>
             </div>

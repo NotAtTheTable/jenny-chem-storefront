@@ -28,6 +28,7 @@ export default defineConfig({
   ssr: {
     optimizeDeps: {
       include: [
+        '@remix-run/node',
         'beautify',
         'react-diff-viewer-continued',
         'date-fns/formatDistance/index.js',

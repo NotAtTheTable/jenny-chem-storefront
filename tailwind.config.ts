@@ -35,6 +35,7 @@ const config = {
       },
       colors: {
         'jc-light-grey': '#F0F0F8',
+        'jc-light-grey-100': '#F6F6F8',
         'jc-light-blue': '#7094E0',
         'jc-light-blue-100': '#B2C1E0',
         'jc-dark-blue-100': '#080D3F',

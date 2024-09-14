@@ -152,7 +152,7 @@ export default function Product() {
         productRecommendations={productRecommendations}
       />
       <div className='container'>
-        <div className='bg-jc-light-grey py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
+        <div className='bg-jc-light-grey-100 py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
           <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
         </div>
       </div>
@@ -169,6 +169,7 @@ function ProductMain({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Promise<ProductVariantsQuery>;
 }) {
+  console.log(product)
   const { title } = product;
   return <div className='bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
     <div className='container flex flex-row py-10'>
