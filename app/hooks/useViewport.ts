@@ -15,3 +15,4 @@ export const useViewport = (): boolean | null => {
 
     return isMobile;
 };
+

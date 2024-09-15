@@ -157,6 +157,18 @@ aside li {
   }
 }
 
+@media (max-width: 768px) {
+  .desktop-component {
+    display: none;
+  }
+}
+
+@media (min-width: 769px) {
+  .mobile-component {
+    display: none;
+  }
+}
+
 .header-menu-mobile {
   display: flex;
   flex-direction: column;
