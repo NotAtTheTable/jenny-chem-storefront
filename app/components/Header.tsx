@@ -4,6 +4,7 @@ import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
 import ContactIcon from "~/assets/foundational/contact_icon.svg"
+import ParcelIcon from "~/assets/foundational/parcel_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
 import { AlignJustify, Dot, Search, SearchIcon } from 'lucide-react';
@@ -25,7 +26,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
           <HeaderMenuMobileToggle />
           <HeaderMobileSearchToggle />
         </div>
-        <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center lg:justify-start" prefetch="intent" to="/" end>
+        <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center" prefetch="intent" to="/" end>
           <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
         </NavLink>
         <HeaderMenu
@@ -119,11 +120,15 @@ function HeaderCtas({
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
     <nav className="header-ctas" role="navigation">
+      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="https://jennychem.aftership.com/?page-name=tracking-page">
+        <img alt="contact-icon" className="h-7" src={ParcelIcon} />
+        <p className='font-body mt-1' style={{ fontSize: "9px" }}>TRACKING</p>
+      </NavLink>
       <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
+      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to={"https://shopify.com/3254747185/account"}>
         <img alt="profile-placeholder" className="h-7" src={ProfilePlaceholderIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>
           <Suspense fallback="Sign in">

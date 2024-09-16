@@ -63,10 +63,10 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
             <div className="container px-0 py-10 flex flex-row">
                 <CollectionCard title={menu?.items[selectedIndex].title || ""} handle={"some random  garbage"} ActionElement={NavigateToCollectionPageButton}
                 />
-                <div className="flex-1 flex flex-row px-10 py-3 p gap-10">
+                <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
                     {
                         menu?.items[selectedIndex]?.items?.map((menuItem) => (
-                            <div key={menuItem.id}>
+                            <div key={menuItem.id} className="flex-1">
                                 <CollectionList
                                     keyPass={menuItem.id}
                                     menuItem={menuItem as ParentMenuItemFragment}
