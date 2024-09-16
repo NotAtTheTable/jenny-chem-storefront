@@ -159,13 +159,13 @@ aside li {
 
 @media screen and (max-width: 768px) {
   .desktop-component {
-    display: none;
+    display: none !important;
   }
 }
 
 @media screen and (min-width: 769px) {
   .mobile-component {
-    display: none;
+    display: none !important;
   }
 }
 
