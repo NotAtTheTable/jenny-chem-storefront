@@ -1,6 +1,8 @@
 import { Link } from "@remix-run/react";
 import { VariantOption } from "@shopify/hydrogen";
 
+import "~/styles/app.css"
+
 export function ProductOptions({ option }: { option: VariantOption }) {
     return (
         <div className="my-4" key={option.name}>

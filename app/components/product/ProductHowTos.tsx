@@ -2,6 +2,8 @@ import React from 'react';
 import { HowToStepList } from './ProductTabs';
 import ReactPlayer from 'react-player';
 
+import "~/styles/app.css"
+
 interface ProductTodosProps {
     howToVideoUrl?: string;
     howToStepList?: HowToStepList

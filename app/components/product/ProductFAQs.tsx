@@ -3,6 +3,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "..
 import { Plus } from "lucide-react";
 import { Image } from "@shopify/hydrogen";
 
+import "~/styles/app.css"
+
 export function ProductFAQs({ faqList }: { faqList: FAQList }) {
 
     return (

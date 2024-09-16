@@ -7,6 +7,8 @@ import { ProductPrice } from "./ProductPrice";
 import { Button } from "../foundational/ArrowButton";
 import { AddToCartButton } from "./ProductAddToCartButton";
 
+import "~/styles/app.css"
+
 export function ProductForm({
     product,
     selectedVariant,

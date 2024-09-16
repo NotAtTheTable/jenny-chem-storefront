@@ -5,6 +5,8 @@ import ProductCard from '../card/ProductCard';
 import { ArrowButton } from '../foundational/ArrowButton';
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
+import "~/styles/app.css"
+
 interface ProductRecommendationsProps {
     productRecommendations: ProductRecommendationsQuery["productRecommendations"];
 }
