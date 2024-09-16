@@ -157,13 +157,13 @@ aside li {
   }
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
   .desktop-component {
     display: none;
   }
 }
 
-@media (min-width: 769px) {
+@media screen and (min-width: 769px) {
   .mobile-component {
     display: none;
   }
