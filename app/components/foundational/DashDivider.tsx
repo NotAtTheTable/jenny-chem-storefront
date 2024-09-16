@@ -9,7 +9,7 @@ interface DashDividerProps {
 const DashDivider: React.FC<DashDividerProps> = ({ light = false, className }) => {
     return (
         <div className="w-full my-3 flex items-center justify-center">
-            <div className={cn([`w-16 h-0.5 bg-${light ? "white" : "jc-light-blue"}`, className])} />
+            <div className={cn([`w-16 h-[3px] bg-${light ? "white" : "jc-light-blue"}`, className])} />
         </div>
     )
 }

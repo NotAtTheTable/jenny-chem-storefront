@@ -52,6 +52,9 @@ const config = {
           to: { height: "0" },
         },
       },
+      letterSpacing: {
+        'extra-wide': '0.2em',
+      },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",

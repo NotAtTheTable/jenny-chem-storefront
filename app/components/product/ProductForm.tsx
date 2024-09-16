@@ -24,57 +24,111 @@ export function ProductForm({
     const filteredOptions = product.options.filter(option => option.name.toLowerCase() !== 'title');
 
     return (
-        <div>
-            <VariantSelector
-                handle={product.handle}
-                options={filteredOptions}
-                variants={variants}
-            >
-                {({ option }) => <ProductOptions key={option.name} option={option} />}
-            </VariantSelector>
-            <QuantityInput
-                value={`${quantity}`}
-                onChange={(value) => { setQuantity(Number(value)) }}
-            />
-            <div className='flex flex-row items-center'>
-                <div className='flex items-center'>
-                    <ProductPrice
-                        selectedVariant={selectedVariant}
-                    />
-                </div>
-                <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
-                <p>KLARNA</p>
-            </div>
-            <div className='mt-6 w-56'>
-                {
-                    !selectedVariant?.availableForSale ?
-                        <div>
-                            <Button
-                                disabled={true}
-                                label='Sold Out'
-                            />
-                        </div>
-
-                        :
-                        <AddToCartButton
-                            disabled={!selectedVariant}
-                            onClick={() => {
-                                window.location.href = window.location.href + '#cart-aside';
-                            }}
-                            lines={
-                                selectedVariant
-                                    ? [
-                                        {
-                                            merchandiseId: selectedVariant.id,
-                                            quantity: quantity,
-                                        },
-                                    ]
-                                    : []
-                            }
-                            label={'Add to basket'}
+        <>
+            <div className="desktop-component">
+                <VariantSelector
+                    handle={product.handle}
+                    options={filteredOptions}
+                    variants={variants}
+                >
+                    {({ option }) => <ProductOptions key={option.name} option={option} />}
+                </VariantSelector>
+                <QuantityInput
+                    value={`${quantity}`}
+                    onChange={(value) => { setQuantity(Number(value)) }}
+                />
+                <div className='flex flex-row items-center'>
+                    <div className='flex items-center'>
+                        <ProductPrice
+                            selectedVariant={selectedVariant}
                         />
-                }
+                    </div>
+                    <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
+                    <p>KLARNA</p>
+                </div>
+                <div className='mt-6 w-56'>
+                    {
+                        !selectedVariant?.availableForSale ?
+                            <div>
+                                <Button
+                                    disabled={true}
+                                    label='Sold Out'
+                                />
+                            </div>
+
+                            :
+                            <AddToCartButton
+                                disabled={!selectedVariant}
+                                onClick={() => {
+                                    window.location.href = window.location.href + '#cart-aside';
+                                }}
+                                lines={
+                                    selectedVariant
+                                        ? [
+                                            {
+                                                merchandiseId: selectedVariant.id,
+                                                quantity: quantity,
+                                            },
+                                        ]
+                                        : []
+                                }
+                                label={'Add to basket'}
+                            />
+                    }
+                </div>
             </div>
-        </div>
+            <div className="mobile-component">
+                <VariantSelector
+                    handle={product.handle}
+                    options={filteredOptions}
+                    variants={variants}
+                >
+                    {({ option }) => <ProductOptions key={option.name} option={option} />}
+                </VariantSelector>
+
+                <div className='flex flex-row items-center my-7'>
+                    <QuantityInput
+                        value={`${quantity}`}
+                        onChange={(value) => { setQuantity(Number(value)) }}
+                    />
+                    <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
+                    <div className='flex items-center'>
+                        <ProductPrice
+                            selectedVariant={selectedVariant}
+                        />
+                    </div>
+                </div>
+                <div>
+                    {
+                        !selectedVariant?.availableForSale ?
+                            <div>
+                                <Button
+                                    disabled={true}
+                                    label='Sold Out'
+                                />
+                            </div>
+
+                            :
+                            <AddToCartButton
+                                disabled={!selectedVariant}
+                                onClick={() => {
+                                    window.location.href = window.location.href + '#cart-aside';
+                                }}
+                                lines={
+                                    selectedVariant
+                                        ? [
+                                            {
+                                                merchandiseId: selectedVariant.id,
+                                                quantity: quantity,
+                                            },
+                                        ]
+                                        : []
+                                }
+                                label={'Add to basket'}
+                            />
+                    }
+                </div>
+            </div>
+        </>
     );
 }

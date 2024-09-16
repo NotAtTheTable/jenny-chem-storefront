@@ -7,13 +7,12 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
 
     return (
         <div className="flex flex-col md:flex-row gap-6">
-
             <div className={'md:w-3/5'}>
                 <Accordion collapsible type="single" className="gap-3 flex flex-col">
                     {faqList.faqs.map(({ question, answer }, index) => (
                         <AccordionItem key={index} value={`value_${index}`} className="[&[data-state=open]]:bg-jc-dark-blue [&[data-state=open]]:text-white text-jc-dark-blue bg-white rounded-lg px-4 shadow">
                             <AccordionTrigger hideDefaultToggle
-                                className="flex flex-1 items-center justify-between py-3 font-medium"
+                                className="flex flex-1 items-center justify-between py-3 font-medium text-left"
                                 customDataStateClass="[&[data-state=open]>div>svg]:rotate-45 [&[data-state=open]>div>svg]:text-jc-light-blue"
                             >
                                 <div key={index} className='flex items-center w-full justify-between flex-row'>
@@ -29,7 +28,7 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
                 </Accordion>
             </div>
             <div
-                className="relative min-h-[250px] rounded-lg shadow-md bg-cover bg-center md:w-2/5"
+                className="relative min-h-[250px] rounded-lg shadow-md bg-cover bg-center md:w-2/5 desktop-component"
                 style={{ backgroundImage: "url('https://placehold.co/400')" }}
                 role="img"
                 aria-label="FAQ Image"

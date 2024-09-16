@@ -63,3 +63,17 @@ export const LightBlueArrowButton: React.FC<ArrowButtonProps> = ({ label, classN
         </button>
     )
 }
+
+export const MobileArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
+    return (
+        <button
+            className={`py-1 px-1 bg-jc-dark-blue rounded-lg border border-jc-light-blue drop-shadow ${className || ''}`}
+            {...props}
+        >
+            <div className="flex flex-row gap-3 justify-center align-center">
+                <p className="px-2 line-clamp-1" style={{ fontSize: "19px", color: '#fff' }}>{label.toUpperCase()}</p>
+                <img alt="arrow" src={lbarrow} />
+            </div>
+        </button>
+    )
+}

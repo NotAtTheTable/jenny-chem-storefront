@@ -151,10 +151,13 @@ export default function Product() {
         product={product}
         productRecommendations={productRecommendations}
       />
-      <div className='container'>
+      <div className='desktop-component container'>
         <div className='bg-jc-light-grey-100 py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
           <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
         </div>
+      </div>
+      <div className='mobile-component my-7'>
+        <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
       </div>
     </>
   );
@@ -172,8 +175,8 @@ function ProductMain({
   console.log(product)
   const { title } = product;
   return <div className='bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
-    <div className='container flex flex-row py-10'>
-      <div className='w-1/2'>
+    <div className='px-6 md:px-[unset] md:container md:flex md:flex-row md:py-10 py-5'>
+      <div className='md:w-1/2'>
         <Suspense
           fallback={
             <ProductImages
@@ -197,10 +200,10 @@ function ProductMain({
           </Await>
         </Suspense>
       </div>
-      <div className='w-1/2 py-8'>
-        <h1 style={{ letterSpacing: "0.2rem" }} className='font-display text-jc-dark-blue text-7xl break-normal whitespace-normal'>{title}</h1>
-        <div className='w-16'><DashDivider /></div>
-        {selectedVariant?.sku && <div className='mt-6 mb-3'><TrustProductMini sku={selectedVariant.sku} /></div>}
+      <div className="md:w-1/2 md:py-8 text-center md:text-left">
+        <h1 className='font-display text-jc-dark-blue text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</h1>
+        <div className='md:w-16'><DashDivider /></div>
+        {selectedVariant?.sku && <div className='mt-6 mb-3 md:w-[161px]'><TrustProductMini sku={selectedVariant.sku} /></div>}
         {product.shortDescription?.value && <div className='text-jc-dark-blue'>{product.shortDescription.value}</div>}
         <Suspense
           fallback={
@@ -225,8 +228,8 @@ function ProductMain({
           </Await>
         </Suspense>
       </div>
-    </div>
-  </div>
+    </div >
+  </div >
 }
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql

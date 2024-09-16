@@ -3,13 +3,13 @@ import Warning from "@/assets/foundational/warning.svg"
 export function ProductShipping() {
 
     return (
-        <div className="flex gap-6">
+        <div className="flex md:flex-row flex-col gap-6">
             <img src={"https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Shipping_and_return.png?v=1725394077"} className="w-[300px] flex-shrink-0" />
-            <div className="flex flex-grow gap-6">
-                <div className="w-1/2">
+            <div className="flex md:flex-row flex-col flex-grow gap-6 md:text-left text-center">
+                <div className="md:w-1/2">
                     <h3 className="text-jc-light-blue text-lg mb-3">SHIPPING INFORMATION</h3>
-                    <p className="text-sm text-jc-dark-blue mb-3">Orders are shipped using the DHL&#44; Yodel&#44; Royal Mail&#44; DPD & APC network and the delivery rates depend on order amount and location within the UK&#44; Not all orders will fall under the free delivery option&#44;</p>
-                    <p className="text-sm text-jc-dark-blue mb-3">Shipping fees include handling and packing fees as well as postage costs&#44; Handling fees are fixed&#44; whereas transport fees vary according to the total weight of the shipment&#44;</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">Orders are shipped using the DHL&#44; Yodel&#44; Royal Mail&#44; DPD & APC network and the delivery rates depend on order amount and location within the UK&#44; Not all orders will fall under the free delivery option.</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">Shipping fees include handling and packing fees as well as postage costs&#44; Handling fees are fixed&#44; whereas transport fees vary according to the total weight of the shipment.</p>
                     <table className="w-full border-collapse my-4">
                         <thead>
                             <tr className="bg-jc-dark-blue text-white text-sm">
@@ -46,16 +46,16 @@ export function ProductShipping() {
                         </p>
                     </div>
                 </div>
-                <div className="w-1/2">
+                <div className="md:w-1/2">
                     <h3 className="text-jc-light-blue text-lg mb-3">RETURNS INFORMATION</h3>
-                    <p className="text-sm text-jc-dark-blue mb-3">We will notify you once we&#39;ve received and inspected your return&#44; and let you know if the refund was approved or not&#44; If approved&#44; you&#39;ll be automatically refunded on your original payment method&#44; Please remember it can take some time for your bank or credit card company to process the refund&#44;</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">We will notify you once we&#39;ve received and inspected your return&#44; and let you know if the refund was approved or not&#44; If approved&#44; you&#39;ll be automatically refunded on your original payment method&#44; Please remember it can take some time for your bank or credit card company to process the refund.</p>
                     <h3 className="text-jc-light-blue text-lg mb-3">DAMAGED ITEMS</h3>
-                    <p className="text-sm text-jc-dark-blue mb-3">Please inspect your order upon reception and contact us immediately if the item is defective&#44; damaged or if you receive the wrong item&#44; so that we can evaluate the issue and make it right&#44;</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">Please inspect your order upon reception and contact us immediately if the item is defective. damaged or if you receive the wrong item. so that we can evaluate the issue and make it right.</p>
                     <h3 className="text-jc-light-blue text-lg mb-3">EXCEPTIONS &amp; NON-RETURNABLE ITEMS&#58;</h3>
-                    <p className="text-sm text-jc-dark-blue mb-3">Certain types of items cannot be returned&#44; We also do not accept returns for hazardous materials&#44; flammable liquids&#44; or gases&#44; Please get in touch if you have questions or concerns about your specific item&#44;</p>
-                    <p className="text-sm text-jc-dark-blue mb-3">Unfortunately&#44; we cannot accept returns on sale items or gift cards&#44; Offer &#47; Discount are excluded from the returns policy unless returned within 7 days of the order being placed&#44;</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">Certain types of items cannot be returned&#44; We also do not accept returns for hazardous materials&#44; flammable liquids&#44; or gases&#44; Please get in touch if you have questions or concerns about your specific item.</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">Unfortunately&#44; we cannot accept returns on sale items or gift cards&#44; Offer &#47; Discount are excluded from the returns policy unless returned within 7 days of the order being placed.</p>
                     <h3 className="text-jc-light-blue text-lg mb-3">EXCHANGES</h3>
-                    <p className="text-sm text-jc-dark-blue mb-3">The fastest way to ensure you get what you want is to return the item you have&#44; and once the return is accepted&#44; make a separate purchase for the new item&#44;</p>
+                    <p className="text-sm text-jc-dark-blue mb-3">The fastest way to ensure you get what you want is to return the item you have&#44; and once the return is accepted&#44; make a separate purchase for the new item.</p>
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import {
     Image,
 } from '@shopify/hydrogen';
 
+import "~/styles/app.css"
+
 export function ProductImages({ selectedVariant, variants, images }: {
     selectedVariant: ProductFragment['selectedVariant'],
     variants: Array<ProductVariantFragment>,
@@ -55,8 +57,8 @@ export function ProductImages({ selectedVariant, variants, images }: {
         return <div className="h-full w-auto"></div>;
     }
     return (
-        <div className="h-[480px] relative">
-            <div className="absolute h-full overflow-y-scroll w-[80px] no-scrollbar" >
+        <div className="md:h-[480px] relative">
+            <div className="desktop-component absolute h-full overflow-y-scroll w-[80px] no-scrollbar" >
                 {images.nodes.length > 1 && images.nodes.map((image, index) => (
                     image && (
                         <button
@@ -77,12 +79,12 @@ export function ProductImages({ selectedVariant, variants, images }: {
                     )
                 ))}
             </div>
-            <div className="w-auto px-10 mr-8 ml-[80px] relative flex items-center justify-center">
+            <div className="w-auto md:px-10 md:mr-8 md:ml-[80px] relative flex items-center justify-center">
                 {images.nodes.length > 1 && <>
-                    <button onClick={() => handleNavigationClick(-1)} className='absolute left-[40px] top-1/2 transform -translate-y-1/2'>
+                    <button onClick={() => handleNavigationClick(-1)} className='absolute left-[10px] md:left-[40px] top-1/2 transform -translate-y-1/2'>
                         <CircleChevronLeft className={'text-jc-light-blue'} size={40} strokeWidth={1} />
                     </button>
-                    <button onClick={() => handleNavigationClick(1)} className='absolute right-[40px] top-1/2 transform -translate-y-1/2'>
+                    <button onClick={() => handleNavigationClick(1)} className='absolute right-[10px] md:right-[40px] top-1/2 transform -translate-y-1/2'>
                         <CircleChevronRight className={'text-jc-light-blue'} size={40} strokeWidth={1} />
                     </button>
                 </>

@@ -28,7 +28,7 @@ const TrustProductMini = ({ sku }: { sku: string }) => {
             data-sku={sku || ""}
             data-no-reviews="show"
             data-scroll-to-list="true"
-            data-style-alignment="left"
+            data-style-alignment="center"
         >
             <a
                 href="https://uk.trustpilot.com/review/jennychem.com"

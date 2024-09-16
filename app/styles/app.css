@@ -440,12 +440,6 @@ aside li {
   opacity: 0.5;
 }
 
-.product-options-grid {
-  display: flex;
-  flex-wrap: wrap;
-  grid-gap: 0.75rem;
-}
-
 /*
 * --------------------------------------------------
 * routes/blog._index.tsx

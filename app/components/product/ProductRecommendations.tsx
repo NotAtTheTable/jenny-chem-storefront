@@ -16,18 +16,33 @@ function NavigateToProductPageButton({ handle }: { handle: string }) {
 
 const ProductRecommendations = ({ productRecommendations }: ProductRecommendationsProps) => {
     return (
-        <div className='flex flex-row justify-between'>
-            {productRecommendations && productRecommendations.slice(0, 5).map((product) => (
-                <ProductCard
-                    key={product.id}
-                    imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                    title={product.title}
-                    handle={product.handle}
-                    price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
-                    ActionElement={NavigateToProductPageButton}
-                />
-            ))}
-        </div>)
+        <>
+            <div className='desktop-component flex flex-row justify-between'>
+                {productRecommendations && productRecommendations.slice(0, 5).map((product) => (
+                    <ProductCard
+                        key={product.id}
+                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                        title={product.title}
+                        handle={product.handle}
+                        price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                        ActionElement={NavigateToProductPageButton}
+                    />
+                ))}
+            </div>
+            <div className='mobile-component flex flex-col gap-2 justify-center w-full items-center'>
+                {productRecommendations && productRecommendations.slice(0, 5).map((product) => (
+                    <ProductCard
+                        key={product.id}
+                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                        title={product.title}
+                        handle={product.handle}
+                        price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                        ActionElement={NavigateToProductPageButton}
+                    />
+                ))}
+            </div>
+        </>
+    )
 };
 
 export default ProductRecommendations;
