@@ -38,23 +38,23 @@ export function ProductTabs({
                 <TabsTrigger value="shipping" className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">SHIPPING & RETURNS</TabsTrigger>
                 <TabsTrigger value="related" className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">RELATED PRODUCTS</TabsTrigger>
             </TabsList>
-            <TabsContent value="overview" className='bg-jc-light-grey-100 p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
+            <TabsContent value="overview" className='bg-jc-light-grey-100 p-6 shadow' >
                 <ProductOverview descriptionHtml={product.descriptionHtml} overviewMedia={product.overviewMedia} />
             </TabsContent>
             {(howToStepList.steps.length > 0 || product.howToVideoUrl?.value) &&
-                <TabsContent value="howto" className='bg-jc-light-grey-100 p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]' >
+                <TabsContent value="howto" className='bg-jc-light-grey-100 p-6 shadow' >
                     <ProductHowTos howToStepList={howToStepList} howToVideoUrl={product.howToVideoUrl?.value} />
                 </TabsContent>
             }
             {faqList.faqs.length > 0 &&
-                <TabsContent value="faq" className='bg-jc-light-grey-100 p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+                <TabsContent value="faq" className='bg-jc-light-grey-100 p-6 shadow'>
                     <ProductFAQs faqList={faqList} />
                 </TabsContent>
             }
-            <TabsContent value="shipping" className='bg-jc-light-grey-100 p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+            <TabsContent value="shipping" className='bg-jc-light-grey-100 p-6 shadow'>
                 <ProductShipping />
             </TabsContent>
-            <TabsContent value="related" className='bg-jc-light-grey-100 p-6 shadow-[0_0_5px_rgba(0,0,0,0.3)]'>
+            <TabsContent value="related" className='bg-jc-light-grey-100 p-6 shadow'>
                 <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
             </TabsContent>
         </Tabs>

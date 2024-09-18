@@ -45,7 +45,7 @@ export async function loader({
 
 const HeadingSection = () => {
   return (
-    <div className='bg-jc-light-blue bg-opacity-15'>
+    <div className='border-b-[0.75px] border-jc-light-blue-100 bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
       <div className='container relative py-16 text-jc-dark-blue'>
         <div className='text-center w-full flex flex-col items-center'>
           <Heading level={1} className='font-display text-8xl'><span className='text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>

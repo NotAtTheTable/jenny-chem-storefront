@@ -39,7 +39,7 @@ export function ProductForm({
                     value={`${quantity}`}
                     onChange={(value) => { setQuantity(Number(value)) }}
                 />
-                <div className='flex flex-row items-center'>
+                <div className='flex flex-row items-center mt-4'>
                     <div className='flex items-center'>
                         <ProductPrice
                             selectedVariant={selectedVariant}
