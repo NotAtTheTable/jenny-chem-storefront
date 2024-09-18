@@ -165,7 +165,7 @@ function Hero({
     >
       <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
       <div className='container flex items-center justify-left h-full p-10'>
-        <div className="relative z-10 text-left text-white max-w-md">
+        <div className="relative z-10 text-left text-white max-w-sm">
           <Heading className='text-9xl font-display' dashClassName='w-16' level={1}>{title}</Heading>
           <p className="text-xl mb-5">{subtitle}</p>
           <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
@@ -215,8 +215,8 @@ function BestSellingProducts({
                 )}
               </Await>
             </CarouselContent>
-            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-2rem" }} />
-            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-2rem" }} />
+            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", right: "-2rem" }} />
+            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", left: "-2rem" }} />
           </Carousel>
         </Suspense>
       </div>
@@ -317,10 +317,10 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
         Use the hashtag <span className='text-jc-light-blue'>#jennychem</span> when posting to show your results!
       </span>
       <div className="flex flex-row gap-1 my-2">
-        <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
-        <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
-        <a href="https://google.com"><img alt="Instagram" src={InstagramIcon} /></a>
-        <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
+        <a href="https://google.com"><img alt="Facebook" className='h-[32px] w-[32px]' src={FacebookIcon} /></a>
+        <a href="https://google.com"><img alt="Youtube" className='h-[32px] w-[32px]' src={YoutubeIcon} /></a>
+        <a href="https://google.com"><img alt="Instagram" className='h-[32px] w-[32px]' src={InstagramIcon} /></a>
+        <a href="https://google.com"><img alt="Tiktok" className='h-[32px] w-[32px]' src={TiktokIcon} /></a>
       </div>
     </div>
   } else {
@@ -346,10 +346,10 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
           </p>
         </div>
         <div className="flex flex-row gap-1 my-2">
-          <a href="https://google.com"><img alt="Facebook" src={FacebookIcon} /></a>
-          <a href="https://google.com"><img alt="Youtube" src={YoutubeIcon} /></a>
-          <a href="https://google.com"><img alt="Instagram" src={InstagramIcon} /></a>
-          <a href="https://google.com"><img alt="Tiktok" src={TiktokIcon} /></a>
+          <a href="https://google.com"><img alt="Facebook" className='h-[32px] w-[32px]' src={FacebookIcon} /></a>
+          <a href="https://google.com"><img alt="Youtube" className='h-[32px] w-[32px]' src={YoutubeIcon} /></a>
+          <a href="https://google.com"><img alt="Instagram" className='h-[32px] w-[32px]' src={InstagramIcon} /></a>
+          <a href="https://google.com"><img alt="Tiktok" className='h-[32px] w-[32px]' src={TiktokIcon} /></a>
         </div>
       </div>
     </div>
@@ -372,7 +372,7 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center text-center p-6 container text-jc-dark-blue'>
       <Heading level={1} className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></Heading>
-      <div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
+      <div className="shadow rounded-lg overflow-hidden" >
         <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
       </div >
       <p className='mt-5 mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
@@ -382,7 +382,7 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
   } else {
     return <div className='flex flex-row p-10 container'>
       <div className='p-4 w-2/3'>
-        <div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden">
+        <div className="shadow rounded-lg overflow-hidden">
           <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
         </div>
       </div>

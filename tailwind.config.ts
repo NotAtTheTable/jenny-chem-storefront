@@ -24,6 +24,10 @@ const config = {
         "2xl": "1400px",
       },
     },
+    boxShadow: {
+      DEFAULT: '0 0 6px #080D3F50',
+      'md': '0 0 10px #080D3F50',
+    },
     extend: {
       height: {
         '70': '17.4rem'

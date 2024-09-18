@@ -53,7 +53,7 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
 
     return (
         <div
-            className="w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out"
+            className="w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]"
             style={{
                 zIndex: 2,
                 maxHeight: isHidden ? '1000px' : '0'

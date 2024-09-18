@@ -18,7 +18,7 @@ export function ArticleCard({
     className?: string
 }) {
     return <Link to={`/blogs/news/${handle}`}>
-        <div style={{ backgroundImage: `url(${imageUrl})` }} className={cn(["bg-cover bg-center relative rounded-lg", className])}>
+        <div style={{ backgroundImage: `url(${imageUrl})` }} className={cn(["shadow bg-cover bg-center relative rounded-lg", className])}>
             <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,1), transparent)' }} className="absolute inset-0 rounded-lg"></div>
             <div className="relative flex h-full flex-col justify-between align-left p-2">
                 <div></div>

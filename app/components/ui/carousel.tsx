@@ -6,6 +6,11 @@ import useEmblaCarousel, {
 } from "embla-carousel-react"
 import { CircleChevronLeft, CircleChevronRight } from "lucide-react"
 
+import LeftArrowBlue from "~/assets/foundational/arrows/carousel_blue_arrow_left.svg"
+import LeftArrowWhite from "~/assets/foundational/arrows/carousel_white_arrow_left.svg"
+import RightArrowBlue from "~/assets/foundational/arrows/carousel_blue_arrow_right.svg"
+import RightArrowWhite from "~/assets/foundational/arrows/carousel_white_arrow_right.svg"
+
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -212,8 +217,8 @@ CarouselItem.displayName = "CarouselItem"
 
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<typeof Button> & { iconClassName: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
->(({ className, variant = "outline", size = "icon", iconClassName, currentLastIndex, setLastIndex, skip, ...props }, ref) => {
+  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
+>(({ className, variant = "outline", size = "icon", white = false, iconClassName, currentLastIndex, setLastIndex, skip, ...props }, ref) => {
   const { orientation, scrollPrev, scrollTo, canScrollPrev } = useCarousel()
 
   const handleClick = () => {
@@ -235,7 +240,7 @@ const CarouselPrevious = React.forwardRef<
       onClick={handleClick}
       {...props}
     >
-      <CircleChevronLeft className={iconClassName} size={40} strokeWidth={1} />
+      <img className={iconClassName} src={white ? LeftArrowWhite : LeftArrowBlue} />
       <span className="sr-only">Previous slide</span>
     </button>
   )
@@ -244,8 +249,8 @@ CarouselPrevious.displayName = "CarouselPrevious"
 
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<typeof Button> & { iconClassName: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
->(({ className, variant = "outline", iconClassName, size = "icon", currentLastIndex, setLastIndex, skip, ...props }, ref) => {
+  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
+>(({ className, variant = "outline", white = false, iconClassName, size = "icon", currentLastIndex, setLastIndex, skip, ...props }, ref) => {
   const { orientation, scrollNext, scrollTo, canScrollNext } = useCarousel()
 
   const handleClick = () => {
@@ -267,7 +272,7 @@ const CarouselNext = React.forwardRef<
       onClick={handleClick}
       {...props}
     >
-      <CircleChevronRight className={iconClassName} size={40} strokeWidth={1} />
+      <img className={iconClassName} src={white ? RightArrowWhite : RightArrowBlue} />
       <span className="sr-only">Next slide</span>
     </button>
   )

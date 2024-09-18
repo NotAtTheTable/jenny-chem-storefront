@@ -38,8 +38,8 @@ export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" 
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName={mode == "dark" ? 'text-white' : 'text-jc-light-blue'} style={{ top: "40%", right: "-1.5rem" }} />
-                            <CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName={mode == "dark" ? 'text-white' : 'text-jc-light-blue'} style={{ top: "40%", left: "-1.5rem" }} />
+                            <CarouselNext white={mode === "dark"} skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", right: "-1.5rem" }} />
+                            <CarouselPrevious skip={1} white={mode === "dark"} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", left: "-1.5rem" }} />
                         </Carousel>
                     )}
                 </Await>
@@ -70,8 +70,8 @@ export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" 
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName={mode == "dark" ? 'text-white' : 'text-jc-light-blue'} style={{ top: "50%", right: "-4rem" }} />
-                            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName={mode == "dark" ? 'text-white' : 'text-jc-light-blue'} style={{ top: "50%", left: "-4.5rem" }} />
+                            <CarouselNext white={mode == "dark"} skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "50%", right: "-4rem" }} />
+                            <CarouselPrevious white={mode == "dark"} skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "50%", left: "-4.5rem" }} />
                         </Carousel>
                     )}
                 </Await>

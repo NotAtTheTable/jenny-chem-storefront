@@ -12,7 +12,7 @@ interface ArrowButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const ArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
-            className={`${props.disabled ? "opacity-40" : ""} bg-jc-dark-blue border-jc-light-blue py-1 px-1 w-full rounded-full border-2  drop-shadow ${className || ''}`}
+            className={`${props.disabled ? "opacity-40" : ""} bg-jc-dark-blue border-jc-light-blue py-1 px-1 w-full rounded-full border-2  shadow ${className || ''}`}
             {...props}
         >
             <div className="flex flex-row justify-between">
@@ -26,7 +26,7 @@ export const ArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...p
 export const Button: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
-            className={`${props.disabled ? "opacity-40" : ""} bg-jc-dark-blue py-1 px-1 w-full rounded-full border-2 border-jc-light-blue drop-shadow ${className || ''}`}
+            className={`${props.disabled ? "opacity-40" : ""} bg-jc-dark-blue py-1 px-1 w-full rounded-full border-2 border-jc-light-blue shadow ${className || ''}`}
             {...props}
         >
             <div className="flex flex-row justify-between">
@@ -39,7 +39,7 @@ export const Button: React.FC<ArrowButtonProps> = ({ label, className, ...props 
 export const DownArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
-            className={`bg-jc-dark-blue py-1 px-1 w-full rounded-full border-2 border-jc-light-blue drop-shadow ${className || ''}`}
+            className={`bg-jc-dark-blue py-1 px-1 w-full rounded-full border-2 border-jc-light-blue shadow ${className || ''}`}
             {...props}
         >
             <div className="flex flex-row justify-between">
@@ -53,7 +53,7 @@ export const DownArrowButton: React.FC<ArrowButtonProps> = ({ label, className, 
 export const LightBlueArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
-            className={`py-1 px-1 bg-jc-light-blue rounded-full border border-white drop-shadow ${className || ''}`}
+            className={`py-1 px-1 bg-jc-light-blue rounded-full border border-white shadow ${className || ''}`}
             {...props}
         >
             <div className="flex flex-row justify-between">
@@ -67,7 +67,7 @@ export const LightBlueArrowButton: React.FC<ArrowButtonProps> = ({ label, classN
 export const MobileArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
-            className={`py-1 px-1 bg-jc-dark-blue rounded-lg border border-jc-light-blue drop-shadow ${className || ''}`}
+            className={`py-1 px-1 bg-jc-dark-blue rounded-lg border border-jc-light-blue shadow ${className || ''}`}
             {...props}
         >
             <div className="flex flex-row gap-3 justify-center align-center">

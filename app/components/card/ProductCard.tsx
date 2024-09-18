@@ -13,7 +13,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ imageData, title, handle, price, ActionElement }: ProductCardProps) {
     return (
-        <div style={{ height: "28.5rem", boxShadow: 'rgba(0,0,0,0.1) 0 0 6px' }} className="m-[6px] flex flex-col w-60 border overflow-hidden rounded-lg">
+        <div style={{ height: "28.5rem" }} className="shadow m-[6px] flex flex-col w-60 border overflow-hidden rounded-lg">
             <div className="bg-jc-light-grey flex justify-center items-center w-full h-70">
                 <Image
                     height={"100"}

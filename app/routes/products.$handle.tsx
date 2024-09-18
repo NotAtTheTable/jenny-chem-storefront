@@ -1,43 +1,26 @@
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense } from 'react';
 import { defer, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Await,
-  Link,
   useLoaderData,
   type MetaFunction,
-  type FetcherWithComponents,
 } from '@remix-run/react';
 import type {
   ProductFragment,
   ProductVariantsQuery,
-  ProductVariantFragment,
 } from 'storefrontapi.generated';
 import {
-  Image,
-  Money,
-  VariantSelector,
-  type VariantOption,
   getSelectedProductOptions,
-  CartForm,
+
 } from '@shopify/hydrogen';
 import type {
-  CartLineInput,
   Product,
   SelectedOption,
 } from '@shopify/hydrogen/storefront-api-types';
 import { getVariantUrl } from '~/lib/variants';
-import DashDivider from '~/components/foundational/DashDivider';
-import Select, { SelectProps } from '~/components/foundational/Select';
-import { ArrowButton, Button } from '~/components/foundational/ArrowButton';
 import TrustProductMini from '~/components/trustpilot/TrustPilotProductWidget';
-import { Loader } from '~/components/ui/Loading/loading';
-import { CircleChevronLeft, CircleChevronRight } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs';
 import { ProductImages } from '~/components/product/ProductImages';
-import { ProductPrice } from '~/components/product/ProductPrice';
-import { QuantityInput } from '~/components/product/ProductQuantityInput';
 import { ProductTabs } from '~/components/product/ProductTabs';
-import { ProductOptions } from '~/components/product/ProductOptions';
 import { ProductForm } from '~/components/product/ProductForm';
 import TrustProductReviews from '~/components/trustpilot/TrustPilotProductGalleryWidget';
 import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';

@@ -1,4 +1,5 @@
-import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
+import BlueLeftArrow from "~/assets/foundational/arrows/carousel_blue_arrow_left.svg"
+import BlueRightArrow from "~/assets/foundational/arrows/carousel_blue_arrow_right.svg"
 import { useState, useRef, useEffect } from "react";
 import { ProductFragment, ProductVariantFragment } from "storefrontapi.generated";
 import {
@@ -82,10 +83,10 @@ export function ProductImages({ selectedVariant, variants, images }: {
             <div className="w-auto md:px-10 md:mr-8 md:ml-[80px] relative flex items-center justify-center">
                 {images.nodes.length > 1 && <>
                     <button onClick={() => handleNavigationClick(-1)} className='absolute left-[10px] md:left-[40px] top-1/2 transform -translate-y-1/2'>
-                        <CircleChevronLeft className={'text-jc-light-blue'} size={40} strokeWidth={1} />
+                        <img src={BlueLeftArrow} />
                     </button>
                     <button onClick={() => handleNavigationClick(1)} className='absolute right-[10px] md:right-[40px] top-1/2 transform -translate-y-1/2'>
-                        <CircleChevronRight className={'text-jc-light-blue'} size={40} strokeWidth={1} />
+                        <img src={BlueRightArrow} />
                     </button>
                 </>
                 }

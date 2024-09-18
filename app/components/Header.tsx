@@ -20,7 +20,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
 
   return (<>
-    <div style={{ filter: "drop-shadow(rgba(0,0,0,0.4) 0 3px 9px)", zIndex: 3 }} className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
+    <div style={{ zIndex: 3 }} className='shadow-[0_3_9px_rgba(0,0,0,0.4)] bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='flex flex-row gap-4 absolute'>
           <HeaderMenuMobileToggle />
