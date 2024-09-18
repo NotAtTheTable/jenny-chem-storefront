@@ -34,9 +34,8 @@ export function ProductTabs({
             <TabsList className="flex w-full overflow-x-auto overflow-y-hidden divide-x md:divide-x-0 divide-jc-light-blue">
                 <TabsTrigger value="overview" className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">PRODUCT OVERVIEW</TabsTrigger>
                 <TabsTrigger disabled={(howToStepList.steps.length === 0 && !product?.howToVideoUrl?.value)} value="howto" className="md:min-w-[100px] px-5 flex-shrink-0 md:px-10">HOW TO USE</TabsTrigger>
-                <TabsTrigger disabled={faqList.faqs.length === 0} value="faq" className='md:min-w-[100px] flex-shrink-0 px-5 md:px-10'>FAQS</TabsTrigger>
+                <TabsTrigger disabled={faqList.faqs.length === 0} value="faq" className='md:min-w-[100px] flex-shrink-0 px-5 md:px-10'>FREQUENTLY ASKED QUESTIONS</TabsTrigger>
                 <TabsTrigger value="shipping" className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">SHIPPING & RETURNS</TabsTrigger>
-                <TabsTrigger value="related" className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">RELATED PRODUCTS</TabsTrigger>
             </TabsList>
             <TabsContent value="overview" className='bg-jc-light-grey-100 p-6 shadow' >
                 <ProductOverview descriptionHtml={product.descriptionHtml} overviewMedia={product.overviewMedia} />

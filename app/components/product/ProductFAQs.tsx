@@ -15,14 +15,14 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
                         <AccordionItem key={index} value={`value_${index}`} className="[&[data-state=open]]:bg-jc-dark-blue [&[data-state=open]]:text-white text-jc-dark-blue bg-white rounded-lg px-4 shadow">
                             <AccordionTrigger hideDefaultToggle
                                 className="flex flex-1 items-center justify-between py-3 font-medium text-left"
-                                customDataStateClass="[&[data-state=open]>div>svg]:rotate-45 [&[data-state=open]>div>svg]:text-jc-light-blue"
+                                customDataStateClass="[&[data-state=open]>div>svg]:rotate-45 [&[data-state=closed]>div>svg]:text-jc-dark-blue [&[data-state=open]>div>svg]:text-jc-light-blue"
                             >
                                 <div key={index} className='flex items-center w-full justify-between flex-row'>
                                     <div style={{ fontWeight: '700' }} className='font-bold'>{question}</div>
                                     <Plus className="rotate-icon" />
                                 </div>
                             </AccordionTrigger>
-                            <AccordionContent className='pt-3 border-t-2 border-jc-light-blue '>
+                            <AccordionContent className='pt-3 border-t-[1.5px] border-jc-light-blue '>
                                 <div>{answer}</div>
                             </AccordionContent>
                         </AccordionItem>

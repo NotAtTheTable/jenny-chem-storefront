@@ -59,7 +59,7 @@ export function ProductImages({ selectedVariant, variants, images }: {
     }
     return (
         <div className="md:h-[480px] relative">
-            <div className="desktop-component absolute h-full overflow-y-scroll w-[80px] no-scrollbar" >
+            <div className="desktop-component absolute h-[97%] mt-[3%] overflow-y-scroll w-[80px] no-scrollbar" >
                 {images.nodes.length > 1 && images.nodes.map((image, index) => (
                     image && (
                         <button

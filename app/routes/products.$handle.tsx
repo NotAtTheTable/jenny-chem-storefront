@@ -25,6 +25,7 @@ import { ProductForm } from '~/components/product/ProductForm';
 import TrustProductReviews from '~/components/trustpilot/TrustPilotProductGalleryWidget';
 import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';
 import Heading from '~/components/foundational/Heading';
+import ProductRecommendations from '~/components/product/ProductRecommendations';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -136,13 +137,18 @@ export default function Product() {
         productRecommendations={productRecommendations}
       />
       <div className='desktop-component container'>
-        <div className='bg-jc-light-grey-100 py-5 px-10 shadow-[0_0_5px_rgba(0,0,0,0.3)] mb-10'>
+        <div className='bg-jc-light-grey-100 py-5 px-10 shadow mb-10'>
           <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
+        </div>
+        <div className='py-10'>
+          <Heading className='text-5xl font-display text-jc-dark-blue text-center' level={1}>RELATED PRODUCTS</Heading>
+          <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
         </div>
       </div>
       <div className='mobile-component my-7'>
         <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
       </div>
+
     </>
   );
 }
