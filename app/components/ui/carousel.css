@@ -13,11 +13,13 @@
 
 .breadcrumb {
     border-radius: 50%;
-    height: 19px;
+    height: auto;
     width: 19px;
     border-color: white;
-    border-width: 2px;
+    border-width: 1px;
     position: relative;
+    aspect-ratio: 1;
+    box-shadow: 0 0 10px #00000016;
 }
 
 .breadcrumb--selected::before {
@@ -25,7 +27,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-6px, -6px);
+    transform: translate(-5.7px, -5.7px);
     width: 11px;
     /* Diameter of the inner circle (2 * radius 11) */
     height: 11px;
