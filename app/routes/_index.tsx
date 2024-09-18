@@ -23,6 +23,8 @@ import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
 import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
 import { RECOMMENDED_BLOG_ARTICLES_QUERY } from './blogs.$blogHandle._index';
+import { Header } from '~/components/Header';
+import Heading from '~/components/foundational/Heading';
 
 export type Viewport = 'desktop' | 'mobile';
 
@@ -164,8 +166,7 @@ function Hero({
       <div style={{ background: 'linear-gradient(to right, rgba(11,21,57,0.75), transparent )' }} className="absolute w-8/12 inset-0 "></div>
       <div className='container flex items-center justify-left h-full p-10'>
         <div className="relative z-10 text-left text-white max-w-md">
-          <h1 className="text-9xl font-display">{title}</h1>
-          <div className='w-16'><DashDivider /></div>
+          <Heading className='text-9xl font-display' dashClassName='w-16' level={1}>{title}</Heading>
           <p className="text-xl mb-5">{subtitle}</p>
           <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
         </div>
@@ -187,8 +188,7 @@ function BestSellingProducts({
   if (viewport === "mobile") {
     return (
       <div className="flex flex-col items-center p-6 container">
-        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
-        <DashDivider />
+        <Heading className='text-center text-6xl text-jc-dark-blue font-display' level={2}>Our Best Sellers</Heading>
         <Suspense fallback={<div>Loading...</div>}>
           <Carousel opts={{
             align: "start",
@@ -224,8 +224,7 @@ function BestSellingProducts({
   } else {
     return (
       <div className="flex flex-col items-center p-10 container">
-        <h2 className='text-center text-6xl text-jc-dark-blue font-display'>Our Best Sellers</h2>
-        <DashDivider />
+        <Heading className='text-center text-6xl text-jc-dark-blue font-display' level={2}>Our Best Sellers</Heading>
         <Suspense fallback={<div>Loading...</div>}>
           <Carousel opts={{
             align: "start",
@@ -307,10 +306,8 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
 
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center p-6 container text-center'>
-      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>Get Social </h1>
-      <h1 className='text-center text-7xl text-jc-dark-blue font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
-      <DashDivider />
-      <div className="w-full h-auto my-4 rounded-lg drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
+      <Heading className='text-center text-7xl text-jc-dark-blue font-display' level={1}>Get Social <br /> & Share<span className='text-jc-light-blue'>!</span></Heading>
+      <div className="w-full h-auto mb-4 rounded-lg drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]">
         <img src="https://cdn.shopify.com/s/files/1/0032/5474/7185/files/kermit-porsche.jpg?v=1718809192" alt="grid-1" />
       </div>
       <span className='mb-2'>
@@ -338,9 +335,7 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
       </div>
       <div className='flex-1 flex flex-col justify-between  p-4 text-jc-dark-blue'>
         <div>
-          <h1 className='text-8xl font-display'>Get Social</h1>
-          <h1 style={{ lineHeight: "5rem" }} className='text-8xl font-display'>& Share <span className='text-jc-light-blue'>!</span></h1>
-          <div className='w-16'><DashDivider /></div>
+          <Heading className='text-8xl text-jc-dark-blue font-display' dashClassName='w-16' level={1}>Get Social <br /> & Share<span className='text-jc-light-blue'>!</span></Heading>
           <p className='mb-3'>
             Follow us on social media to see our products in action, followed by the final result. Also to see what new products we currently
             have in development, along with limited time offers.
@@ -367,8 +362,7 @@ function Tips({ articles, viewport = 'desktop' }: Readonly<{
 }>) {
   return <BlueBubbleBackground>
     <div className="flex flex-col items-center p-10 container ">
-      <h2 className='text-center text-6xl text-jc-light-blue font-display'>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></h2>
-      <DashDivider />
+      <Heading className='text-center text-6xl text-jc-light-blue font-display' level={2}>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></Heading>
       <ArticleCarousel articles={articles.articles} viewport={viewport} />
     </div>
   </BlueBubbleBackground >
@@ -377,9 +371,8 @@ function Tips({ articles, viewport = 'desktop' }: Readonly<{
 function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
   if (viewport === 'mobile') {
     return <div className='flex flex-col items-center text-center p-6 container text-jc-dark-blue'>
-      <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
-      <div className='w-full'><DashDivider /></div>
-      < div className="mt-3 drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
+      <Heading level={1} className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></Heading>
+      <div className="drop-shadow-[0_0_6px_rgba(8,13,63,0.5)] rounded-lg overflow-hidden" >
         <ReactPlayer controls width="100%" height="100%" url="https://cdn.shopify.com/videos/c/o/v/94a5987a06e046eb99f7128481f0d7c7.mp4" />
       </div >
       <p className='mt-5 mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
@@ -394,9 +387,8 @@ function WhyOurFormula({ viewport = 'desktop' }: { viewport?: Viewport }) {
         </div>
       </div>
       <div className='flex-1 p-4 text-jc-dark-blue'>
-        <h1 className='font-display text-8xl'>Why Our Formula <span className="text-jc-light-blue">?</span></h1>
-        <div className='w-16'><DashDivider /></div>
-        <p className='mt-4 mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
+        <Heading level={1} className='font-display text-8xl' dashClassName='w-16'>Why Our Formula <span className="text-jc-light-blue">?</span></Heading>
+        <p className='mb-3'>Jennychem is one of the UK’s leading cleaning products suppliers for both businesses and consumers. We are a family oriented business that has been in operation for more than 25 years.</p>
         <p>  Providing a vast range of products, including vehicle care and kitchen sanitation. All our products are formulated and then manufactured on site within the UK.</p>
         <div className='mt-4 w-36'><ArrowButton label="ABOUT US" onClick={() => ''} /></div>
       </div>

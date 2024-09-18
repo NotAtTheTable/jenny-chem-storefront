@@ -11,6 +11,7 @@ import { Suspense, useState } from 'react';
 import { ArticleCard } from '~/components/card/ArticleCard';
 import { ChevronDownIcon, ChevronUpIcon, CircleChevronDownIcon, CircleChevronUpIcon } from 'lucide-react';
 import { ArrowButton, DownArrowButton } from '~/components/foundational/ArrowButton';
+import Heading from '~/components/foundational/Heading';
 
 // TODO: Populate the header by using blog information
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
@@ -47,16 +48,14 @@ const HeadingSection = () => {
     <div className='bg-jc-light-blue bg-opacity-15'>
       <div className='container relative py-16 text-jc-dark-blue'>
         <div className='text-center w-full flex flex-col items-center'>
-          <h1 className="font-display text-jc-light-blue text-8xl">TIPS & TRICKS</h1>
-          <h1 className="font-display text-jc-dark-blue text-8xl">WHEN IT COMES TO CLEANING</h1>
-          <DashDivider className="-mt-1 mb-2 h-[3px]" />
+          <Heading level={1} className='font-display text-8xl'><span className='text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>
           <div className="max-w-3xl">
             Aut explicabo quasi et omnis necessitatibus sed alias amet a commodi adipisci sit autem tempore qui quaerat eaque. Et eveniet laudantium qui inventore vitae non maxime consequatur eos omnis debitis id sequi soluta. Aut obcaecati aliquam ut tempora voluptatem et cupiditate consectetur non.
           </div>
         </div>
         <div className='absolute left-0 bottom-5'>Home &gt; Blog</div>
       </div>
-    </div>
+    </div >
   )
 }
 
@@ -96,9 +95,9 @@ const ArticleList = ({ articles }: Readonly<{
   return (
     <>
       <div className='flex flex-row gap-2 py-10 w-full justify-center'>
-        {properties.map((property) => (
+        {/* {properties.map((property) => (
           <Chip key={property} handleSelect={() => handleSelectProperty(property)} isSelected={selectedProperties.includes(property)} label={property} />
-        ))}
+        ))} */}
       </div>
 
       <Pagination connection={articles}>
@@ -159,11 +158,8 @@ export default function Blog() {
     <div className="blog">
       <HeadingSection />
       <div className='container py-16'>
-        <h1 className="font-display text-jc-dark-blue text-6xl text-center">POPULAR ARTICLES</h1>
-        <DashDivider className="-mt-1 mb-4 h-[3px]" />
-
+        <Heading className="font-display text-jc-dark-blue text-6xl text-center" level={1}>POPULAR ARTICLES</Heading>
         <ArticleCarousel mode={"light"} articles={recommendedArticles.articles} viewport={isMobile ? "mobile" : "desktop"} />
-
         <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 -mb-3" />
         <ArticleList articles={articles.articles} />
       </div>

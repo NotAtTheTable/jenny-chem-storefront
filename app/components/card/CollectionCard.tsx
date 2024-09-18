@@ -1,4 +1,5 @@
 import DashDivider from "../foundational/DashDivider";
+import Heading from "../foundational/Heading";
 
 interface CollectionCardProps {
     title: string;
@@ -14,8 +15,7 @@ export default function CollectionCard({ title, handle, ActionElement }: Collect
     return (
         <div style={{ boxShadow: 'rgba(0,0,0,0.1) 0 0 6px' }} className="px-6 py-5 bg-jc-dark-blue-100 flex flex-col justify-between w-96 h-96 border overflow-hidden rounded-3xl">
             <div>
-                <div style={{ lineHeight: "1em", letterSpacing: "0.2rem" }} className="line-clamp-2 text-white font-display text-[90px] leading-tight">{title}</div>
-                <div className="w-14 -mt-2"><DashDivider /></div>
+                <Heading dashClassName="w-16" className="line-clamp-2 text-white tracking-wide font-display text-[90px] leading-[85px]" level={1}>{title}</Heading>
                 <div className="text-base text-white leading-tight">{handle}</div>
             </div>
             <div className="w-52">

@@ -41,6 +41,7 @@ import { ProductOptions } from '~/components/product/ProductOptions';
 import { ProductForm } from '~/components/product/ProductForm';
 import TrustProductReviews from '~/components/trustpilot/TrustPilotProductGalleryWidget';
 import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';
+import Heading from '~/components/foundational/Heading';
 
 export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
   return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
@@ -201,8 +202,7 @@ function ProductMain({
         </Suspense>
       </div>
       <div className="md:w-1/2 md:py-8 text-center md:text-left">
-        <h1 className='font-display text-jc-dark-blue text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</h1>
-        <div className='md:w-16'><DashDivider /></div>
+        <Heading level={1} dashClassName='md:w-16' className='font-display text-jc-dark-blue text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</Heading>
         {selectedVariant?.sku && <div className='mt-6 mb-3 md:w-[161px]'><TrustProductMini sku={selectedVariant.sku} /></div>}
         {product.shortDescription?.value && <div className='text-jc-dark-blue'>{product.shortDescription.value}</div>}
         <Suspense

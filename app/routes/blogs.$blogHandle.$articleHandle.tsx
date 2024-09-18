@@ -41,6 +41,7 @@ export default function Article() {
     <div>
       <PageHeader
         title={title}
+        headingTextClassName='w-[50%] font-display text-8xl tracking-large'
         imageUrl={image?.url}
         subTextNode={
           <>
