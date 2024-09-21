@@ -1,13 +1,14 @@
 import { VariantSelector } from "@shopify/hydrogen";
 import { useState } from "react";
 import { ProductFragment, ProductVariantFragment } from "storefrontapi.generated";
-import { ProductOptions } from "./ProductOptions";
+import { ProductOptionButtons } from "./ProductOptionButtons";
 import { QuantityInput } from "./ProductQuantityInput";
 import { ProductPrice } from "./ProductPrice";
 import { Button } from "../foundational/ArrowButton";
 import { AddToCartButton } from "./ProductAddToCartButton";
 
 import "~/styles/app.css"
+import { ProductOptionSelect } from "./ProductOptionSelect";
 
 export function ProductForm({
     product,
@@ -33,7 +34,7 @@ export function ProductForm({
                     options={filteredOptions}
                     variants={variants}
                 >
-                    {({ option }) => <ProductOptions key={option.name} option={option} />}
+                    {({ option }) => <ProductOptionButtons key={option.name} option={option} />}
                 </VariantSelector>
                 <QuantityInput
                     value={`${quantity}`}
@@ -85,7 +86,11 @@ export function ProductForm({
                     options={filteredOptions}
                     variants={variants}
                 >
-                    {({ option }) => <ProductOptions key={option.name} option={option} />}
+                    {({ option }) =>
+                        option.name === "Size" ?
+                            <ProductOptionButtons key={option.name} option={option} />
+                            : <ProductOptionSelect key={option.name} option={option} />
+                    }
                 </VariantSelector>
 
                 <div className='flex flex-row items-center my-7'>

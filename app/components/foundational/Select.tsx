@@ -64,20 +64,20 @@ const Select: React.FC<SelectProps> = ({
                 aria-expanded={isOpen}
                 aria-labelledby="select-label"
                 disabled={disabled}
-                className={`w-full pl-3 pr-3 py-1 flex flex-row items-center text-left border-[1.5px] border-jc-light-blue rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-jc-light-blue focus:border-jc-light-blue ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
+                className={`w-full px-3 py-1 flex flex-row items-center text-center text-white border-[1.5px] border-jc-light-blue bg-jc-dark-blue rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-jc-light-blue focus:border-jc-light-blue ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'
                     }`}
             >
-                <span className="block truncate -mb-[3px]">
+                <span style={{ transform: 'translateY(1px)' }} className="block truncate w-full text-xl">
                     {selectedOption ? selectedOption.label : placeholder}
                 </span>
-                <span className='absolute right-0 top-1/2 transform -translate-y-1/2 pr-2'>
-                    <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent border-jc-dark-blue"></div>
+                <span className='absolute right-0 top-1/2 transform -translate-y-1/2 pr-3'>
+                    <div className="w-0 h-0 border-l-[4px] border-r-[4px] border-t-[6px] border-l-transparent border-r-transparent border-white"></div>
                 </span>
             </button>
 
             {isOpen && (
                 <ul
-                    className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-xl"
+                    className="absolute z-10 w-full py-1 mt-1 overflow-auto text-xl bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-xl"
                     tabIndex={-1}
                     role="listbox"
                     aria-labelledby="select-label"

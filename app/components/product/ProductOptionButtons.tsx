@@ -3,7 +3,7 @@ import { VariantOption } from "@shopify/hydrogen";
 
 import "~/styles/app.css"
 
-export function ProductOptions({ option }: { option: VariantOption }) {
+export function ProductOptionButtons({ option }: { option: VariantOption }) {
     return (
         <div className="my-4" key={option.name}>
             {/* having this is a great battle, see if we put it back , let jenny decide <h3 className='font-display tracking-wide text-2xl text-jc-dark-blue mb-2'>{option.name}</h3> */}
