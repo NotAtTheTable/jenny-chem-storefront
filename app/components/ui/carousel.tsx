@@ -227,13 +227,14 @@ CarouselItem.displayName = "CarouselItem"
 
 const CarouselPrevious = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
->(({ className, variant = "outline", size = "icon", white = false, iconClassName, currentLastIndex, setLastIndex, skip, ...props }, ref) => {
-  const { orientation, scrollPrev, scrollTo, canScrollPrev } = useCarousel()
+  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, skip?: number }
+>(({ className, variant = "outline", size = "icon", white = false, iconClassName, skip = 1, ...props }, ref) => {
+  const { orientation, scrollPrev, canScrollPrev } = useCarousel()
 
-  const handleClick = () => {
-    scrollTo(currentLastIndex - skip);
-    setLastIndex(currentLastIndex - skip);
+  const handlePrev = () => {
+    for (let i = 0; i < skip; i++) {
+      scrollPrev();
+    }
   }
 
   return (
@@ -248,7 +249,7 @@ const CarouselPrevious = React.forwardRef<
         { 'opacity-30': !canScrollPrev }
       )}
       disabled={!canScrollPrev}
-      onClick={handleClick}
+      onClick={handlePrev}
       {...props}
     >
       <img className={iconClassName} src={white ? LeftArrowWhite : LeftArrowBlue} />
@@ -260,13 +261,14 @@ CarouselPrevious.displayName = "CarouselPrevious"
 
 const CarouselNext = React.forwardRef<
   HTMLButtonElement,
-  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, currentLastIndex: number, setLastIndex: (index: number) => void, skip: number }
->(({ className, variant = "outline", white = false, iconClassName, size = "icon", currentLastIndex, setLastIndex, skip, ...props }, ref) => {
-  const { orientation, scrollNext, scrollTo, canScrollNext } = useCarousel()
+  React.ComponentProps<typeof Button> & { white?: boolean, iconClassName?: string, skip?: number }
+>(({ className, variant = "outline", white = false, iconClassName, size = "icon", skip = 1, ...props }, ref) => {
+  const { orientation, scrollNext, canScrollNext } = useCarousel()
 
-  const handleClick = () => {
-    scrollTo(currentLastIndex + skip);
-    setLastIndex(currentLastIndex + skip);
+  const handleNext = () => {
+    for (let i = 0; i < skip; i++) {
+      scrollNext();
+    }
   }
 
   return (
@@ -281,7 +283,7 @@ const CarouselNext = React.forwardRef<
         { 'opacity-30': !canScrollNext } // Add opacity if button is disabled
       )}
       disabled={!canScrollNext}
-      onClick={handleClick}
+      onClick={handleNext}
       {...props}
     >
       <img className={iconClassName} src={white ? RightArrowWhite : RightArrowBlue} />

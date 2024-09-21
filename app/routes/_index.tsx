@@ -183,81 +183,43 @@ function BestSellingProducts({
   viewport?: Viewport;
 }>) {
 
-  const [currentLastIndex, setCurrentLastIndex] = useState<number>(0);
-
-  if (viewport === "mobile") {
-    return (
-      <div className="flex flex-col items-center p-6 container">
-        <Heading className='text-center text-6xl text-jc-dark-blue font-display' level={2}>Our Best Sellers</Heading>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Carousel opts={{
-            align: "start",
-            loop: true,
-          }}
-            className="w-72 mt-3"
-          >
-            <CarouselContent className="-ml-5">
-              <Await resolve={products}>
-                {({ products }) => (
-                  <>
-                    {products.nodes.map((product) => (
-                      <CarouselItem key={product.id} className="pl-9 basis-1/1">
-                        <ProductCard
-                          imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                          title={product.title}
-                          handle={product.handle}
-                          price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
-                          ActionElement={NavigateToProductPageButton}
-                        />
-                      </CarouselItem>
-                    ))}
-                  </>
-                )}
-              </Await>
-            </CarouselContent>
-            <CarouselNext skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", right: "-2rem" }} />
-            < CarouselPrevious skip={1} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} style={{ top: "40%", left: "-2rem" }} />
-          </Carousel>
-        </Suspense>
-      </div>
-    );
-  } else {
-    return (
-      <div className="flex flex-col items-center p-10 container">
-        <Heading className='text-center text-6xl text-jc-dark-blue font-display' level={2}>Our Best Sellers</Heading>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Carousel opts={{
-            align: "start",
-            loop: true,
-          }}
-            className="w-[90%] 2xl:w-full max-w-8xl mt-3"
-          >
-            <CarouselContent className="-ml-2">
-              <Await resolve={products}>
-                {({ products }) => (
-                  <>
-                    {products.nodes.map((product) => (
-                      <CarouselItem key={product.id} className="pl-2 md:basis-1/3 xl:basis-1/4 2xl:basis-1/5">
-                        <ProductCard
-                          imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                          title={product.title}
-                          price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
-                          handle={product.handle}
-                          ActionElement={NavigateToProductPageButton}
-                        />
-                      </CarouselItem>
-                    ))}
-                  </>
-                )}
-              </Await>
-            </CarouselContent>
-            <CarouselNext skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", right: "-4rem" }} />
-            <CarouselPrevious skip={2} currentLastIndex={currentLastIndex} setLastIndex={setCurrentLastIndex} iconClassName='text-jc-light-blue' style={{ top: "40%", left: "-4.3rem" }} />
-          </Carousel>
-        </Suspense>
-      </div>
-    );
-  }
+  return (
+    <div className="p-10 container">
+      <Heading className='text-center text-6xl text-jc-dark-blue font-display' level={2}>Our Best Sellers</Heading>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Carousel opts={{
+          align: "start",
+          loop: true,
+        }}
+          className="mt-3 mx-6 px-0 md:mx-0 md:px-6"
+        >
+          <CarouselContent>
+            <Await resolve={products}>
+              {({ products }) => (
+                <>
+                  {products.nodes.map((product) => (
+                    <CarouselItem key={product.id} className="w-min md:basis-1/5 pl-0 flex justify-center">
+                      <ProductCard
+                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                        title={product.title}
+                        price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                        handle={product.handle}
+                        ActionElement={NavigateToProductPageButton}
+                      />
+                    </CarouselItem>
+                  ))}
+                </>
+              )}
+            </Await>
+          </CarouselContent>
+          <CarouselNext className='mobile-component' skip={1} style={{ top: "40%", right: "-1.5rem" }} />
+          <CarouselNext className='desktop-component' skip={2} style={{ top: "40%", right: "-1.5rem" }} />
+          <CarouselPrevious className='mobile-component' skip={1} style={{ top: "40%", left: "-1.5rem" }} />
+          <CarouselPrevious className='desktop-component' skip={2} style={{ top: "40%", left: "-1.5rem" }} />
+        </Carousel>
+      </Suspense>
+    </div>
+  );
 }
 
 function TrustPilotBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
@@ -361,7 +323,7 @@ function Tips({ articles, viewport = 'desktop' }: Readonly<{
   viewport?: Viewport
 }>) {
   return <BlueBubbleBackground>
-    <div className="flex flex-col items-center p-10 container ">
+    <div className="p-10 container ">
       <Heading className='text-center text-6xl text-jc-light-blue font-display' level={2}>Tips & Tricks <span className='text-white'>When It Comes To Cleaning</span></Heading>
       <ArticleCarousel articles={articles.articles} viewport={viewport} />
     </div>

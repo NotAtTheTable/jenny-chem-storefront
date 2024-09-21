@@ -108,8 +108,8 @@ export function ProductImages({ selectedVariant, variants, images }: {
                                     ))
                                 }
                             </CarouselContent>
-                            <CarouselNext className="right-[1.5rem]" skip={1} currentLastIndex={largeImageIndex} setLastIndex={setLargeImageIndex} />
-                            <CarouselPrevious className="left-[1.5rem]" skip={1} currentLastIndex={largeImageIndex} setLastIndex={setLargeImageIndex} />
+                            <CarouselNext className="right-[1.5rem]" />
+                            <CarouselPrevious className="left-[1.5rem]" />
                         </Carousel>
                     </div>
                     :

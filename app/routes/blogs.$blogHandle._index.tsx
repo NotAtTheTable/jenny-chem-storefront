@@ -103,7 +103,7 @@ const ArticleList = ({ articles }: Readonly<{
       <Pagination connection={articles}>
         {({ nodes, NextLink, isLoading }) => (
           <>
-            <div className='relative grid grid-cols-4 gap-5'>
+            <div className='relative grid grid-cols-4 px-6'>
               <div className='absolute right-0 -top-10 flex flex-row gap-2 text-jc-dark-blue font-bold text-sm'>
                 <p>Sort by date:</p>
                 <button
@@ -128,14 +128,16 @@ const ArticleList = ({ articles }: Readonly<{
                   }</button>
               </div>
               {nodes.map((article: ArticleCardFragment) => (
-                <ArticleCard
-                  handle={article.handle}
-                  title={article.title}
-                  publishedAt={new Date(article.publishedAt)}
-                  imageUrl={article.image?.url || undefined}
-                  onClick={() => { return '' }}
-                  className="h-60"
-                />
+                <div className='flex justify-center my-3'>
+                  <ArticleCard
+                    handle={article.handle}
+                    title={article.title}
+                    publishedAt={new Date(article.publishedAt)}
+                    imageUrl={article.image?.url || undefined}
+                    onClick={() => { return '' }}
+                    className="h-60"
+                  />
+                </div>
               ))}
             </div>
             <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 mb-3" />

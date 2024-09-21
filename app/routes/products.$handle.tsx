@@ -147,6 +147,10 @@ export default function Product() {
       </div>
       <div className='mobile-component my-7'>
         <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
+        <div className='bg-jc-light-grey-100 py-10 px-10 shadow'>
+          <Heading className='text-5xl font-display text-jc-dark-blue text-center' level={1}>RELATED PRODUCTS</Heading>
+          <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
+        </div>
       </div>
 
     </>
