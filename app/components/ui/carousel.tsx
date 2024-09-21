@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 import "./carousel.css"
+import { useImperativeHandle, useRef } from "react"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -171,16 +172,25 @@ const Carousel = React.forwardRef<
 )
 Carousel.displayName = "Carousel"
 
+export type CarouselContentRef = { scrollTo: (index: number) => void; } | null
+
 const CarouselContent = React.forwardRef<
-  HTMLDivElement,
+  CarouselContentRef,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
-  const { carouselRef, orientation } = useCarousel()
+  const { carouselRef, orientation, scrollTo } = useCarousel()
+  const divRef = useRef<HTMLDivElement>(null)
+
+  useImperativeHandle(ref, () => ({
+    scrollTo: (index) => {
+      scrollTo(index);
+    },
+  }));
 
   return (
     <div ref={carouselRef} className="overflow-hidden">
       <div
-        ref={ref}
+        ref={divRef}
         className={cn(
           "flex",
           orientation === "horizontal" ? "" : "-mt-4 flex-col",
@@ -230,11 +240,12 @@ const CarouselPrevious = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        "absolute  h-10 w-10 rounded-full",
+        "absolute rounded-full",
         orientation === "horizontal"
           ? "-left-12 top-1/2 -translate-y-1/2"
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
-        className
+        className,
+        { 'opacity-30': !canScrollPrev }
       )}
       disabled={!canScrollPrev}
       onClick={handleClick}
@@ -262,11 +273,12 @@ const CarouselNext = React.forwardRef<
     <button
       ref={ref}
       className={cn(
-        "absolute h-10 w-10 rounded-full",
+        "absolute rounded-full",
         orientation === "horizontal"
           ? "-right-12 top-1/2 -translate-y-1/2"
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
-        className
+        className,
+        { 'opacity-30': !canScrollNext } // Add opacity if button is disabled
       )}
       disabled={!canScrollNext}
       onClick={handleClick}
