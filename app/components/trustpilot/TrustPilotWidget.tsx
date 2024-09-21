@@ -20,7 +20,6 @@ const TrustBox = () => {
             data-template-id="53aa8912dec7e10d38f59f36"
             data-businessunit-id="5d6ec855f44b80000110a29d"
             data-style-height="140px"
-            data-text-color="#17255D"
             data-style-width="100%"
             data-theme="dark"
             data-stars="5"
