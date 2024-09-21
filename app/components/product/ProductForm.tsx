@@ -2,13 +2,13 @@ import { VariantSelector } from "@shopify/hydrogen";
 import { useState } from "react";
 import { ProductFragment, ProductVariantFragment } from "storefrontapi.generated";
 import { ProductOptionButtons } from "./ProductOptionButtons";
-import { QuantityInput } from "./ProductQuantityInput";
 import { ProductPrice } from "./ProductPrice";
 import { Button } from "../foundational/ArrowButton";
 import { AddToCartButton } from "./ProductAddToCartButton";
 
 import "~/styles/app.css"
 import { ProductOptionSelect } from "./ProductOptionSelect";
+import NumericInput from "../foundational/NumericInput";
 
 export function ProductForm({
     product,
@@ -36,10 +36,10 @@ export function ProductForm({
                 >
                     {({ option }) => <ProductOptionButtons key={option.name} option={option} />}
                 </VariantSelector>
-                <QuantityInput
-                    value={`${quantity}`}
-                    onChange={(value) => { setQuantity(Number(value)) }}
-                />
+                <div className='flex items-center'>
+                    <label style={{ display: 'block', transform: 'translateY(1.5px)' }} className='font-display tracking-wide text-2xl text-jc-dark-blue mr-4'>Quantity:</label>
+                    <NumericInput min={1} value={quantity} onChange={(value) => { setQuantity(value) }} />
+                </div>
                 <div className='flex flex-row items-center mt-4'>
                     <div className='flex items-center'>
                         <ProductPrice
@@ -94,10 +94,9 @@ export function ProductForm({
                 </VariantSelector>
 
                 <div className='flex flex-row items-center my-7'>
-                    <QuantityInput
-                        value={`${quantity}`}
-                        onChange={(value) => { setQuantity(Number(value)) }}
-                    />
+                    <div className='flex items-center'>
+                        <NumericInput min={1} value={quantity} onChange={(value) => { setQuantity(value) }} />
+                    </div>
                     <div className='w-[1px] mx-6 self-stretch bg-jc-light-blue' />
                     <div className='flex items-center'>
                         <ProductPrice
