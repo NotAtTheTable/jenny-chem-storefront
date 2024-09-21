@@ -196,7 +196,7 @@ function ProductMain({
       </div>
       <div className="md:w-1/2 md:py-8 text-center md:text-left">
         <Heading level={1} dashClassName='md:w-16' className='font-display text-jc-dark-blue text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</Heading>
-        {selectedVariant?.sku && <div className='mt-6 mb-3 md:w-[161px]'><TrustProductMini sku={selectedVariant.sku} /></div>}
+        {selectedVariant?.sku && <div className='mt-3 mb-2 md:w-[161px]'><TrustProductMini sku={selectedVariant.sku} /></div>}
         {product.shortDescription?.value && <div className='text-jc-dark-blue'>{product.shortDescription.value}</div>}
         <Suspense
           fallback={

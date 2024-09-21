@@ -50,7 +50,7 @@ export default function Homepage() {
         <HeroSlideShow
           viewport={isMobile ? 'mobile' : 'desktop'}
         />
-        <BestSellingProducts viewport={isMobile ? 'mobile' : 'desktop'} products={recommendedProducts} />
+        <BestSellingProducts products={recommendedProducts} />
         <TrustPilotBanner viewport={isMobile ? 'mobile' : 'desktop'} />
         <GetSocial viewport={isMobile ? 'mobile' : 'desktop'} />
         <Tips articles={recommendedArticles} viewport={isMobile ? 'mobile' : 'desktop'} />
@@ -177,10 +177,8 @@ function Hero({
 
 function BestSellingProducts({
   products,
-  viewport = 'desktop'
 }: Readonly<{
   products: RecommendedProductsQuery;
-  viewport?: Viewport;
 }>) {
 
   return (

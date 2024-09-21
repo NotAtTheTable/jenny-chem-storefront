@@ -26,6 +26,7 @@ const TrustProductReviews = ({ sku }: { sku: string }) => {
             data-businessunit-id="5d6ec855f44b80000110a29d"
             data-style-height="140px"
             data-style-width="100%"
+            data-text-color="#17255D"
             data-theme="light"
             data-sku={sku || ""}
             data-no-reviews="show"
