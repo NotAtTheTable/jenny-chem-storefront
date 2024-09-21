@@ -62,8 +62,8 @@ const ProductRecommendations = ({ productRecommendations }: ProductRecommendatio
                         </CarouselItem>
                     ))}
                 </CarouselContent>
-                <CarouselNext style={{ top: "40%", right: "-1.5rem" }} />
-                <CarouselPrevious style={{ top: "40%", left: "-1.5rem" }} />
+                <CarouselNext style={{ top: "40%", right: "-2.5rem" }} />
+                <CarouselPrevious style={{ top: "40%", left: "-2.5rem" }} />
             </Carousel>
         </>
     )

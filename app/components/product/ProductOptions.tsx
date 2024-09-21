@@ -49,9 +49,9 @@ export function ProductOptions({ option }: { option: VariantOption }) {
                               rounded-md
                               font-display
                               tracking-wide
-                              px-4
+                              px-2
                               py-1
-                              text-lg
+                              text-xl
                               ${isActive ? "text-white bg-jc-dark-blue" : "text-jc-dark-blue"}
                               ${isAvailable ? "text-opacity-100" : "text-opacity-30"}
                             `}
