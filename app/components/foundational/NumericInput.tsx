@@ -1,3 +1,4 @@
+import { Minus, Plus } from 'lucide-react';
 import React from 'react';
 
 interface NumericInputProps {
@@ -6,9 +7,10 @@ interface NumericInputProps {
     step?: number;
     value: number;
     onChange: (value: number) => void;
+    inputReadOnly?: boolean;
 }
 
-const NumericInput: React.FC<NumericInputProps> = ({ min = 0, max = 100, step = 1, value, onChange }) => {
+const NumericInput: React.FC<NumericInputProps> = ({ min = 0, max = 100, step = 1, value, onChange, inputReadOnly = false }) => {
 
     const handleDecrement = () => {
         if (value > min) {
@@ -33,22 +35,23 @@ const NumericInput: React.FC<NumericInputProps> = ({ min = 0, max = 100, step = 
         <div className="flex items-center space-x-1 text-xl md:text-lg">
             <button
                 onClick={handleDecrement}
-                className="px-2 md:px-4 text-xl md:text-lg border-[1.5px] border-jc-light-blue text-jc-dark-blue rounded transition"
+                className="h-6 border-[1.5px] border-jc-light-blue text-jc-dark-blue rounded transition"
             >
-                -
+                <Minus strokeWidth={4} height={15} />
             </button>
             <input
+                readOnly={inputReadOnly}
                 type="number"
-                className="text-xl w-16 md:text-lg appearance-none text-center bg-[unset] text-jc-dark-blue border-[1.5px] border-jc-light-blue rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="text-xl h-6 w-10 md:text-lg appearance-none text-center bg-[unset] text-jc-dark-blue border-[1.5px] border-jc-light-blue rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={value}
                 onChange={handleInputChange}
                 style={{ WebkitAppearance: 'none', MozAppearance: 'textfield' }}
             />
             <button
                 onClick={handleIncrement}
-                className="text-xl px-2 md:px-4 border-[1.5px] border-jc-light-blue text-jc-dark-blue rounded transition"
+                className="h-6 border-[1.5px] border-jc-light-blue text-jc-dark-blue rounded transition"
             >
-                +
+                <Plus strokeWidth={4} height={15} />
             </button>
         </div>
     );

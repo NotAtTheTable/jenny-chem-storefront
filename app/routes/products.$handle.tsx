@@ -141,14 +141,14 @@ export default function Product() {
           <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
         </div>
         <div className='py-10'>
-          <Heading className='text-5xl font-display text-jc-dark-blue text-center' level={1}>RELATED PRODUCTS</Heading>
+          <Heading className='text-5xl font-display text-center' level={1}>RELATED PRODUCTS</Heading>
           <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
         </div>
       </div>
       <div className='mobile-component my-7'>
         <TrustProductReviews sku={product.selectedVariant?.sku || ""} />
         <div className='bg-jc-light-grey-100 py-10 px-10 shadow'>
-          <Heading className='text-5xl font-display text-jc-dark-blue text-center' level={1}>RELATED PRODUCTS</Heading>
+          <Heading className='text-5xl font-display text-center' level={1}>RELATED PRODUCTS</Heading>
           <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
         </div>
       </div>
@@ -195,7 +195,7 @@ function ProductMain({
         </Suspense>
       </div>
       <div className="md:w-1/2 md:py-8 text-center md:text-left">
-        <Heading level={1} dashClassName='md:w-16' className='font-display text-jc-dark-blue text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</Heading>
+        <Heading level={1} dashClassName='md:w-16' className='font-display text-5xl tracking-wide md:text-7xl break-normal whitespace-normal'>{title}</Heading>
         {selectedVariant?.sku && <div className='mt-3 mb-2 md:w-[161px]'><TrustProductMini sku={selectedVariant.sku} /></div>}
         {product.shortDescription?.value && <div className='text-jc-dark-blue'>{product.shortDescription.value}</div>}
         <Suspense

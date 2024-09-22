@@ -138,7 +138,7 @@ function HeaderCtas({
           </Suspense>
         </p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center"} prefetch="intent" to="/account">
+      <a className={"flex flex-col items-center"} href="#cart-aside">
         <Suspense>
           <Await resolve={cart}>
             {(cart) => {
@@ -147,7 +147,7 @@ function HeaderCtas({
           </Await>
         </Suspense>
         <p className='font-body mt-1 desktop-only' style={{ fontSize: "9px" }}>BASKET</p>
-      </NavLink>
+      </a>
       <NavLink prefetch="intent" to="/account">
 
       </NavLink>

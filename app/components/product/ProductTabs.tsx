@@ -53,9 +53,6 @@ export function ProductTabs({
             <TabsContent value="shipping" className='bg-jc-light-grey-100 p-6 shadow'>
                 <ProductShipping />
             </TabsContent>
-            <TabsContent value="related" className='bg-jc-light-grey-100 p-6 shadow'>
-                <ProductRecommendations productRecommendations={productRecommendations.productRecommendations} />
-            </TabsContent>
         </Tabs>
     )
 }

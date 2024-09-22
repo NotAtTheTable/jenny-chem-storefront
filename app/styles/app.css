@@ -1,5 +1,5 @@
 :root {
-  --aside-width: 400px;
+  --aside-width: 470px;
   --cart-aside-summary-height-with-discount: 300px;
   --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
@@ -23,7 +23,6 @@ img {
 */
 aside {
   background: var(--color-light);
-  box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
   height: 100vh;
   max-width: var(--aside-width);
   min-width: var(--aside-width);
@@ -33,17 +32,12 @@ aside {
   transition: transform 200ms ease-in-out;
 }
 
-aside header {
-  align-items: center;
-  border-bottom: 1px solid var(--color-dark);
-  display: flex;
-  height: var(--header-height);
-  justify-content: space-between;
-  padding: 0 20px;
+aside .aside-container {
+  margin: 20px 25px;
 }
 
-aside header h3 {
-  margin: 0;
+aside header {
+  position: relative;
 }
 
 aside header .close {
@@ -63,9 +57,7 @@ aside header h2 {
   margin-top: 0;
 }
 
-aside main {
-  margin: 1rem;
-}
+aside main {}
 
 aside p {
   margin: 0 0 0.25rem;
@@ -80,7 +72,7 @@ aside li {
 }
 
 .overlay {
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(5, 7, 36, 0.8);
   bottom: 0;
   left: 0;
   opacity: 0;
@@ -248,12 +240,11 @@ aside li {
 }
 
 .cart-summary-aside {
-  background: white;
-  border-top: 1px solid var(--color-dark);
+  background-color: white;
   bottom: 0;
   padding-top: 0.75rem;
   position: absolute;
-  width: calc(var(--aside-width) - 40px);
+  width: 100%;
 }
 
 .cart-line-quantity {

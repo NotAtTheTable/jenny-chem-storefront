@@ -1,3 +1,7 @@
+import { Plus } from "lucide-react";
+import DashDivider from "./foundational/DashDivider";
+import Heading from "./foundational/Heading";
+
 /**
  * A side bar component with Overlay that works without JavaScript.
  * @example
@@ -27,9 +31,16 @@ export function Aside({
         }}
       />
       <aside>
-        <header>
-          <h3>{heading}</h3>
-          <CloseAside />
+        <header className="aside-container">
+          <div>
+            <h3 className="text-3xl text-center text-jc-dark-blue font-display">{heading}</h3>
+            <div className="w-full mt-1 flex items-center justify-center">
+              <div className={`w-16 h-[3px] bg-jc-light-blue`} />
+            </div>
+          </div>
+          <div className="absolute right-0 top-1/2 transform -translate-y-[75%]">
+            <CloseAside />
+          </div>
         </header>
         <main>{children}</main>
       </aside>
@@ -41,7 +52,7 @@ function CloseAside() {
   return (
     /* eslint-disable-next-line jsx-a11y/anchor-is-valid */
     <a className="close" href="#" onChange={() => history.go(-1)}>
-      &times;
+      <Plus strokeWidth={3} className="rotate-45 text-jc-dark-blue" />
     </a>
   );
 }
