@@ -124,7 +124,7 @@ function HeaderCtas({
         <img alt="contact-icon" className="h-7" src={ParcelIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>TRACKING</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/account">
+      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/contact">
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
       </NavLink>

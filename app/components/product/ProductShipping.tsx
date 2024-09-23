@@ -3,8 +3,9 @@ import Warning from "@/assets/foundational/warning.svg"
 export function ProductShipping() {
 
     return (
-        <div className="flex md:flex-row flex-col gap-6">
-            <img src={"https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Shipping_and_return.png?v=1725394077"} className="w-[300px] flex-shrink-0" />
+        <div className="flex md:flex-row flex-col gap-4 md:gap-6">
+            <img src={"https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Shipping_and_return.png?v=1725394077"} className="desktop-only w-[300px] flex-shrink-0" />
+            <img src={"https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Shipping_and_return_mobile.png?v=1727120568"} className="mobile-only w-full" />
             <div className="flex md:flex-row flex-col flex-grow gap-6 md:text-left text-center">
                 <div className="md:w-1/2">
                     <h3 className="text-jc-light-blue text-lg mb-2">SHIPPING INFORMATION</h3>

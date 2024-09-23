@@ -187,12 +187,12 @@ function CartCostSummary({ cost }: { cost: CartApiQueryFragment["cost"] }) {
           )}
         </dd>
       </dl>
-      <dl className="flex justify-between mb-2">
+      {/* <dl className="flex justify-between mb-2">
         <dt>Estimated Shipping</dt>
         <dd>
           xxxx
         </dd>
-      </dl>
+      </dl> */}
       <strong>
         <dl className="flex justify-between text-2xl">
           <dt >Total</dt>
@@ -283,16 +283,9 @@ export function CartEmpty({
         started!
       </p>
       <br />
-      <Link
-        to="/collections"
-        onClick={() => {
-          if (layout === 'aside') {
-            window.location.href = '/collections';
-          }
-        }}
-      >
+      <a href="#" onChange={() => history.go(-1)}>
         Continue shopping →
-      </Link>
+      </a>
     </div>
   );
 }
