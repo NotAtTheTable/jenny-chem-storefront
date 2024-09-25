@@ -80,11 +80,3 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
         </div>
     )
 }
-
-export function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
-    return (
-        <div className={`z-[49] pt-[${headerHeight || 0}px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
-            {children}
-        </div>
-    );
-}

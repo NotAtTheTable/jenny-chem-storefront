@@ -9,6 +9,7 @@ import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.sv
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
 import { AlignJustify, Cross, Dot, Plus, Search, SearchIcon, X } from 'lucide-react';
 import HeaderDropDown from './header/HeaderDropDown';
+import MobileMenu from './header/MobileMenu';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
@@ -61,7 +62,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
     </div>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
     >
-      <div>Here's the header</div>
+      <MobileMenu menu={menu} />
     </MobileHeaderDropDown>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
     >
