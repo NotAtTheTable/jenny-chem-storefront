@@ -1,5 +1,5 @@
 import { Await, NavLink } from '@remix-run/react';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
@@ -7,35 +7,49 @@ import ContactIcon from "~/assets/foundational/contact_icon.svg"
 import ParcelIcon from "~/assets/foundational/parcel_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
-import { AlignJustify, Dot, Search, SearchIcon } from 'lucide-react';
+import { AlignJustify, Cross, Dot, Plus, Search, SearchIcon, X } from 'lucide-react';
 import HeaderDropDown from './header/HeaderDropDown';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
-
-type Viewport = 'desktop' | 'mobile';
 
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
 
   const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
+  const [mobileMenuVisible, setMobileMenuVisible] = useState<boolean>(false);
+  const [mobileSearchVisible, setMobileSearchVisible] = useState<boolean>(false);
+
+  const headerRef = useRef<HTMLDivElement>(null); // Create a ref for the header height
+  const [headerHeight, setHeaderHeight] = useState<number>(0); // State to store header height
+
+  useEffect(() => {
+    if (headerRef.current) {
+      setHeaderHeight(headerRef.current.offsetHeight); // Set header height on mount
+    }
+  }, [headerRef]);
 
   return (<>
-    <div style={{ zIndex: 3 }} className='shadow-[0_3_9px_rgba(0,0,0,0.4)] bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue relative'>
+    <div ref={headerRef} className='sticky top-0 z-50 shadow-[0_3_9px_rgba(0,0,0,0.4)] bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
-        <div className='flex flex-row gap-4 absolute'>
-          <HeaderMenuMobileToggle />
-          <HeaderMobileSearchToggle />
+        <div className='absolute flex flex-row gap-4'>
+          <button className='mobile-only' onClick={() => setMobileMenuVisible(!mobileMenuVisible)}>
+            {mobileMenuVisible ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
+          </button>
+          <button className='mobile-only' onClick={() => setMobileSearchVisible(!mobileSearchVisible)}>
+            <SearchIcon className='text-jc-light-blue' />
+          </button>
         </div>
         <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center" prefetch="intent" to="/" end>
           <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
         </NavLink>
-        <HeaderMenu
-          menu={menu}
-          viewport="desktop"
-          primaryDomainUrl={shop.primaryDomain.url}
-          handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
-          selectedMenuItemIndex={selectedMenuItemIndex}
-        />
+        <div className='desktop-component'>
+          <HeaderMenu
+            menu={menu}
+            primaryDomainUrl={shop.primaryDomain.url}
+            handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
+            selectedMenuItemIndex={selectedMenuItemIndex}
+          />
+        </div>
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
       </header>
       <HeaderDropDown
@@ -45,6 +59,14 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
         primaryDomainUrl={shop.primaryDomain.url}
       />
     </div>
+    <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
+    >
+      <div>Here's the header</div>
+    </MobileHeaderDropDown>
+    <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
+    >
+      <div>Here's the search</div>
+    </MobileHeaderDropDown>
   </>
   );
 }
@@ -52,41 +74,21 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
 export function HeaderMenu({
   menu,
   primaryDomainUrl,
-  viewport,
   handleSelectedMenuItemIndex,
   selectedMenuItemIndex
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
-  viewport: Viewport;
   handleSelectedMenuItemIndex: (index: number | null) => void;
   selectedMenuItemIndex: number | null;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
-  const className = `header-menu-${viewport} shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue`;
-
-  function closeAside(event: React.MouseEvent<HTMLAnchorElement>) {
-    if (viewport === 'mobile') {
-      event.preventDefault();
-      window.location.href = event.currentTarget.href;
-    }
-  }
+  const className = `shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue`;
 
   return (
     <nav className={className} role="navigation">
-      {viewport === 'mobile' && (
-        <NavLink
-          end
-          onClick={closeAside}
-          prefetch="intent"
-          to="/"
-        >
-          Home
-        </NavLink>
-      )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item, index) => {
         if (!item.url) return null;
-
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
@@ -100,7 +102,6 @@ export function HeaderMenu({
             end
             key={item.id}
             onTouchStart={() => handleSelectedMenuItemIndex(index)}
-            onClick={closeAside}
             prefetch="intent"
             to={url}
             onMouseEnter={() => handleSelectedMenuItemIndex(index)}
@@ -168,20 +169,12 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
   )
 }
 
-function HeaderMenuMobileToggle() {
+function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
   return (
-    <a className='mobile-only' href="#mobile-menu-aside">
-      <AlignJustify className='text-jc-light-blue' />
-    </a>
+    <div className={`z-[49] pt-[${headerHeight || 0}px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+      {children}
+    </div>
   );
-}
-
-function HeaderMobileSearchToggle() {
-  return (
-    <a className='mobile-only' href="#mobile-search">
-      <SearchIcon className='text-jc-light-blue' />
-    </a>
-  )
 }
 
 const FALLBACK_HEADER_MENU = {
