@@ -62,7 +62,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
     </div>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
     >
-      <MobileMenu menu={menu} />
+      <MobileMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
     </MobileHeaderDropDown>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
     >

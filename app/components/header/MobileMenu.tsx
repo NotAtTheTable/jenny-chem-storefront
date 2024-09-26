@@ -23,7 +23,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl }) => {
             <TabsList className="flex w-full overflow-x-scroll no-scrollbar divide-x md:divide-x-0 divide-jc-light-blue">
                 {
                     menu?.items.map((item) => (
-                        <TabsTrigger value={item.id} className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">{item.title}</TabsTrigger>
+                        <TabsTrigger key={item.id} value={item.id} className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">{item.title}</TabsTrigger>
                     ))
                 }
             </TabsList>
