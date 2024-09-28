@@ -31,6 +31,7 @@ const ProductRecommendations = ({ productRecommendations }: ProductRecommendatio
                         <CarouselItem key={product.id} className="basis-1/5 pl-0 flex justify-center">
                             <ProductCard
                                 key={product.id}
+                                id={product.id}
                                 imageData={product.images.nodes[0] as StorefrontAPI.Image}
                                 title={product.title}
                                 handle={product.handle}
@@ -53,6 +54,7 @@ const ProductRecommendations = ({ productRecommendations }: ProductRecommendatio
                         <CarouselItem key={product.id} className="w-min pl-0 flex justify-center">
                             <ProductCard
                                 key={product.id}
+                                id={product.id}
                                 imageData={product.images.nodes[0] as StorefrontAPI.Image}
                                 title={product.title}
                                 handle={product.handle}

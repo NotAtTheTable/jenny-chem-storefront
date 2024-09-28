@@ -13,7 +13,7 @@ const Heading: React.FC<HeadingProps> = ({ level, children, className, dashClass
     const Tag = `h${level}` as keyof JSX.IntrinsicElements;
     return <div>
         <Tag className={cn(className, 'text-jc-dark-blue font-display')} variants={''} store-url={''}>{children as any}</Tag>
-        <div className={dashClassName}><DashDivider className={cn("-mt-1 mb-[10px] h-[3px]")} /></div>
+        <div className={dashClassName}><DashDivider className={cn("-mt-1 mb-[10px] h-[3px]", dashClassName)} /></div>
     </div>;
 };
 

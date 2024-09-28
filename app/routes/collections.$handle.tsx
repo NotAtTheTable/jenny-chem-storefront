@@ -102,6 +102,7 @@ function ProductsGrid({ products }: { products: ProductCardPreviewFragment[] }) 
         return (
           <div key={product.id}>
             <ProductCard
+              id={product.id}
               imageData={product.images.nodes[0] as StorefrontAPI.Image}
               title={product.title}
               price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}

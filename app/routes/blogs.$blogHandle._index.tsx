@@ -48,7 +48,7 @@ const HeadingSection = () => {
     <div className='border-b-[0.75px] border-jc-light-blue-100 bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
       <div className='container relative py-16 text-jc-dark-blue'>
         <div className='text-center w-full flex flex-col items-center'>
-          <Heading level={1} className='font-display text-8xl'><span className='text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>
+          <Heading level={1} className='font-display text-8xl'><span className='!text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>
           <div className="max-w-3xl">
             Aut explicabo quasi et omnis necessitatibus sed alias amet a commodi adipisci sit autem tempore qui quaerat eaque. Et eveniet laudantium qui inventore vitae non maxime consequatur eos omnis debitis id sequi soluta. Aut obcaecati aliquam ut tempora voluptatem et cupiditate consectetur non.
           </div>
@@ -160,7 +160,7 @@ export default function Blog() {
     <div className="blog">
       <HeadingSection />
       <div className='container py-16'>
-        <Heading className="font-display text-jc-dark-blue text-6xl text-center" level={1}>POPULAR ARTICLES</Heading>
+        <Heading className="font-display text-6xl text-center" level={1}>POPULAR ARTICLES</Heading>
         <ArticleCarousel mode={"light"} articles={recommendedArticles.articles} viewport={isMobile ? "mobile" : "desktop"} />
         <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 -mb-3" />
         <ArticleList articles={articles.articles} />

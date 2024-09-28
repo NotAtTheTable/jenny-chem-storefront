@@ -582,7 +582,7 @@ export type BlogsQuery = {
 
 export type ProductPreviewFragment = Pick<
   StorefrontAPI.Product,
-  'handle' | 'title'
+  'id' | 'handle' | 'title'
 > & {
   images: {
     nodes: Array<
@@ -604,7 +604,7 @@ export type CollectionPreviewFragment = Pick<
   >;
   products: {
     nodes: Array<
-      Pick<StorefrontAPI.Product, 'handle' | 'title'> & {
+      Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
         images: {
           nodes: Array<
             Pick<
@@ -664,7 +664,7 @@ export type CollectionGroupByHandleQuery = {
                 >;
                 products: {
                   nodes: Array<
-                    Pick<StorefrontAPI.Product, 'handle' | 'title'> & {
+                    Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
                       images: {
                         nodes: Array<
                           Pick<

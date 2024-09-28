@@ -35,7 +35,7 @@ export function CartMain({ layout, cart }: CartMainProps) {
 
 function CartDeliveryBanner() {
   return (
-    <div className='bg-[#7094E020] text-center py-[3px]'>
+    <div className='bg-[#7094E020] text-center py-[3px] border-t border-b border-jc-light-blue border-opacity-50'>
       <div className='mx-[25px] relative'>
         <span className='text-jc-dark-blue'>Free Delivery on selected orders over £25*</span>
         <img className='absolute right-[3px] top-1/2 transform -translate-y-1/2' src={BlueInfoIcon} />
@@ -141,11 +141,13 @@ function CartCheckoutActions({ checkoutUrl }: { checkoutUrl: string }) {
 
   return (
     <div className='aside-container'>
-      <div className='flex items-center gap-1 text-jc-dark-blue mb-5'><img src={BlueSecureIcon} /> Money Back Guarantee within 30 days of your purchase.</div>
+      <div className='flex items-center justify-center gap-1 text-jc-dark-blue mb-5'><img src={BlueSecureIcon} /> Money Back Guarantee within 30 days of your purchase.</div>
       <a href={checkoutUrl} target="_self">
         <ArrowButton label='CHECKOUT SECURELY' />
       </a>
-
+      <div className='my-3 flex justify-center'>
+        <img src={'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/card-images.png?v=1727529035'} />
+      </div>
     </div>
   );
 }
@@ -164,11 +166,7 @@ export function CartSummary({
 
   return (
     <div aria-labelledby="cart-summary" className={className}>
-      {/* <CartDiscounts discountCodes={discountCodes} /> */}
-      <div className='h-[1px] bg-jc-light-blue bg-opacity-50' />
       <CartCostSummary cost={cost} />
-      <div className='h-[1px] bg-jc-light-blue bg-opacity-50' />
-      {/* <CartShippingCalculator /> */}
       <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
     </div>
   );
@@ -176,35 +174,21 @@ export function CartSummary({
 
 function CartCostSummary({ cost }: { cost: CartApiQueryFragment["cost"] }) {
   return (
-    <div className='aside-container text-jc-dark-blue'>
-      <dl className="flex justify-between ">
-        <dt>Subtotal</dt>
-        <dd>
-          {cost?.subtotalAmount?.amount ? (
-            <Money data={cost?.subtotalAmount} />
-          ) : (
-            '-'
-          )}
-        </dd>
-      </dl>
-      {/* <dl className="flex justify-between mb-2">
-        <dt>Estimated Shipping</dt>
-        <dd>
-          xxxx
-        </dd>
-      </dl> */}
-      <strong>
-        <dl className="flex justify-between text-2xl">
-          <dt >Total</dt>
-          <dd>
-            {cost?.totalAmount ? (
-              <Money data={cost?.totalAmount} />
-            ) : (
-              '-'
-            )}
-          </dd>
-        </dl>
-      </strong>
+    <div className='bg-[#7094E020] text-center py-[3px] border-t border-b border-jc-light-blue border-opacity-50'>
+      <div className='mx-[25px] text-jc-dark-blue'>
+        <strong>
+          <dl className="flex justify-between text-2xl">
+            <dt >Total</dt>
+            <dd>
+              {cost?.totalAmount ? (
+                <Money data={cost?.totalAmount} />
+              ) : (
+                '-'
+              )}
+            </dd>
+          </dl>
+        </strong>
+      </div>
     </div>
   )
 }

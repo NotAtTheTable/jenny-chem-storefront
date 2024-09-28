@@ -198,6 +198,7 @@ function BestSellingProducts({
                   {products.nodes.map((product) => (
                     <CarouselItem key={product.id} className="w-min md:basis-1/5 pl-0 flex justify-center">
                       <ProductCard
+                        id={product.id}
                         imageData={product.images.nodes[0] as StorefrontAPI.Image}
                         title={product.title}
                         price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}

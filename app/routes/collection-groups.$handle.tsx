@@ -105,6 +105,7 @@ const CollectionSummary = (props: CollectionPreviewFragment) => {
             return (
                 <div key={product.handle}>
                     <ProductCard
+                        id={product.id}
                         imageData={product.images.nodes[0] as StorefrontAPI.Image}
                         title={product.title}
                         price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
@@ -124,6 +125,7 @@ function NavigateToProductPageButton({ handle }: { handle: string }) {
 
 const PRODUCT_PREVIEW_FRAGMENT = `#graphql
     fragment ProductPreview on Product {
+        id
         images(first: 1) {
             nodes {
                 id

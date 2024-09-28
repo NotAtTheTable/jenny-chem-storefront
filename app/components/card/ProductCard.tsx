@@ -4,6 +4,7 @@ import { Image as ImageType } from '@shopify/hydrogen/storefront-api-types'
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
 interface ProductCardProps {
+    id: string;
     imageData: ImageType;
     title: string;
     handle: string;
@@ -11,7 +12,9 @@ interface ProductCardProps {
     ActionElement?: React.FunctionComponent<any>;
 }
 
-export default function ProductCard({ imageData, title, handle, price, ActionElement }: ProductCardProps) {
+
+export default function ProductCard({ id, imageData, title, handle, price, ActionElement }: ProductCardProps) {
+
     return (
         <div style={{ height: "28.5rem" }} className="shadow m-[6px] flex flex-col w-60 border overflow-hidden rounded-lg">
             <div className="bg-jc-light-grey flex justify-center items-center w-full h-70">
