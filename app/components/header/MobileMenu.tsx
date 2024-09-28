@@ -29,7 +29,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl }) => {
             </TabsList>
             {
                 menu?.items.map((navItem) => (
-                    <TabsContent className='px-5' value={navItem.id}>
+                    <TabsContent className='px-5' key={navItem.id} value={navItem.id}>
                         {
                             <Accordion collapsible type="single">
 

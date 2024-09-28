@@ -1,7 +1,6 @@
 :root {
   --aside-width: 470px;
-  --cart-aside-summary-height-with-discount: 300px;
-  --cart-aside-summary-height: 250px;
+  --cart-aside-summary-height: 300px;
   --grid-item-width: 355px;
   --header-height: 64px;
   --color-dark: #000;
@@ -218,10 +217,6 @@ aside li {
   max-height: calc(100vh - var(--cart-aside-summary-height));
   overflow-y: auto;
   width: auto;
-}
-
-.cart-main.with-discount {
-  max-height: calc(100vh - var(--cart-aside-summary-height-with-discount));
 }
 
 .cart-line {

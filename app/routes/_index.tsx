@@ -288,7 +288,7 @@ function GetSocial({ viewport = 'desktop' }: { viewport?: Viewport }) {
     return <div className='flex flex-row-reverse p-10 container'>
       <div style={{ height: 'fit-content' }} className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 grid-rows-2 gap-4 p-4 '>
         {socialImages.map(({ url, alt }, index) => (
-          <div className={`w-48 h-48 ${(index == 7) || (index == 6) ? "hidden xl:block" : ""} ${(index == 5) || (index == 4) ? "hidden lg:block" : ""} overflow-hidden drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]`}>
+          <div key={index} className={`w-48 h-48 ${(index == 7) || (index == 6) ? "hidden xl:block" : ""} ${(index == 5) || (index == 4) ? "hidden lg:block" : ""} overflow-hidden drop-shadow-[0_0_6px_rgba(8,13,63,0.5)]`}>
             <img className='w-full h-full object-cover rounded-lg' src={url} alt={alt} />
           </div>
         ))}

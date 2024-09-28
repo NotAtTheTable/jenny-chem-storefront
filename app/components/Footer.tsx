@@ -145,7 +145,7 @@ function FooterMenu({
     return (
 
       <div className='flex flex-row p-10 justify-between container'>
-        <div>
+        <div className='z-10'>
           <SiteMap />
           <nav className="text-white font-body text-xs divide-x divide-white flex pt-10" role="navigation">
             {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
@@ -177,8 +177,9 @@ function FooterMenu({
             })}
           </nav>
         </div>
-        <div className='flex flex-col items-end justify-end gap-4'>
+        <div className='flex flex-col items-end justify-end gap-4 z-10'>
           <img className="w-48 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
+          <img className='w-[240px] h-auto' src={'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/payment-light.png?v=1727549427'} />
           <p className='text-white text-xs text-right'>
             &copy; 2024, Jennychem Limited | All Rights Reserved.<br />
             Company registration number: 00000000 | VAT number: GB 000000000
@@ -206,11 +207,11 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
         href: "/blog"
       },
       {
-        label: "Trade & Customer Login",
+        label: "Services",
         href: "/trade-and-customer-login"
       },
       {
-        label: "Search",
+        label: "Trustpilot",
         href: "/search"
       }
     ]
@@ -227,32 +228,32 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
         href: "/shipping-rates"
       },
       {
-        label: "Order Returns",
+        label: "Trade & Customer Login",
         href: "/order-returns"
       },
       {
-        label: "Distributors",
+        label: "Dilution Calculator",
         href: "/distributors"
       }
     ]
   },
   {
-    heading: "Other",
+    heading: "Social",
     links: [
       {
-        label: "Sample Kit",
+        label: "Facebook",
         href: "/privacy-policy1"
       },
       {
-        label: "Dilution Calculator",
+        label: "Instagram",
         href: "/terms-of-service2"
       },
       {
-        label: "Services",
+        label: "Youtube",
         href: "/privacy-policy3"
       },
       {
-        label: "Basket",
+        label: "TikTok",
         href: "/terms-of-service4"
       }
     ]
@@ -289,7 +290,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
       {
         data.map((section) => (
           <div key={section.heading} className='flex flex-col gap-2 w-40'>
-            <h3 className='text-white font-display text-2xl border-b border-jc-light-blue pb-2 font-bold'>{section.heading}</h3>
+            <strong><h3 className='text-white font-body text-2xl border-b border-jc-light-blue pb-2 font-bold'>{section.heading}</h3></strong>
             {section.links.map((link) => (
               <a key={link.href} className='text-white font-body pb-1 text-xs border-b border-jc-light-blue' href={link.href}>{link.label}</a>
             ))}

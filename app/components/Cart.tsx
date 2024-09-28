@@ -22,13 +22,14 @@ export function CartMain({ layout, cart }: CartMainProps) {
   const withDiscount =
     cart &&
     Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
 
   return (
-    <div className={className}>
+    <div>
       <CartDeliveryBanner />
-      <CartEmpty hidden={linesCount} layout={layout} />
-      <CartDetails cart={cart} layout={layout} />
+      <div className={`h-full max-h-[calc(100vh-var(--cart-aside-summary-height))] overflow-y-auto`}>
+        <CartEmpty hidden={linesCount} layout={layout} />
+        <CartDetails cart={cart} layout={layout} />
+      </div>
     </div>
   );
 }
@@ -38,7 +39,6 @@ function CartDeliveryBanner() {
     <div className='bg-[#7094E020] text-center py-[3px] border-t border-b border-jc-light-blue border-opacity-50'>
       <div className='mx-[25px] relative'>
         <span className='text-jc-dark-blue'>Free Delivery on selected orders over £25*</span>
-        <img className='absolute right-[3px] top-1/2 transform -translate-y-1/2' src={BlueInfoIcon} />
       </div>
     </div>
   )
@@ -159,13 +159,11 @@ export function CartSummary({
   cart: CartApiQueryFragment
   layout: CartMainProps['layout'];
 }) {
-  const className =
-    layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
 
   const { discountCodes, cost } = cart;
 
   return (
-    <div aria-labelledby="cart-summary" className={className}>
+    <div aria-labelledby="cart-summary" className={`bg-white absolute bottom-0 w-full`}>
       <CartCostSummary cost={cost} />
       <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
     </div>

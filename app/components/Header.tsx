@@ -32,7 +32,7 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   }, [headerRef]);
 
   return (<>
-    <div ref={headerRef} className='sticky top-0 z-50 shadow-[0_3_9px_rgba(0,0,0,0.4)] bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
+    <div ref={headerRef} className='sticky top-0 z-50 shadow bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='absolute flex flex-row gap-4'>
           <button className='mobile-only' onClick={() => setMobileMenuVisible(!mobileMenuVisible)}>
@@ -86,16 +86,12 @@ export function HeaderMenu({
   selectedMenuItemIndex: number | null;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
-  const className = `shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue flex flex-row`;
+  const className = `font-display tracking-wider font-bold line divide-x divide-jc-light-blue flex flex-row`;
 
   return (
     <nav className={className} role="navigation">
       {(menu || FALLBACK_HEADER_MENU).items.map((item, index) => {
         if (!item.url) return null;
-        // if the url is internal, we strip the domain
-        if (item.id === SERVICES_NAV_ITEM_ID) {
-          item.url = "/services"
-        }
         const url =
           item.url.includes('myshopify.com') ||
             item.url.includes(publicStoreDomain) ||
@@ -104,19 +100,18 @@ export function HeaderMenu({
             : item.url;
         return (
           <NavLink
-            className={`header-menu-item px-4 my-6 ${(selectedMenuItemIndex === index) ? "text-jc-light-blue" : ""}`}
+            className={`header-menu-item !no-underline px-4 my-6 ${(selectedMenuItemIndex === index) ? "text-jc-light-blue" : ""}`}
             end
             key={item.id}
-            onTouchStart={() => handleSelectedMenuItemIndex(index)}
             prefetch="intent"
             to={url}
-            onMouseEnter={() => handleSelectedMenuItemIndex(index)}
+            onClick={() => handleSelectedMenuItemIndex(index)}
           >
             {item.title}
           </NavLink>
         );
       })}
-      <a href="#search-aside" className="header-menu-item flex px-2 my-6"><Search style={{ marginTop: "3px" }} height={15} />Search</a>
+      <a href="#search-aside" className="!no-underline header-menu-item flex px-2 my-6"><Search style={{ marginTop: "3px" }} height={15} />Search</a>
     </nav>
   );
 }
@@ -127,15 +122,15 @@ function HeaderCtas({
 }: Pick<HeaderProps, 'isLoggedIn' | 'cart'>) {
   return (
     <nav className="header-ctas" role="navigation">
-      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="https://jennychem.aftership.com/?page-name=tracking-page">
+      <NavLink className={"flex flex-col items-center desktop-only !no-underline"} prefetch="intent" to="https://jennychem.aftership.com/?page-name=tracking-page">
         <img alt="contact-icon" className="h-7" src={ParcelIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>TRACKING</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to="/contact">
+      <NavLink className={"flex flex-col items-center desktop-only !no-underline"} prefetch="intent" to="/contact">
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center desktop-only"} prefetch="intent" to={"https://shopify.com/3254747185/account"}>
+      <NavLink className={"flex flex-col items-center desktop-only !no-underline"} prefetch="intent" to={"https://shopify.com/3254747185/account"}>
         <img alt="profile-placeholder" className="h-7" src={ProfilePlaceholderIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>
           <Suspense fallback="Sign in">
