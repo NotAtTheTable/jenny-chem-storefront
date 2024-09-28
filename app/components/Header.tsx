@@ -86,7 +86,7 @@ export function HeaderMenu({
   selectedMenuItemIndex: number | null;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
-  const className = `shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue`;
+  const className = `shadow font-display tracking-wider font-bold line divide-x divide-jc-light-blue flex flex-row`;
 
   return (
     <nav className={className} role="navigation">

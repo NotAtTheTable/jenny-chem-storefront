@@ -111,7 +111,7 @@ const ParallaxHeader: React.FC = () => {
 
     const handleScroll = () => {
         setScrollY(window.scrollY);
-        if (window.scrollY > 200) {
+        if (window.scrollY > 100) {
             setIsVisible(true);
         } else {
             setIsVisible(false);
@@ -119,6 +119,8 @@ const ParallaxHeader: React.FC = () => {
     };
 
     useEffect(() => {
+        // Call once incase enters page while scrolled down
+        handleScroll();
         window.addEventListener('scroll', handleScroll);
         return () => {
             window.removeEventListener('scroll', handleScroll);
