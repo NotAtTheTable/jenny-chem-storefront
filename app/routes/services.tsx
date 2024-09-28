@@ -125,6 +125,7 @@ const ParallaxHeader: React.FC = () => {
         };
     }, []);
 
+
     return (
         <>
             <div className="desktop-component fixed py-16 z-[-1] w-full min-h-[500px] bg-white" style={{ transform: `translateY(-${scrollY * 0.2}px)` }}>

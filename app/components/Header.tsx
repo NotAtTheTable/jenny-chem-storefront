@@ -13,6 +13,8 @@ import MobileMenu from './header/MobileMenu';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
 
+const SERVICES_NAV_ITEM_ID = "gid://shopify/MenuItem/475474723008";
+
 export function Header({ header, isLoggedIn, cart }: HeaderProps) {
   const { shop, menu } = header;
 
@@ -91,6 +93,9 @@ export function HeaderMenu({
       {(menu || FALLBACK_HEADER_MENU).items.map((item, index) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
+        if (item.id === SERVICES_NAV_ITEM_ID) {
+          item.url = "/services"
+        }
         const url =
           item.url.includes('myshopify.com') ||
             item.url.includes(publicStoreDomain) ||
