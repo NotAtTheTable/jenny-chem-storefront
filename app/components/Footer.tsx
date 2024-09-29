@@ -17,6 +17,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { BlueBubbleBackground } from './foundational/BlueBubbleBackground';
+import LocaleSelector from './LocalSelector';
 
 export function Footer({
   menu,
@@ -179,6 +180,7 @@ function FooterMenu({
         </div>
         <div className='flex flex-col items-end justify-end gap-4 z-10'>
           <img className="w-48 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
+          <LocaleSelector />
           <img className='w-[240px] h-auto' src={'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/payment-light.png?v=1727549427'} />
           <p className='text-white text-xs text-right'>
             &copy; 2024, Jennychem Limited | All Rights Reserved.<br />
