@@ -141,7 +141,7 @@ function CartCheckoutActions({ checkoutUrl }: { checkoutUrl: string }) {
 
   return (
     <div className='aside-container'>
-      <div className='flex items-center justify-center gap-1 text-jc-dark-blue mb-5'><img src={BlueSecureIcon} /> Money Back Guarantee within 30 days of your purchase.</div>
+      <div className='flex items-center justify-center gap-1 text-jc-dark-blue mb-5'><img src={BlueSecureIcon} /> Money Back Guarantee within 30 days of purchase.</div>
       <a href={checkoutUrl} target="_self">
         <ArrowButton label='CHECKOUT SECURELY' />
       </a>
