@@ -2,6 +2,7 @@ import { Await } from '@remix-run/react';
 import { Suspense } from 'react';
 import type {
   CartApiQueryFragment,
+  CollectionGroupsQuery,
   FooterQuery,
   HeaderQuery,
 } from 'storefrontapi.generated';
@@ -19,6 +20,7 @@ export type LayoutProps = {
   children?: React.ReactNode;
   footer: Promise<FooterQuery>;
   header: HeaderQuery;
+  collectionGroups: CollectionGroupsQuery;
   isLoggedIn: Promise<boolean>;
 };
 
@@ -27,13 +29,14 @@ export function Layout({
   children = null,
   footer,
   header,
+  collectionGroups,
   isLoggedIn,
 }: LayoutProps) {
   return (
     <>
       <CartAside cart={cart} />
       <SearchAside />
-      {header && <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />}
+      {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} />}
       <main>{children}</main>
       <Suspense>
         <Await resolve={footer}>

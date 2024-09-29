@@ -11,11 +11,9 @@ import { AlignJustify, Cross, Dot, Plus, Search, SearchIcon, X } from 'lucide-re
 import HeaderDropDown from './header/HeaderDropDown';
 import MobileMenu from './header/MobileMenu';
 
-type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn'>;
+type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups'>;
 
-const SERVICES_NAV_ITEM_ID = "gid://shopify/MenuItem/475474723008";
-
-export function Header({ header, isLoggedIn, cart }: HeaderProps) {
+export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderProps) {
   const { shop, menu } = header;
 
   const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
@@ -58,13 +56,14 @@ export function Header({ header, isLoggedIn, cart }: HeaderProps) {
       <HeaderDropDown
         isHidden={(selectedMenuItemIndex !== null && [0, 1, 2, 3].includes(selectedMenuItemIndex))}
         menu={menu} selectedIndex={selectedMenuItemIndex || 0}
+        collectionGroups={collectionGroups}
         handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
         primaryDomainUrl={shop.primaryDomain.url}
       />
     </div>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
     >
-      <MobileMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+      <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} />
     </MobileHeaderDropDown>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
     >
@@ -171,6 +170,9 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
 }
 
 function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
+  useEffect(() => {
+
+  }, [headerHeight])
   return (
     <div className={`z-[49] pt-[${headerHeight || 0}px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}

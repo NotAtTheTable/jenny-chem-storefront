@@ -1,22 +1,40 @@
-import { HeaderQuery, MenuItemFragment, ParentMenuItemFragment } from "storefrontapi.generated";
+import { CollectionGroupsQuery, HeaderQuery, MenuItemFragment, ParentMenuItemFragment } from "storefrontapi.generated";
 import CollectionCard from "../card/CollectionCard";
 import { NavLink, useNavigate } from "@remix-run/react";
 import { ArrowButton } from "../foundational/ArrowButton";
 import { useRootLoaderData } from "~/lib/root-data";
 
-export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelectedMenuItemIndex, isHidden = true, primaryDomainUrl }:
+export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelectedMenuItemIndex, collectionGroups, isHidden = true, primaryDomainUrl }:
     {
         menu: HeaderQuery['menu'],
         selectedIndex: number,
         handleSelectedMenuItemIndex: (index: number | null) => void,
+        collectionGroups: CollectionGroupsQuery,
         isHidden: boolean,
         primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url']
     }) {
 
     function NavigateToCollectionPageButton({ handle }: { handle: string }) {
         const navigate = useNavigate();
-        return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/products/${handle}`)} />
+        return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/collection-groups/${handle}`)} />
     }
+
+    function findCollectionGroupByMenuItemId(menuItemId: string | undefined): { title: string, description: string, handle: string } {
+        const collectionGroup = collectionGroups.metaobjects.nodes.find(collectionGroup => {
+            return collectionGroup.fields.some(field => field.key === "menu_item_id" && field.value === menuItemId)
+        })
+
+        // Destructure from the field value format
+        const fieldsArray = collectionGroup?.fields || [];
+        const fieldsObject = fieldsArray.reduce<Record<string, any>>((acc, field) => {
+            acc[field.key] = field.value;
+            return acc;
+        }, {}) as { title: string, description: string, handle: string };
+        fieldsObject.handle = collectionGroup?.handle || '';
+        return fieldsObject
+    }
+
+    const collectionGroup = findCollectionGroupByMenuItemId(menu?.items[selectedIndex].id)
 
     function CollectionList({ menuItem, primaryDomainUrl, keyPass = "" }: {
         menuItem: ParentMenuItemFragment;
@@ -61,7 +79,7 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
             onMouseLeave={() => handleSelectedMenuItemIndex(null)}
         >
             <div className="container px-0 py-10 flex flex-row">
-                <CollectionCard title={menu?.items[selectedIndex].title || ""} handle={"some random  garbage"} ActionElement={NavigateToCollectionPageButton}
+                <CollectionCard title={collectionGroup.title} handle={collectionGroup.handle} description={collectionGroup.description} ActionElement={NavigateToCollectionPageButton}
                 />
                 <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
                     {

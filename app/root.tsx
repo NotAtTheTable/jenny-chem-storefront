@@ -79,11 +79,14 @@ export async function loader({ context }: LoaderFunctionArgs) {
     },
   });
 
+  const collectionGroups = await storefront.query(COLLECTION_GROUP_QUERY, { cache: storefront.CacheLong() });
+
   return defer(
     {
       cart: cartPromise,
       footer: footerPromise,
       header: await headerPromise,
+      collectionGroups: collectionGroups,
       isLoggedIn: isLoggedInPromise,
       publicStoreDomain,
     },
@@ -142,7 +145,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-        <Layout cart={null as any} footer={null as any} header={null as any} isLoggedIn={false as any}>
+        <Layout cart={null as any} footer={null as any} collectionGroups={null as any} header={null as any} isLoggedIn={false as any}>
           <div className="route-error">
             <h1>Oops</h1>
             <h2>{errorStatus}</h2>
@@ -234,4 +237,34 @@ const FOOTER_QUERY = `#graphql
     }
   }
   ${MENU_FRAGMENT}
+` as const;
+
+const COLLECTION_GROUP_QUERY = `#graphql
+
+  query CollectionGroups(
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(language: $language, country: $country) {
+
+    metaobjects(first: 10, type: "collection_group") {
+      nodes {
+        id
+        handle
+        fields {
+            value
+            key
+            reference {
+                ... on MediaImage {
+                    image {
+                        id
+                        url
+                        altText
+                    }
+                }
+            }
+        }
+      }
+    }
+    
+}
 ` as const;
