@@ -123,7 +123,7 @@ function NavigateToProductPageButton({ handle }: { handle: string }) {
     return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
 }
 
-const PRODUCT_PREVIEW_FRAGMENT = `#graphql
+export const PRODUCT_PREVIEW_FRAGMENT = `#graphql
     fragment ProductPreview on Product {
         id
         images(first: 1) {

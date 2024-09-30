@@ -1,25 +1,35 @@
 import React from 'react';
 import { CollectionGroupsQuery, HeaderQuery } from 'storefrontapi.generated';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { ProductShipping } from '../product/ProductShipping';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 
-import BlueRightArrow from '~/assets/foundational/arrows/carousel_blue_arrow_right.svg'
 import { ChevronRightIcon, CircleChevronRightIcon } from 'lucide-react';
 import { useRootLoaderData } from '~/lib/root-data';
-import { NavLink } from '@remix-run/react';
+import { NavLink, useNavigate } from '@remix-run/react';
 import Heading from '../foundational/Heading';
 import { ArrowButton } from '../foundational/ArrowButton';
+import {
+    Image,
+} from '@shopify/hydrogen';
 
 interface MobileMenuProps {
     menu: HeaderQuery['menu'],
     primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'],
-    collectionGroups: CollectionGroupsQuery
+    collectionGroups: CollectionGroupsQuery,
+    closeMenu: () => void
 }
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collectionGroups }) => {
+const LINK_ITEMS = [
+    'gid://shopify/MenuItem/475474723008',
+    'gid://shopify/MenuItem/475474755776',
+    'gid://shopify/MenuItem/475474788544'
+]
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collectionGroups, closeMenu }) => {
 
     const { publicStoreDomain } = useRootLoaderData();
+    const navigate = useNavigate();
+
     // TODO : Only use the collectionGroups, for the others just have links
 
     const collectionGroupsMap = collectionGroups.metaobjects.nodes.reduce((acc, group) => {
@@ -28,44 +38,77 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
             acc[menuItemIdField.value] = {
                 title: group.fields.find(field => field.key === "title")?.value || '',
                 description: group.fields.find(field => field.key === "description")?.value || '',
-                handle: group.handle
+                handle: group.handle,
+                featuredProduct: group.fields.find(field => field.key === "featured_product")?.reference,
+                featuredProductTitle: group.fields.find(field => field.key === "featured_product_title")?.value || undefined,
+                featuredProductImage: group.fields.find(field => field.key === "featured_product_image")?.value || undefined,
             };
         }
         return acc;
-    }, {} as Record<string, { title: string; description: string; handle: string }>);
+    }, {} as Record<string,
+        {
+            title: string;
+            description: string;
+            handle: string;
+            featuredProduct: any;
+            featuredProductTitle?: string;
+            featuredProductImage?: any;
+        }>);
 
-    console.log(collectionGroupsMap); // For debugging purposes, you can remove this later
+
+    const navigateToProductPage = (handle: string) => {
+        closeMenu();
+        return navigate(`/products/${handle}`)
+    }
+
+    console.log(menu?.items)
 
     return (
-        <Tabs defaultValue={menu?.items[0].id} className='py-4'>
+        <Tabs defaultValue={menu?.items[0].id} className='py-1'>
             <TabsList className="flex w-full overflow-x-scroll no-scrollbar divide-x md:divide-x-0 divide-jc-light-blue">
                 {
-                    menu?.items.map((item) => (
-                        <TabsTrigger key={item.id} value={item.id} className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">{item.title}</TabsTrigger>
-                    ))
+                    menu?.items.map((item) => {
+                        if (LINK_ITEMS.includes(item.id) && item.url) {
+                            const url =
+                                item.url.includes('myshopify.com') ||
+                                    item.url.includes(publicStoreDomain) ||
+                                    item.url.includes(primaryDomainUrl)
+                                    ? new URL(item.url).pathname
+                                    : item.url;
+                            return (
+                                <NavLink onClick={() => closeMenu()} key={item.id} to={url} className="!no-underline inline-flex items-center justify-center text-jc-dark-blue whitespace-nowrap rounded-sm px-3 py-1 text-xl flex-shrink-0 px-5 md:px-10 text-jc-dark-blue font-display">
+                                    {item.title}
+                                </NavLink>
+                            );
+                        }
+                        return (<TabsTrigger key={item.id} value={item.id} className="md:min-w-[200px] flex-shrink-0 px-5 md:px-10">{item.title}</TabsTrigger>)
+                    })
                 }
             </TabsList>
             {
                 menu?.items.map((navItem) => (
                     navItem.items.length > 0 &&
-                    <TabsContent key={navItem.id} value={navItem.id}>
-                        <div className='flex flex-row p-5 h-[260px] bg-jc-dark-blue'>
+                    <TabsContent className='!mt-1' key={navItem.id} value={navItem.id}>
+                        <div className='flex flex-row p-5 bg-jc-dark-blue'>
                             <div className='w-1/2'>
-                                <Heading dashClassName='w-16' className='!text-white text-6xl' level={3}>Product Name</Heading>
-                                <ArrowButton className='w-max mx-auto' label='VIEW PRODUCT' />
+                                <Heading dashClassName='w-16' className='!text-white text-6xl line-clamp-2' level={3}>
+                                    {collectionGroupsMap[navItem.id].featuredProductTitle || collectionGroupsMap[navItem.id].featuredProduct.title}
+                                </Heading>
+                                <ArrowButton onClick={() => navigateToProductPage(collectionGroupsMap[navItem.id].featuredProduct.handle)} className='w-max mx-auto' label='VIEW PRODUCT' />
                             </div>
                             <div className='w-1/2'>
-                                <div className='flex flex-col items-center'>
-                                    <img
-                                        src="https://via.placeholder.com/150"
-                                        alt="Placeholder"
-                                        className="mb-4"
-                                    />
-                                    <p className='text-center text-jc-dark-blue'>This is a placeholder image.</p>
-                                </div>
+                                <Image
+                                    alt={(collectionGroupsMap[navItem.id].featuredProductImage || collectionGroupsMap[navItem.id].featuredProduct.images.nodes[0]).altText || 'Product Image'}
+                                    aspectRatio="1/1"
+                                    data={collectionGroupsMap[navItem.id].featuredProductImage || collectionGroupsMap[navItem.id].featuredProduct.images.nodes[0]}
+                                    key={(collectionGroupsMap[navItem.id].featuredProductImage || collectionGroupsMap[navItem.id].featuredProduct.images.nodes[0]).id}
+                                    sizes="(min-width: 45em) 50vw, 100vw"
+                                    className="max-h-full max-w-full object-contain"
+                                    loader={({ src }) => `${src}?w=200&h=200&fit=cover`}
+                                />
                             </div>
                         </div>
-                        <Accordion className='px-5' collapsible type="single" defaultValue={navItem.items[0].id}>
+                        <Accordion className='px-5 py-2' collapsible type="single" defaultValue={navItem.items[0].id}>
 
                             {navItem.items.map((collectionGroupItem) => (
                                 <AccordionItem key={collectionGroupItem.id} value={collectionGroupItem.id}>
@@ -90,6 +133,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                                                     key={collectionItem.id}
                                                     prefetch="intent"
                                                     to={url}
+                                                    onClick={() => closeMenu()}
                                                     className='flex items-center w-full justify-between pb-2 text-xsm border-b-[0.75px] border-[#C7C7C] text-jc-dark-blue font-body'
                                                 >
                                                     {collectionItem.title}

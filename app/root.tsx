@@ -17,6 +17,7 @@ import appStyles from './styles/app.css?url';
 import { Layout } from '~/components/Layout';
 import stylesheet from "~/tailwind.css?url";
 import { useEffect } from 'react';
+import { PRODUCT_PREVIEW_FRAGMENT } from './routes/collection-groups.$handle';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -261,10 +262,14 @@ const COLLECTION_GROUP_QUERY = `#graphql
                         altText
                     }
                 }
+                ... on Product {
+                  ...ProductPreview
+                }
             }
         }
       }
     }
     
 }
+${PRODUCT_PREVIEW_FRAGMENT}
 ` as const;

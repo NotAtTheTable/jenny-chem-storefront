@@ -63,7 +63,7 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
     </div>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
     >
-      <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} />
+      <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} closeMenu={() => setMobileMenuVisible(!mobileMenuVisible)} />
     </MobileHeaderDropDown>
     <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
     >
@@ -171,10 +171,10 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
 
 function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
   useEffect(() => {
-
+    console.log(headerHeight)
   }, [headerHeight])
   return (
-    <div className={`z-[49] pt-[${headerHeight || 0}px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div style={{ paddingTop: `${headerHeight || 72}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}
     </div>
   );

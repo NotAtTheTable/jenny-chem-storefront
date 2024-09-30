@@ -31,7 +31,7 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
             </div>
             <div
                 className="relative min-h-[250px] rounded-lg shadow-md bg-cover bg-center md:w-2/5 desktop-component"
-                style={{ backgroundImage: "url('https://placehold.co/400')" }}
+                style={{ backgroundImage: "url('https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Web_F_Q_Image.jpg?v=1727728324')" }}
                 role="img"
                 aria-label="FAQ Image"
             >
@@ -40,7 +40,6 @@ export function ProductFAQs({ faqList }: { faqList: FAQList }) {
                         data={{
                             altText: "Product FAQ image",
                             url: "https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895",
-                            width: 400,
                         }}
                         sizes="(min-width: 45em) 50vw, 100vw"
                         aspectRatio="27/10"
