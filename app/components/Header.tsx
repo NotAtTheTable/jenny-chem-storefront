@@ -29,14 +29,28 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
     }
   }, [headerRef]);
 
+  const toggleMobileMenu = () => {
+    if (!mobileMenuVisible) {
+      setMobileSearchVisible(false);
+    }
+    setMobileMenuVisible(!mobileMenuVisible)
+  }
+
+  const toggleMobileSearch = () => {
+    if (!mobileSearchVisible) {
+      setMobileMenuVisible(false);
+    }
+    setMobileSearchVisible(!mobileSearchVisible)
+  }
+
   return (<>
     <div ref={headerRef} className='sticky top-0 z-50 shadow bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
       <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
         <div className='absolute flex flex-row gap-4'>
-          <button className='mobile-only' onClick={() => setMobileMenuVisible(!mobileMenuVisible)}>
+          <button className='mobile-only' onClick={() => toggleMobileMenu()}>
             {mobileMenuVisible ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
           </button>
-          <button className='mobile-only' onClick={() => setMobileSearchVisible(!mobileSearchVisible)}>
+          <button className='mobile-only' onClick={() => toggleMobileSearch()}>
             <SearchIcon className='text-jc-light-blue' />
           </button>
         </div>
