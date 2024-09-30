@@ -149,7 +149,7 @@ function Hero({
       style={{ backgroundImage: `url(${backgroundImage})`, height: '650px' }}
     >
       <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0.4) )' }} className="absolute w-full inset-0 "></div>
-      <div className='container flex h-full py-16 px-10'>
+      <div className='container flex h-full justify-center items-center'>
         <div className="relative z-1 flex items-center flex-col text-center text-white max-w-2xl">
           <h1 className="text-8xl font-display">{title}</h1>
           <div className='w-full'><DashDivider /></div>
