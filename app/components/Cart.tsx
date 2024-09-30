@@ -7,7 +7,7 @@ import BlueInfoIcon from '~/assets/foundational/blue_info_icon.svg'
 import { Plus } from 'lucide-react';
 import NumericInput from './foundational/NumericInput';
 import { useEffect, useState } from 'react';
-import { ArrowButton, Button } from './foundational/ArrowButton';
+import { ArrowButton, Button, MobileArrowButton } from './foundational/ArrowButton';
 import BlueSecureIcon from "~/assets/foundational/blue_secure_icon.svg"
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
@@ -258,15 +258,14 @@ export function CartEmpty({
   layout?: CartMainProps['layout'];
 }) {
   return (
-    <div hidden={hidden}>
-      <br />
-      <p>
-        Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
-        started!
-      </p>
+    <div hidden={hidden} className='flex flex-col items-center'>
+      <h3 className='text-2xl text-jc-dark-blue font-display text-center mt-[30%]'>
+        Your basket is empty.
+      </h3>
+      <p className='text-jc-dark-blue text-center'>Items you add to your basket will show up here.</p>
       <br />
       <a href="#" onChange={() => history.go(-1)}>
-        Continue shopping →
+        <ArrowButton className='w-max' label="CONTINUE SHOPPING" />
       </a>
     </div>
   );

@@ -171,10 +171,9 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
 
 function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
   useEffect(() => {
-    console.log(headerHeight)
   }, [headerHeight])
   return (
-    <div style={{ paddingTop: `${headerHeight || 72}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div style={{ top: `${headerHeight || 72}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}
     </div>
   );
