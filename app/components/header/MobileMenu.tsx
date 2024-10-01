@@ -11,6 +11,7 @@ import { ArrowButton } from '../foundational/ArrowButton';
 import {
     Image,
 } from '@shopify/hydrogen';
+import { MediaImage } from '@shopify/hydrogen/storefront-api-types';
 
 interface MobileMenuProps {
     menu: HeaderQuery['menu'],
@@ -41,7 +42,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                 handle: group.handle,
                 featuredProduct: group.fields.find(field => field.key === "featured_product")?.reference,
                 featuredProductTitle: group.fields.find(field => field.key === "featured_product_title")?.value || undefined,
-                featuredProductImage: group.fields.find(field => field.key === "featured_product_image")?.value || undefined,
+                featuredProductImage: (group.fields.find(field => field.key === "featured_product_image")?.reference as MediaImage) || undefined,
+                navbarImage: (group.fields.find(field => field.key === "navbar_pattern")?.reference as MediaImage) || undefined,
             };
         }
         return acc;
@@ -52,7 +54,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
             handle: string;
             featuredProduct: any;
             featuredProductTitle?: string;
-            featuredProductImage?: any;
+            featuredProductImage?: MediaImage;
+            navbarImage?: MediaImage;
         }>);
 
 
@@ -60,8 +63,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
         closeMenu();
         return navigate(`/products/${handle}`)
     }
-
-    console.log(menu?.items)
 
     return (
         <Tabs defaultValue={menu?.items[0].id} className='py-1'>
@@ -89,7 +90,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                 menu?.items.map((navItem) => (
                     navItem.items.length > 0 &&
                     <TabsContent className='!mt-1' key={navItem.id} value={navItem.id}>
-                        <div className='flex flex-row p-5 bg-jc-dark-blue'>
+                        <div className='flex flex-row p-5 bg-jc-dark-blue' style={{ backgroundImage: `url(${collectionGroupsMap[navItem.id].navbarImage?.image?.url})`, backgroundSize: 'cover' }}>
                             <div className='w-1/2'>
                                 <Heading dashClassName='w-16' className='!text-white text-6xl line-clamp-2' level={3}>
                                     {collectionGroupsMap[navItem.id].featuredProductTitle || collectionGroupsMap[navItem.id].featuredProduct.title}
@@ -134,7 +135,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                                                     prefetch="intent"
                                                     to={url}
                                                     onClick={() => closeMenu()}
-                                                    className='flex items-center w-full justify-between pb-2 text-xsm border-b-[0.75px] border-[#C7C7C] text-jc-dark-blue font-body'
+                                                    className='!no-underline flex items-center w-full justify-between pb-2 text-xsm border-b-[0.75px] border-[#C7C7C] text-jc-dark-blue font-body'
                                                 >
                                                     {collectionItem.title}
                                                     <ChevronRightIcon height={18} strokeWidth={2.5} className='text-jc-light-blue' />

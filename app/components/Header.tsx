@@ -153,7 +153,7 @@ function HeaderCtas({
           </Suspense>
         </p>
       </NavLink>
-      <a className={"flex flex-col items-center"} href="#cart-aside">
+      <a className={"flex flex-col items-center !no-underline"} href="#cart-aside">
         <Suspense>
           <Await resolve={cart}>
             {(cart) => {

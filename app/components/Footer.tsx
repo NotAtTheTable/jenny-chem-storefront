@@ -122,7 +122,7 @@ function FooterMenu({
                 </a>
               ) : (
                 <NavLink
-                  className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
+                  className={`!no-underline px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
                   end
                   key={item.id}
                   prefetch="intent"
@@ -164,7 +164,7 @@ function FooterMenu({
                 </a>
               ) : (
                 <NavLink
-                  className={`px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
+                  className={`!no-underline px-2 ${index === 0 ? 'pl-0' : ''} ${index === (menu || FALLBACK_FOOTER_MENU).items.length - 1 ? 'pr-0' : ''}`}
                   end
                   key={item.id}
                   prefetch="intent"
@@ -278,7 +278,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
           </AccordionItem>
         ))}
       </Accordion>
-      <NavLink to="https://shopify.com/3254747185/account">
+      <NavLink className={"!no-underline"} to="https://shopify.com/3254747185/account">
         <div className='flex items-center justify-between py-3 flex-row border-b-2 border-jc-light-blue'>
           <h3 className='text-white font-body text-xl'>Trade & Customer Login</h3>
           <CircleChevronRight color='white' className='w-6 h-6' strokeWidth={1} />

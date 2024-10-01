@@ -3,6 +3,7 @@ import CollectionCard from "../card/CollectionCard";
 import { NavLink, useNavigate } from "@remix-run/react";
 import { ArrowButton } from "../foundational/ArrowButton";
 import { useRootLoaderData } from "~/lib/root-data";
+import { MediaImage } from "@shopify/hydrogen/storefront-api-types";
 
 export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelectedMenuItemIndex, collectionGroups, isHidden = true, primaryDomainUrl }:
     {
@@ -19,7 +20,7 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
         return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/collection-groups/${handle}`)} />
     }
 
-    function findCollectionGroupByMenuItemId(menuItemId: string | undefined): { title: string, description: string, handle: string } {
+    function findCollectionGroupByMenuItemId(menuItemId: string | undefined): { title: string, description: string, handle: string, navbar_pattern: MediaImage } {
         const collectionGroup = collectionGroups.metaobjects.nodes.find(collectionGroup => {
             return collectionGroup.fields.some(field => field.key === "menu_item_id" && field.value === menuItemId)
         })
@@ -27,9 +28,9 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
         // Destructure from the field value format
         const fieldsArray = collectionGroup?.fields || [];
         const fieldsObject = fieldsArray.reduce<Record<string, any>>((acc, field) => {
-            acc[field.key] = field.value;
+            acc[field.key] = field.reference || field.value;
             return acc;
-        }, {}) as { title: string, description: string, handle: string };
+        }, {}) as { title: string, description: string, handle: string, navbar_pattern: MediaImage };
         fieldsObject.handle = collectionGroup?.handle || '';
         return fieldsObject
     }
@@ -55,6 +56,7 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
                 return (
                     <div key={item.id} className={"leading-loose text-md text-jc-dark-blue border-b border-jc-dark-blu border-opacity-50"}>
                         <NavLink
+                            className={"!no-underline"}
                             end
                             key={item.id}
                             prefetch="intent"
@@ -79,7 +81,12 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
             onMouseLeave={() => handleSelectedMenuItemIndex(null)}
         >
             <div className="container px-0 py-10 flex flex-row">
-                <CollectionCard title={collectionGroup.title} handle={collectionGroup.handle} description={collectionGroup.description} ActionElement={NavigateToCollectionPageButton}
+                <CollectionCard
+                    title={collectionGroup.title}
+                    handle={collectionGroup.handle}
+                    imageUrl={collectionGroup.navbar_pattern?.image?.url || ""}
+                    description={collectionGroup.description}
+                    ActionElement={NavigateToCollectionPageButton}
                 />
                 <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
                     {

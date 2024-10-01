@@ -269,11 +269,30 @@ export type CollectionGroupsQuery = {
       Pick<StorefrontAPI.Metaobject, 'id' | 'handle'> & {
         fields: Array<
           Pick<StorefrontAPI.MetaobjectField, 'value' | 'key'> & {
-            reference?: StorefrontAPI.Maybe<{
-              image?: StorefrontAPI.Maybe<
-                Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText'>
-              >;
-            }>;
+            reference?: StorefrontAPI.Maybe<
+              | {
+                  image?: StorefrontAPI.Maybe<
+                    Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText'>
+                  >;
+                }
+              | (Pick<StorefrontAPI.Product, 'id' | 'handle' | 'title'> & {
+                  images: {
+                    nodes: Array<
+                      Pick<
+                        StorefrontAPI.Image,
+                        'id' | 'url' | 'altText' | 'width' | 'height'
+                      >
+                    >;
+                  };
+                  seo: Pick<StorefrontAPI.Seo, 'description' | 'title'>;
+                  priceRange: {
+                    minVariantPrice: Pick<
+                      StorefrontAPI.MoneyV2,
+                      'amount' | 'currencyCode'
+                    >;
+                  };
+                })
+            >;
           }
         >;
       }
@@ -1471,7 +1490,7 @@ interface GeneratedQueryTypes {
     return: FooterQuery;
     variables: FooterQueryVariables;
   };
-  '#graphql\n\n  query CollectionGroups(\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n\n    metaobjects(first: 10, type: "collection_group") {\n      nodes {\n        id\n        handle\n        fields {\n            value\n            key\n            reference {\n                ... on MediaImage {\n                    image {\n                        id\n                        url\n                        altText\n                    }\n                }\n            }\n        }\n      }\n    }\n    \n}\n': {
+  '#graphql\n\n  query CollectionGroups(\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n\n    metaobjects(first: 10, type: "collection_group") {\n      nodes {\n        id\n        handle\n        fields {\n            value\n            key\n            reference {\n                ... on MediaImage {\n                    image {\n                        id\n                        url\n                        altText\n                    }\n                }\n                ... on Product {\n                  ...ProductPreview\n                }\n            }\n        }\n      }\n    }\n    \n}\n#graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n': {
     return: CollectionGroupsQuery;
     variables: CollectionGroupsQueryVariables;
   };
