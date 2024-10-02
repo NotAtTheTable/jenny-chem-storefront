@@ -502,6 +502,48 @@ aside li {
   text-decoration: underline;
 }
 
+.mobile-article {
+  color: #17255D;
+  text-align: center;
+}
+
+.mobile-article>* {
+  margin-bottom: 20px;
+  break-inside: avoid;
+}
+
+
+.mobile-article img {
+  height: auto;
+  width: 100%;
+}
+
+.mobile-article h1 {
+  color: #7094E0;
+  font-size: 28px;
+}
+
+.mobile-article h2 {
+  color: #7094E0;
+  font-size: 24px;
+}
+
+.mobile-article h3 {
+  color: #7094E0;
+  font-size: 20px;
+}
+
+.mobile-article p {
+  color: #17255D;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.mobile-article a {
+  color: #7094E0;
+  text-decoration: underline;
+}
+
 /*
 * --------------------------------------------------
 * routes/products.$handle.tsx

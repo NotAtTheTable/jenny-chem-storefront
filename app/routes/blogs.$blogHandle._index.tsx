@@ -23,7 +23,9 @@ export async function loader({
   params,
   context: { storefront },
 }: LoaderFunctionArgs) {
-  const paginationVariables = getPaginationVariables(request);
+  const paginationVariables = getPaginationVariables(request, {
+    pageBy: 10
+  });
 
   const url = new URL(request.url);
   const reverse = url.searchParams.get("reverse");
@@ -46,14 +48,14 @@ export async function loader({
 const HeadingSection = () => {
   return (
     <div className='border-b-[0.75px] border-jc-light-blue-100 bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
-      <div className='container relative py-16 text-jc-dark-blue'>
+      <div className='px-5 md:container relative md:py-16 py-8 text-jc-dark-blue'>
         <div className='text-center w-full flex flex-col items-center'>
-          <Heading level={1} className='font-display text-8xl'><span className='!text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>
+          <Heading level={1} className='font-display text-8xl'><span className='md:!text-jc-light-blue'>TIPS & TRICKS</span><br /><span className='desktop-component'>WHEN IT COMES TO CLEANING</span></Heading>
           <div className="max-w-3xl">
             Get expert tips for every cleaning need! From vehicle care and maintenance to pool, spa, and janitorial hygiene, we have the tricks to make every task quick and easy.
           </div>
         </div>
-        <div className='absolute left-0 bottom-5'>Home &gt; Blog</div>
+        <div className='desktop-component absolute left-0 bottom-5'>Home &gt; Blog</div>
       </div>
     </div >
   )
@@ -103,7 +105,7 @@ const ArticleList = ({ articles }: Readonly<{
       <Pagination connection={articles}>
         {({ nodes, NextLink, isLoading }) => (
           <>
-            <div className='relative grid grid-cols-4 px-6'>
+            <div className='relative grid md:grid-cols-4 px-6'>
               <div className='absolute right-0 -top-10 flex flex-row gap-2 text-jc-dark-blue font-bold text-sm'>
                 <p>Sort by date:</p>
                 <button
@@ -159,7 +161,7 @@ export default function Blog() {
   return (
     <div className="blog">
       <HeadingSection />
-      <div className='container py-16'>
+      <div className='md:container px-4 py-8 md:py-16'>
         <Heading className="font-display text-6xl text-center" level={1}>POPULAR ARTICLES</Heading>
         <ArticleCarousel mode={"light"} articles={recommendedArticles.articles} viewport={isMobile ? "mobile" : "desktop"} />
         <DashDivider className="w-[100%] mt-5 h-[1px] bg-opacity-50 -mb-3" />

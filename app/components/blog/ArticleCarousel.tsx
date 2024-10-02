@@ -35,9 +35,9 @@ export const ArticleCarousel = ({ articles, viewport = "desktop", mode = "dark" 
                                 </CarouselItem>
                             ))}
                         </CarouselContent>
-                        <CarouselNext white={mode == "dark"} className='mobile-component' skip={1} style={{ right: "-2.5rem" }} />
+                        <CarouselNext white={mode == "dark"} className='mobile-component' skip={1} style={{ right: "-1.8rem" }} />
                         <CarouselNext white={mode == "dark"} className='desktop-component' skip={2} style={{ right: "-1.5rem" }} />
-                        <CarouselPrevious white={mode == "dark"} className='mobile-component' skip={1} style={{ left: "-2.5rem" }} />
+                        <CarouselPrevious white={mode == "dark"} className='mobile-component' skip={1} style={{ left: "-1.8rem" }} />
                         <CarouselPrevious white={mode == "dark"} className='desktop-component' skip={2} style={{ left: "-1.5rem" }} />
                     </Carousel>
                 )}

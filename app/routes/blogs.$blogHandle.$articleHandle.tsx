@@ -37,8 +37,8 @@ export default function Article() {
     day: 'numeric',
   }).format(new Date(article.publishedAt));
 
-  return (
-    <div>
+  return (<>
+    <div className='desktop-component'>
       <PageHeader
         title={title}
         headingTextClassName='!text-white w-[50%] font-display text-8xl tracking-large'
@@ -61,6 +61,29 @@ export default function Article() {
         <DashDivider className="w-[100%] mt-4 mb-2 h-[1px] bg-opacity-50" />
       </div>
     </div>
+
+    <div className='mobile-component'>
+      <div style={{ backgroundImage: `url(${image?.url})`, height: 'fit-content' }}
+        className='mobile-component shadow px-4 py-8 relative bg-cover bg-center bg-jc-dark-blue border-b-[0.75px] border-jc-light-blue-100 text-center text-white'>
+        <div className="absolute w-full inset-0 bg-jc-dark-blue bg-opacity-[55%]" />
+        <div className='relative z-10'>
+          <h1 className='font-display text-6xl leading-[1] '>{title}</h1>
+          <DashDivider />
+          <div style={{ fontSize: "18px" }} className='mt-4'>{publishedDate} / {author?.name}</div>
+          <div>Share</div>
+          <br />
+          <div className='text-sm'><Link to={`/`}>Home</Link>&nbsp;&gt;&nbsp;<Link to={`/blogs/news`}>Blog</Link>&nbsp;&gt;&nbsp;{title}</div>
+        </div>
+      </div>
+      <div className='px-4 py-8'>
+        <div
+          className='mobile-article'
+          dangerouslySetInnerHTML={{ __html: contentHtml }}
+        />
+        <DashDivider className="w-[100%] mt-4 mb-2 h-[1px] bg-opacity-50" />
+      </div>
+    </div>
+  </>
   )
 }
 
