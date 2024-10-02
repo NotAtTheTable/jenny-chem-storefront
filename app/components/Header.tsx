@@ -75,11 +75,11 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
         primaryDomainUrl={shop.primaryDomain.url}
       />
     </div>
-    <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileMenuVisible}
+    <MobileHeaderDropDown isVisible={mobileMenuVisible}
     >
       <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} closeMenu={() => setMobileMenuVisible(!mobileMenuVisible)} />
     </MobileHeaderDropDown>
-    <MobileHeaderDropDown headerHeight={headerHeight} isVisible={mobileSearchVisible}
+    <MobileHeaderDropDown isVisible={mobileSearchVisible}
     >
       <div>Here's the search</div>
     </MobileHeaderDropDown>
@@ -183,11 +183,9 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
   )
 }
 
-function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHeight: number; isVisible: boolean; children: React.ReactNode }) {
-  useEffect(() => {
-  }, [headerHeight])
+function MobileHeaderDropDown({ isVisible, children }: { isVisible: boolean; children: React.ReactNode }) {
   return (
-    <div style={{ top: `${headerHeight || 78}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div className={`z-[49] top-[78px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}
     </div>
   );

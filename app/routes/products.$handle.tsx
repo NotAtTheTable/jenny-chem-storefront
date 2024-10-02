@@ -166,7 +166,7 @@ function ProductMain({
   selectedVariant: ProductFragment['selectedVariant'];
   variants: Promise<ProductVariantsQuery>;
 }) {
-  console.log(product)
+
   const { title } = product;
   return <div className='bg-cover bg-center' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/Product_Page_Background.jpg?v=1725392399)' }}>
     <div className='px-6 md:px-[unset] md:container md:flex md:flex-row md:py-10 py-5'>

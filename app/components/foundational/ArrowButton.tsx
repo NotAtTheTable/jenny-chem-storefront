@@ -23,6 +23,20 @@ export const ArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...p
     )
 }
 
+export const MiniArrowButton: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
+    return (
+        <button
+            className={`${props.disabled ? "opacity-40" : ""} bg-jc-dark-blue border-jc-light-blue py-1 px-1 w-full rounded-full border-2  shadow ${className || ''}`}
+            {...props}
+        >
+            <div className="flex flex-row justify-between">
+                <span className="flex-1 text-center line-clamp-1 text-xs font-semibold" style={{ color: '#fff' }}>{label.toUpperCase()}</span>
+                <img alt="arrow" className="h-[17px]" src={lbarrow} />
+            </div>
+        </button>
+    )
+}
+
 export const Button: React.FC<ArrowButtonProps> = ({ label, className, ...props }) => {
     return (
         <button
