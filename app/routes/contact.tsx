@@ -20,14 +20,7 @@ export async function action({ request, context }: ActionFunctionArgs) {
         throw new Error('All fields are required');
     }
 
-    // Here you can handle the form submission logic, e.g., sending an email or saving to a database
-    // For demonstration, we will just log the data
-    console.log({
-        fullName,
-        email,
-        orderNumber,
-        message,
-    });
+
 
     return redirect('/contact?success=true')
 }

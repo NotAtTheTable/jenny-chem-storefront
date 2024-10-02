@@ -54,7 +54,7 @@ export default function Collections() {
                     gradientCurtain={false}
                     imageUrl={coverImage?.url}
                     title={title || ""}
-                    headingTextClassName='w-[30%] font-display text-8xl tracking-large'
+                    headingTextClassName='!text-white w-[30%] font-display text-8xl tracking-large'
                     subTextNode={<>
                         <div style={{ fontSize: "18px" }} className='text w-[35%]'>{description}</div>
                         <br />

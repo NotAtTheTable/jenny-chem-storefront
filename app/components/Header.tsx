@@ -187,7 +187,7 @@ function MobileHeaderDropDown({ isVisible, headerHeight, children }: { headerHei
   useEffect(() => {
   }, [headerHeight])
   return (
-    <div style={{ top: `${headerHeight || 72}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div style={{ top: `${headerHeight || 78}px` }} className={`z-[49] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}
     </div>
   );

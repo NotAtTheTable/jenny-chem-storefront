@@ -31,8 +31,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
     const { publicStoreDomain } = useRootLoaderData();
     const navigate = useNavigate();
 
-    // TODO : Only use the collectionGroups, for the others just have links
-
     const collectionGroupsMap = collectionGroups.metaobjects.nodes.reduce((acc, group) => {
         const menuItemIdField = group.fields.find(field => field.key === "menu_item_id");
         if (menuItemIdField?.value) {

@@ -50,7 +50,7 @@ const HeadingSection = () => {
         <div className='text-center w-full flex flex-col items-center'>
           <Heading level={1} className='font-display text-8xl'><span className='!text-jc-light-blue'>TIPS & TRICKS</span><br />WHEN IT COMES TO CLEANING</Heading>
           <div className="max-w-3xl">
-            Aut explicabo quasi et omnis necessitatibus sed alias amet a commodi adipisci sit autem tempore qui quaerat eaque. Et eveniet laudantium qui inventore vitae non maxime consequatur eos omnis debitis id sequi soluta. Aut obcaecati aliquam ut tempora voluptatem et cupiditate consectetur non.
+            Get expert tips for every cleaning need! From vehicle care and maintenance to pool, spa, and janitorial hygiene, we have the tricks to make every task quick and easy.
           </div>
         </div>
         <div className='absolute left-0 bottom-5'>Home &gt; Blog</div>

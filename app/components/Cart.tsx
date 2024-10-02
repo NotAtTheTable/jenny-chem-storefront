@@ -9,6 +9,7 @@ import NumericInput from './foundational/NumericInput';
 import { useEffect, useState } from 'react';
 import { ArrowButton, Button, MobileArrowButton } from './foundational/ArrowButton';
 import BlueSecureIcon from "~/assets/foundational/blue_secure_icon.svg"
+import LargeDroplet from "~/assets/foundational/large_droplet.svg"
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
 
@@ -257,12 +258,14 @@ export function CartEmpty({
   hidden: boolean;
   layout?: CartMainProps['layout'];
 }) {
+
   return (
-    <div hidden={hidden} className='flex flex-col items-center'>
-      <h3 className='text-2xl text-jc-dark-blue font-display text-center mt-[30%]'>
+    <div className={`flex flex-col items-center ${hidden ? 'hidden' : ''}`}>
+      <img src={LargeDroplet} className='mt-10' />
+      <h3 className='text-4xl text-jc-dark-blue font-display text-center mt-4'>
         Your basket is empty.
       </h3>
-      <p className='text-jc-dark-blue text-center'>Items you add to your basket will show up here.</p>
+      <p className='text-jc-dark-blue text-center'>Items you add to your basket will show here.</p>
       <br />
       <a href="#" onChange={() => history.go(-1)}>
         <ArrowButton className='w-max' label="CONTINUE SHOPPING" />
