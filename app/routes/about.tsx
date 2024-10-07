@@ -8,6 +8,7 @@ import ArrowLeft from '~/assets/foundational/arrows/filled_dark_blue_left_arrow.
 import ArrowRight from '~/assets/foundational/arrows/filled_dark_blue_right_arrow.svg';
 import { ArrowButton } from '~/components/foundational/ArrowButton';
 import ReactPlayer from 'react-player';
+import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog';
 
 
 export const meta: MetaFunction = () => {
@@ -176,7 +177,16 @@ export default function About() {
                             <Heading dashClassName='w-16' level={1} className='!text-white text-8xl'>WHO <br /> WE ARE.</Heading>
                             <p className='text-white -mt-1'>Providing the correct workwear and equipment for the job, with a range from clothing to accessories to choose from.</p>
                         </div>
-                        <ArrowButton label='PLAY VIDEO' className='w-max mt-5' />
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <ArrowButton label='PLAY VIDEO' className='w-max mt-5' />
+                            </DialogTrigger>
+                            <DialogContent className='max-w-fit h-fit p-10'>
+                                <div className='rounded-lg overflow-hidden shadow'>
+                                    <ReactPlayer controls url={"https://cdn.shopify.com/videos/c/o/v/a486b379bd794422bdb095c1292f30c6.mp4"}></ReactPlayer>
+                                </div>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                     <div className='flex flex-1 flex-row gap-16'>
                         <div>
