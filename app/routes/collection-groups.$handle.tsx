@@ -98,33 +98,34 @@ export default function Collections() {
 
 const CollectionSummary = (props: CollectionPreviewFragment) => {
     const navigate = useNavigate();
-    return (<><div className='desktop-component flex flex-row justify-center'>
-        <div className={`p-5 relative bg-cover bg-center bg-jc-dark-blue w-[457px] mr-[6px] flex flex-col justify-end`}
-            style={{ backgroundImage: `url(${props.image?.url})` }}>
-            <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " />
-            <div className='relative pt-14 z-10 text-white'>
-                <h1 className='w-[50%] font-display text-6xl tracking-large'>{props.title}</h1>
-                <div className='w-16'><DashDivider className='-mt-3 h-[3px]' /></div>
-                {props.description}
-                <div className="mt-3 w-40"><ArrowButton label="Shop Now" onClick={() => navigate(`/collections/${props.handle}`)} /></div>
-            </div>
-        </div>
-        {props.products.nodes.map((product) => {
-            return (
-                <div key={product.handle}>
-                    <ProductCard
-                        id={product.id}
-                        imageData={product.images.nodes[0] as StorefrontAPI.Image}
-                        title={product.title}
-                        price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
-                        handle={product.handle}
-                        ActionElement={NavigateToProductPageButton}
-                    />
+    return (<>
+        <div className='desktop-component flex flex-row justify-center'>
+            <div className={`p-5 relative bg-cover bg-center bg-jc-dark-blue w-[457px] mr-[6px] flex flex-col justify-end`}
+                style={{ backgroundImage: `url(${props.image?.url})` }}>
+                <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " />
+                <div className='relative pt-14 z-10 text-white'>
+                    <h1 className='w-[50%] font-display text-6xl tracking-large'>{props.title}</h1>
+                    <div className='w-16'><DashDivider className='-mt-3 h-[3px]' /></div>
+                    {props.description}
+                    <div className="mt-3 w-40"><ArrowButton label="Shop Now" onClick={() => navigate(`/collections/${props.handle}`)} /></div>
                 </div>
-            )
-        })}
-    </div>
-        <div onClick={() => navigate(`/collections/${props.handle}`)} className={`p-4 relative bg-cover bg-center flex flex-col justify-end rounded-lg shadow overflow-hidden`}
+            </div>
+            {props.products.nodes.map((product) => {
+                return (
+                    <div key={product.handle}>
+                        <ProductCard
+                            id={product.id}
+                            imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                            title={product.title}
+                            price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                            handle={product.handle}
+                            ActionElement={NavigateToProductPageButton}
+                        />
+                    </div>
+                )
+            })}
+        </div>
+        <div onClick={() => navigate(`/collections/${props.handle}`)} className={`p-4 relative bg-cover bg-center flex flex-col justify-end rounded-lg shadow overflow-hidden mobile-component`}
             style={{ backgroundImage: `url(${props.image?.url})` }}>
             <div className="absolute w-full inset-0 bg-jc-dark-blue bg-opacity-[55%]" />
             <div className='relative pt-10 z-10 text-white'>

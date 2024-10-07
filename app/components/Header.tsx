@@ -10,6 +10,7 @@ import BasketIcon from "~/assets/foundational/basket_icon.svg"
 import { AlignJustify, Cross, Dot, Plus, Search, SearchIcon, X } from 'lucide-react';
 import HeaderDropDown from './header/HeaderDropDown';
 import MobileMenu from './header/MobileMenu';
+import { Button } from './foundational/ArrowButton';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups'>;
 
@@ -44,29 +45,32 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
   }
 
   return (<>
-    <div ref={headerRef} className='sticky top-0 z-50 shadow bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
-      <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
-        <div className='absolute flex flex-row gap-4'>
-          <button className='mobile-only' onClick={() => toggleMobileMenu()}>
-            {mobileMenuVisible ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
-          </button>
-          <button className='mobile-only' onClick={() => toggleMobileSearch()}>
-            <SearchIcon className='text-jc-light-blue' />
-          </button>
-        </div>
-        <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center" prefetch="intent" to="/" end>
-          <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
-        </NavLink>
-        <div className='desktop-component'>
-          <HeaderMenu
-            menu={menu}
-            primaryDomainUrl={shop.primaryDomain.url}
-            handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
-            selectedMenuItemIndex={selectedMenuItemIndex}
-          />
-        </div>
-        <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
-      </header>
+    <div ref={headerRef} className='sticky top-0 z-50 shadow'>
+      <HeaderBanner></HeaderBanner>
+      <div className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
+        <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
+          <div className='absolute flex flex-row gap-4 '>
+            <button className='mobile-only' onClick={() => toggleMobileMenu()}>
+              {mobileMenuVisible ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
+            </button>
+            <button className='mobile-only' onClick={() => toggleMobileSearch()}>
+              <SearchIcon className='text-jc-light-blue' />
+            </button>
+          </div>
+          <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center" prefetch="intent" to="/" end>
+            <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
+          </NavLink>
+          <div className='desktop-component'>
+            <HeaderMenu
+              menu={menu}
+              primaryDomainUrl={shop.primaryDomain.url}
+              handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
+              selectedMenuItemIndex={selectedMenuItemIndex}
+            />
+          </div>
+          <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
+        </header>
+      </div>
       <HeaderDropDown
         isHidden={(selectedMenuItemIndex !== null && [0, 1, 2, 3].includes(selectedMenuItemIndex))}
         menu={menu} selectedIndex={selectedMenuItemIndex || 0}
@@ -179,6 +183,30 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
           <div className="h-1.5 w-1.5 md:h-2 md:w-2 bg-white rounded-full"></div>
         </div>
       }
+    </div>
+  )
+}
+
+
+function HeaderBanner() {
+  const handleClose = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('banner', 'false');
+    window.history.pushState({}, '', url);
+  };
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const bannerVisible = urlParams.get('banner') !== 'false';
+
+  return (
+    <div className={`bg-jc-light-blue flex flex-row items-center justify-center gap-4 relative transition-all duration-300 ${bannerVisible ? 'h-[42px]' : 'h-0 overflow-hidden'}`}>
+      <h4 className={`text-white text-sm`}>3-5 WORKING DAY DELIVERY &nbsp; | &nbsp;  FREE DELIVERY ON SELECTED ORDERS OVER £25*</h4>
+      <Button className='w-max [&_p]:text-[10px] py-0 border-none' label='More Info' />
+      <div className="absolute top-1/2 right-1 -translate-y-1/2">
+        <button onClick={handleClose} className="text-white rounded-full w-8 h-8 flex items-center justify-center">
+          <Plus className="rotate-45" strokeWidth={1.5} />
+        </button>
+      </div>
     </div>
   )
 }
