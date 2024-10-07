@@ -22,6 +22,7 @@ export type LayoutProps = {
   header: HeaderQuery;
   collectionGroups: CollectionGroupsQuery;
   isLoggedIn: Promise<boolean>;
+  isHeaderBannerClosed: boolean;
 };
 
 export function Layout({
@@ -31,12 +32,13 @@ export function Layout({
   header,
   collectionGroups,
   isLoggedIn,
+  isHeaderBannerClosed
 }: LayoutProps) {
   return (
     <>
       <CartAside cart={cart} />
       <SearchAside />
-      {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} />}
+      {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} isHeaderBannerClosed={isHeaderBannerClosed} />}
       <main>{children}</main>
       <Suspense>
         <Await resolve={footer}>

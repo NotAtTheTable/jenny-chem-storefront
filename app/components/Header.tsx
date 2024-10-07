@@ -1,5 +1,5 @@
-import { Await, NavLink } from '@remix-run/react';
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Await, NavLink, useFetcher, useSearchParams } from '@remix-run/react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
@@ -12,23 +12,14 @@ import HeaderDropDown from './header/HeaderDropDown';
 import MobileMenu from './header/MobileMenu';
 import { Button } from './foundational/ArrowButton';
 
-type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups'>;
+type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups' | 'isHeaderBannerClosed'>;
 
-export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderProps) {
+export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGroups, cart }: HeaderProps) {
   const { shop, menu } = header;
 
   const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
   const [mobileMenuVisible, setMobileMenuVisible] = useState<boolean>(false);
   const [mobileSearchVisible, setMobileSearchVisible] = useState<boolean>(false);
-
-  const headerRef = useRef<HTMLDivElement>(null); // Create a ref for the header height
-  const [headerHeight, setHeaderHeight] = useState<number>(0); // State to store header height
-
-  useEffect(() => {
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.offsetHeight); // Set header height on mount
-    }
-  }, [headerRef]);
 
   const toggleMobileMenu = () => {
     if (!mobileMenuVisible) {
@@ -45,8 +36,8 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
   }
 
   return (<>
-    <div ref={headerRef} className='sticky top-0 z-50 shadow'>
-      <HeaderBanner></HeaderBanner>
+    <div className='sticky top-0 z-50 shadow'>
+      <HeaderBanner isClosed={isHeaderBannerClosed}></HeaderBanner>
       <div className='bg-gradient-to-b from-jc-dark-blue-100 to-jc-dark-blue'>
         <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
           <div className='absolute flex flex-row gap-4 '>
@@ -79,11 +70,11 @@ export function Header({ header, isLoggedIn, collectionGroups, cart }: HeaderPro
         primaryDomainUrl={shop.primaryDomain.url}
       />
     </div>
-    <MobileHeaderDropDown isVisible={mobileMenuVisible}
+    <MobileHeaderDropDown isHeaderBannerClosed={isHeaderBannerClosed} isVisible={mobileMenuVisible}
     >
       <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} closeMenu={() => setMobileMenuVisible(!mobileMenuVisible)} />
     </MobileHeaderDropDown>
-    <MobileHeaderDropDown isVisible={mobileSearchVisible}
+    <MobileHeaderDropDown isHeaderBannerClosed={isHeaderBannerClosed} isVisible={mobileSearchVisible}
     >
       <div>Here's the search</div>
     </MobileHeaderDropDown>
@@ -188,32 +179,31 @@ function Basket({ isActive = false }: { isActive?: boolean | null }) {
 }
 
 
-function HeaderBanner() {
-  const handleClose = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set('banner', 'false');
-    window.history.pushState({}, '', url);
-  };
+function HeaderBanner({ isClosed }: { isClosed: boolean }) {
+  const fetcher = useFetcher();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const bannerVisible = urlParams.get('banner') !== 'false';
+  if (fetcher.formData?.has("isHeaderBannerClosed")) {
+    isClosed = fetcher.formData.get("isHeaderBannerClosed") === "true"
+  }
 
   return (
-    <div className={`bg-jc-light-blue flex flex-row items-center justify-center gap-4 relative transition-all duration-300 ${bannerVisible ? 'h-[42px]' : 'h-0 overflow-hidden'}`}>
-      <h4 className={`text-white text-sm`}>3-5 WORKING DAY DELIVERY &nbsp; | &nbsp;  FREE DELIVERY ON SELECTED ORDERS OVER £25*</h4>
-      <Button className='w-max [&_p]:text-[10px] py-0 border-none' label='More Info' />
+    <div className={`bg-jc-light-blue flex flex-row items-center justify-center gap-4 relative transition-all duration-300 ${!isClosed ? 'h-[42px]' : 'h-0 overflow-hidden'}`}>
+      <h4 className={`text-white text-xs md:text-sm`}><span className='desktop-component'>3-5 WORKING DAY DELIVERY &nbsp; | &nbsp;</span>  FREE DELIVERY ON SELECTED ORDERS OVER £25*</h4>
+      <Button className='w-max [&_p]:text-[10px] py-0 border-none desktop-component' label='More Info' />
       <div className="absolute top-1/2 right-1 -translate-y-1/2">
-        <button onClick={handleClose} className="text-white rounded-full w-8 h-8 flex items-center justify-center">
-          <Plus className="rotate-45" strokeWidth={1.5} />
-        </button>
+        <fetcher.Form method="post">
+          <button name="isHeaderBannerClosed" value={isClosed ? "false" : "true"} className="text-white rounded-full w-8 h-8 flex items-center justify-center">
+            <Plus className="rotate-45" strokeWidth={1.5} />
+          </button>
+        </fetcher.Form>
       </div>
     </div>
   )
 }
 
-function MobileHeaderDropDown({ isVisible, children }: { isVisible: boolean; children: React.ReactNode }) {
+function MobileHeaderDropDown({ isVisible, isHeaderBannerClosed, children }: { isVisible: boolean; isHeaderBannerClosed: boolean; children: React.ReactNode }) {
   return (
-    <div className={`z-[49] top-[78px] w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div className={`z-[49] ${isHeaderBannerClosed ? "top-[78px]" : "top-[120px]"} w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
       {children}
     </div>
   );

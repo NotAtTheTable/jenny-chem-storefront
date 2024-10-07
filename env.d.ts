@@ -11,13 +11,13 @@ import type {
   HydrogenCart,
   HydrogenSessionData,
 } from '@shopify/hydrogen';
-import type {AppSession} from '~/lib/session';
+import type { AppSession } from '~/lib/session';
 
 declare global {
   /**
    * A global `process` object is only available during build to access NODE_ENV.
    */
-  const process: {env: {NODE_ENV: 'production' | 'development'}};
+  const process: { env: { NODE_ENV: 'production' | 'development' } };
 
   /**
    * Declare expected Env parameter in fetch handler.
@@ -49,5 +49,5 @@ declare module '@shopify/remix-oxygen' {
   /**
    * Declare local additions to the Remix session data.
    */
-  interface SessionData extends HydrogenSessionData {}
+  interface SessionData extends HydrogenSessionData { }
 }

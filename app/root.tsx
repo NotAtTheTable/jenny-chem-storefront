@@ -1,5 +1,5 @@
 import { useNonce } from '@shopify/hydrogen';
-import { defer, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { ActionFunctionArgs, defer, json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import {
   Links,
   Meta,
@@ -10,6 +10,7 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
   type ShouldRevalidateFunction,
+  useFetcher,
 } from '@remix-run/react';
 import favicon from './assets/favicon.svg';
 import resetStyles from './styles/reset.css?url';
@@ -82,6 +83,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
   const collectionGroups = await storefront.query(COLLECTION_GROUP_QUERY, { cache: storefront.CacheLong() });
 
+  const isHeaderBannerClosed = (await context.session.get("isHeaderBannerClosed")) === "true";
+
   return defer(
     {
       cart: cartPromise,
@@ -89,6 +92,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
       header: await headerPromise,
       collectionGroups: collectionGroups,
       isLoggedIn: isLoggedInPromise,
+      isHeaderBannerClosed,
       publicStoreDomain,
     },
     {
@@ -98,6 +102,21 @@ export async function loader({ context }: LoaderFunctionArgs) {
     },
   );
 }
+
+export async function action({
+  request, context
+}: ActionFunctionArgs) {
+
+  const formData = await request.formData();
+  context.session.set("isHeaderBannerClosed", formData.get("isHeaderBannerClosed"));
+
+  return json(formData.get("isHeaderBannerClosed"), {
+    headers: {
+      'Set-Cookie': await context.session.commit()
+    }
+  })
+}
+
 
 export default function App() {
   const nonce = useNonce();
@@ -146,7 +165,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-        <Layout cart={null as any} footer={null as any} collectionGroups={null as any} header={null as any} isLoggedIn={false as any}>
+        <Layout cart={null as any} footer={null as any} collectionGroups={null as any} header={null as any} isLoggedIn={false as any} isHeaderBannerClosed={false}>
           <div className="route-error">
             <h1>Oops</h1>
             <h2>{errorStatus}</h2>
