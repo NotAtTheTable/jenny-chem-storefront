@@ -100,7 +100,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
 
 export function resetSearchParams(prev: URLSearchParams): URLSearchParams {
   prev.delete("nav-mobile-drawer");
-  prev.delete("nav-menu-item");
+  prev.delete("nav-menu-id");
   prev.delete("nav-search");
   return prev;
 }

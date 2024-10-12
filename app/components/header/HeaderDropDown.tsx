@@ -4,6 +4,7 @@ import { NavLink, useNavigate, useSearchParams } from "@remix-run/react";
 import { ArrowButton } from "../foundational/ArrowButton";
 import { useRootLoaderData } from "~/lib/root-data";
 import { MediaImage } from "@shopify/hydrogen/storefront-api-types";
+import { resetSearchParams } from "../Header";
 
 export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUrl }:
     {
@@ -12,10 +13,16 @@ export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUr
         primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url']
     }) {
 
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const navMenuId = searchParams.get('nav-menu-id') || null;
     const collectionGroup = findCollectionGroupByMenuItemId(navMenuId || undefined);
     const menuItem = menu?.items.find(item => item.id === navMenuId) || null;
+
+    function closeDropDown() {
+        setSearchParams((prev) => {
+            return resetSearchParams(prev);
+        })
+    }
 
     function NavigateToCollectionPageButton({ handle }: { handle: string }) {
         const navigate = useNavigate();
@@ -72,31 +79,34 @@ export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUr
 
     if (!collectionGroup || !menuItem) return null;
     return (
-        <div
-            className={`z-[2] w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]`}
-        >
-            <div className="container px-0 py-10 flex flex-row">
-                <CollectionCard
-                    title={collectionGroup.title}
-                    handle={collectionGroup.handle}
-                    imageUrl={collectionGroup.navbar_pattern?.image?.url || ""}
-                    description={collectionGroup.description}
-                    ActionElement={NavigateToCollectionPageButton}
-                />
-                <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
-                    {
-                        menuItem.items?.map((menuItem) => (
-                            <div key={menuItem.id} className="flex-1">
-                                <CollectionList
-                                    keyPass={menuItem.id}
-                                    menuItem={menuItem as ParentMenuItemFragment}
-                                    primaryDomainUrl={primaryDomainUrl}
-                                />
-                            </div>
-                        ))
-                    }
+        <>
+            <div
+                className={`z-[12] w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]`}
+            >
+                <div className="container px-0 py-10 flex flex-row">
+                    <CollectionCard
+                        title={collectionGroup.title}
+                        handle={collectionGroup.handle}
+                        imageUrl={collectionGroup.navbar_pattern?.image?.url || ""}
+                        description={collectionGroup.description}
+                        ActionElement={NavigateToCollectionPageButton}
+                    />
+                    <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
+                        {
+                            menuItem.items?.map((menuItem) => (
+                                <div key={menuItem.id} className="flex-1">
+                                    <CollectionList
+                                        keyPass={menuItem.id}
+                                        menuItem={menuItem as ParentMenuItemFragment}
+                                        primaryDomainUrl={primaryDomainUrl}
+                                    />
+                                </div>
+                            ))
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+            <div onClick={() => closeDropDown()} className="fixed !top-[200px] inset-0 z-[11] opacity-0" />
+        </>
     )
 }
