@@ -1,21 +1,14 @@
 import { SearchIcon } from "lucide-react";
 import { PredictiveSearchForm, PredictiveSearchResults } from "../Search";
-import { useState } from "react";
+import { useSearchParams } from "@remix-run/react";
 
-export default function SearchDropDown({ isHidden = true, setIsHidden }: { isHidden: boolean; setIsHidden: (val: boolean) => void }) {
-    const [fetchResultsFunction, setFetchResultsFunction] = useState<((event: React.ChangeEvent<HTMLInputElement>) => void) | null>(null);
+export default function SearchDropDown() {
     return (
         <div
-            className="w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]"
-            style={{
-                zIndex: 2,
-                maxHeight: isHidden ? '0px' : '1000px'
-            }}
-            onMouseLeave={() => setIsHidden(true)}
+            className={`w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)`}
         >
             <PredictiveSearchForm className="w-full max-w-full">
                 {({ fetchResults, inputRef }) => {
-                    setFetchResultsFunction(() => fetchResults);
                     return (
                         <div className="w-full py-4 bg-[#EBF2FF] flex justify-center">
                             <div className="relative w-full max-w-[750px] rounded-tl rounded-bl overflow-hidden">
@@ -35,7 +28,7 @@ export default function SearchDropDown({ isHidden = true, setIsHidden }: { isHid
                     )
                 }}
             </PredictiveSearchForm>
-            <PredictiveSearchResults handleClose={() => setIsHidden(true)} fetchResults={fetchResultsFunction} />
+            <PredictiveSearchResults />
         </div>
     )
 }

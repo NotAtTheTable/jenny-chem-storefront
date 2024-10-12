@@ -17,7 +17,6 @@ interface MobileMenuProps {
     menu: HeaderQuery['menu'],
     primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'],
     collectionGroups: CollectionGroupsQuery,
-    closeMenu: () => void
 }
 
 const LINK_ITEMS = [
@@ -26,7 +25,7 @@ const LINK_ITEMS = [
     'gid://shopify/MenuItem/475474788544'
 ]
 
-const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collectionGroups, closeMenu }) => {
+const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collectionGroups }) => {
 
     const { publicStoreDomain } = useRootLoaderData();
     const navigate = useNavigate();
@@ -58,7 +57,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
 
 
     const navigateToProductPage = (handle: string) => {
-        closeMenu();
         return navigate(`/products/${handle}`)
     }
 
@@ -75,7 +73,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                                     ? new URL(item.url).pathname
                                     : item.url;
                             return (
-                                <NavLink onClick={() => closeMenu()} key={item.id} to={url} className="!no-underline inline-flex items-center justify-center text-jc-dark-blue whitespace-nowrap rounded-sm px-3 py-1 text-xl flex-shrink-0 px-5 md:px-10 text-jc-dark-blue font-display">
+                                <NavLink key={item.id} to={url} className="!no-underline inline-flex items-center justify-center text-jc-dark-blue whitespace-nowrap rounded-sm px-3 py-1 text-xl flex-shrink-0 px-5 md:px-10 text-jc-dark-blue font-display">
                                     {item.title}
                                 </NavLink>
                             );
@@ -132,7 +130,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                                                     key={collectionItem.id}
                                                     prefetch="intent"
                                                     to={url}
-                                                    onClick={() => closeMenu()}
                                                     className='!no-underline flex items-center w-full justify-between pb-2 text-xsm border-b-[0.75px] border-[#C7C7C] text-jc-dark-blue font-body'
                                                 >
                                                     {collectionItem.title}

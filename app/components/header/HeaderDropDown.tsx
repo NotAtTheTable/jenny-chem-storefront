@@ -1,26 +1,28 @@
 import { CollectionGroupsQuery, HeaderQuery, MenuItemFragment, ParentMenuItemFragment } from "storefrontapi.generated";
 import CollectionCard from "../card/CollectionCard";
-import { NavLink, useNavigate } from "@remix-run/react";
+import { NavLink, useNavigate, useSearchParams } from "@remix-run/react";
 import { ArrowButton } from "../foundational/ArrowButton";
 import { useRootLoaderData } from "~/lib/root-data";
 import { MediaImage } from "@shopify/hydrogen/storefront-api-types";
 
-export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelectedMenuItemIndex, collectionGroups, isHidden = true, primaryDomainUrl }:
+export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUrl }:
     {
         menu: HeaderQuery['menu'],
-        selectedIndex: number,
-        handleSelectedMenuItemIndex: (index: number | null) => void,
         collectionGroups: CollectionGroupsQuery,
-        isHidden: boolean,
         primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url']
     }) {
+
+    const [searchParams] = useSearchParams();
+    const navMenuId = searchParams.get('nav-menu-id') || null;
+    const collectionGroup = findCollectionGroupByMenuItemId(navMenuId || undefined);
+    const menuItem = menu?.items.find(item => item.id === navMenuId) || null;
 
     function NavigateToCollectionPageButton({ handle }: { handle: string }) {
         const navigate = useNavigate();
         return <ArrowButton label="VIEW COLLECTIONS" onClick={() => navigate(`/collection-groups/${handle}`)} />
     }
 
-    function findCollectionGroupByMenuItemId(menuItemId: string | undefined): { title: string, description: string, handle: string, navbar_pattern: MediaImage } {
+    function findCollectionGroupByMenuItemId(menuItemId: string | undefined): { title: string, description: string, handle: string, navbar_pattern: MediaImage } | undefined {
         const collectionGroup = collectionGroups.metaobjects.nodes.find(collectionGroup => {
             return collectionGroup.fields.some(field => field.key === "menu_item_id" && field.value === menuItemId)
         })
@@ -32,10 +34,8 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
             return acc;
         }, {}) as { title: string, description: string, handle: string, navbar_pattern: MediaImage };
         fieldsObject.handle = collectionGroup?.handle || '';
-        return fieldsObject
+        return Object.keys(fieldsObject).length === 0 ? undefined : fieldsObject;
     }
-
-    const collectionGroup = findCollectionGroupByMenuItemId(menu?.items[selectedIndex].id)
 
     function CollectionList({ menuItem, primaryDomainUrl, keyPass = "" }: {
         menuItem: ParentMenuItemFragment;
@@ -61,7 +61,6 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
                             key={item.id}
                             prefetch="intent"
                             to={url}
-                            onClick={() => handleSelectedMenuItemIndex(null)}
                         >
                             {item.title}
                         </NavLink>
@@ -71,14 +70,10 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
         </div>
     }
 
+    if (!collectionGroup || !menuItem) return null;
     return (
         <div
-            className="w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]"
-            style={{
-                zIndex: 2,
-                maxHeight: isHidden ? '1000px' : '0'
-            }}
-            onMouseLeave={() => handleSelectedMenuItemIndex(null)}
+            className={`z-[2] w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)]`}
         >
             <div className="container px-0 py-10 flex flex-row">
                 <CollectionCard
@@ -90,7 +85,7 @@ export default function HeaderDropDown({ menu, selectedIndex = 0, handleSelected
                 />
                 <div className="flex-1 flex flex-row px-10 py-3 gap-10 justify-between">
                     {
-                        menu?.items[selectedIndex]?.items?.map((menuItem) => (
+                        menuItem.items?.map((menuItem) => (
                             <div key={menuItem.id} className="flex-1">
                                 <CollectionList
                                     keyPass={menuItem.id}

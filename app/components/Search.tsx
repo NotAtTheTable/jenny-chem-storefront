@@ -325,7 +325,7 @@ export function PredictiveSearchForm({
   );
 }
 
-export function PredictiveSearchResults({ handleClose, fetchResults }: { handleClose: () => void; fetchResults: ((event: React.ChangeEvent<HTMLInputElement>) => void) | null; }) {
+export function PredictiveSearchResults() {
   const { results, totalResults, searchInputRef, searchTerm, state } =
     usePredictiveSearch();
 
@@ -339,19 +339,7 @@ export function PredictiveSearchResults({ handleClose, fetchResults }: { handleC
   }
 
   function handleQueryClick(query: string) {
-    if (searchInputRef.current && fetchResults) {
-      searchInputRef.current.value = query;
-      searchInputRef.current.focus();
 
-      // Create a synthetic event
-      const syntheticEvent = {
-        target: searchInputRef.current,
-        currentTarget: searchInputRef.current,
-      } as React.ChangeEvent<HTMLInputElement>;
-
-      // Call fetchResults with the synthetic event
-      fetchResults(syntheticEvent);
-    }
   }
 
   if (state === 'loading') {
@@ -373,7 +361,6 @@ export function PredictiveSearchResults({ handleClose, fetchResults }: { handleC
               <button
                 key={link.id}
                 className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
-                onClick={() => handleQueryClick(link.title)}
               >{link.title}</button>
             ))}
           </div>;
@@ -385,7 +372,6 @@ export function PredictiveSearchResults({ handleClose, fetchResults }: { handleC
             key={index}
             searchTerm={searchTerm}
             type={type}
-            handleClose={handleClose}
           />
             ;
         default:
@@ -416,7 +402,6 @@ type SearchResultTypeProps = {
   items: NormalizedPredictiveSearchResultItem[];
   searchTerm: UseSearchReturn['searchTerm'];
   type: NormalizedPredictiveSearchResults[number]['type'];
-  handleClose: () => void;
 };
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
@@ -429,14 +414,12 @@ function ProductSearchResult({
   items,
   searchTerm,
   type,
-  handleClose
 }: SearchResultTypeProps) {
   return (
     <ul key={type} className='flex flex-1 flex-row gap-3 w-20'>
       {items.slice(0, 4).map((item: NormalizedPredictiveSearchResultItem) => (
         <SearchResultItem
           item={item}
-          handleClose={handleClose}
           key={item.id}
         />
       ))}
@@ -446,13 +429,11 @@ function ProductSearchResult({
 
 type SearchResultItemProps = {
   item: NormalizedPredictiveSearchResultItem;
-  handleClose: () => void;
 };
 
-function SearchResultItem({ item, handleClose }: SearchResultItemProps) {
+function SearchResultItem({ item }: SearchResultItemProps) {
   const navigate = useNavigate();
   const handleClick = () => {
-    handleClose();
     return navigate(`/products/${item.handle}`);
   }
 

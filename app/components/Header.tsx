@@ -1,4 +1,4 @@
-import { Await, NavLink, useFetcher } from '@remix-run/react';
+import { Await, Form, NavLink, useFetcher, useSearchParams } from '@remix-run/react';
 import { Suspense, useState } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
@@ -18,27 +18,37 @@ type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collect
 export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGroups, cart }: HeaderProps) {
   const { shop, menu } = header;
 
-  const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
-  const [searchDropDownHidden, setSearchDropDownHidden] = useState<boolean>(true);
-  const [mobileMenuVisible, setMobileMenuVisible] = useState<boolean>(false);
-  const [mobileSearchVisible, setMobileSearchVisible] = useState<boolean>(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navMobileDrawer = searchParams.get('nav-mobile-drawer') || null;
+  const navSearch = searchParams.get('nav-search') || null;
 
-  const toggleMobileMenu = () => {
-    if (!mobileMenuVisible) {
-      setMobileSearchVisible(false);
-    }
-    setMobileMenuVisible(!mobileMenuVisible)
+  function resetSearchParams(prev: URLSearchParams): URLSearchParams {
+    prev.delete("nav-mobile-drawer");
+    prev.delete("nav-menu-item");
+    prev.delete("nav-search");
+    return prev;
   }
 
-  const toggleMobileSearch = () => {
-    if (!mobileSearchVisible) {
-      setMobileMenuVisible(false);
-    }
-    setMobileSearchVisible(!mobileSearchVisible)
+  function toggleMobileMenu() {
+    setSearchParams((prev) => {
+      const currentVal = prev.get('nav-mobile-drawer');
+      prev = resetSearchParams(prev);
+      if (currentVal !== 'menu' && currentVal !== 'search') {
+        prev.set('nav-mobile-drawer', 'menu');
+      }
+      return prev;
+    });
   }
 
-  const toggleSearchDropDown = () => {
-    setSearchDropDownHidden(!searchDropDownHidden)
+  function toggleMobileSearch() {
+    setSearchParams((prev) => {
+      const currentVal = prev.get('nav-mobile-drawer');
+      prev = resetSearchParams(prev);
+      if (currentVal !== 'search') {
+        prev.set('nav-mobile-drawer', 'search');
+      }
+      return prev;
+    });
   }
 
   return (<>
@@ -48,47 +58,49 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
         <header className="container text-white flex justify-between items-center w-full p-4 lg:p-0">
           <div className='absolute flex flex-row gap-4 '>
             <button className='mobile-only' onClick={() => toggleMobileMenu()}>
-              {mobileMenuVisible ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
+              {navMobileDrawer ? <Plus strokeWidth={1.5} className='text-jc-light-blue rotate-45 scale-150' /> : <AlignJustify className='text-jc-light-blue' />}
             </button>
             <button className='mobile-only' onClick={() => toggleMobileSearch()}>
               <SearchIcon className='text-jc-light-blue' />
             </button>
           </div>
-          <NavLink onMouseEnter={() => setSelectedMenuItemIndex(null)} className="flex-1 flex justify-center" prefetch="intent" to="/" end>
+          <NavLink className="flex-1 flex justify-center" prefetch="intent" to="/" end>
             <img className="w-32 min-w-32 h-auto" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
           </NavLink>
           <div className='desktop-component'>
             <HeaderMenu
               menu={menu}
               primaryDomainUrl={shop.primaryDomain.url}
-              handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
-              selectedMenuItemIndex={selectedMenuItemIndex}
-              toggleSearchDropDown={toggleSearchDropDown}
             />
           </div>
           <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
         </header>
       </div>
       <HeaderDropDown
-        isHidden={(selectedMenuItemIndex !== null && [0, 1, 2, 3].includes(selectedMenuItemIndex))}
-        menu={menu} selectedIndex={selectedMenuItemIndex || 0}
+        menu={menu}
         collectionGroups={collectionGroups}
-        handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
         primaryDomainUrl={shop.primaryDomain.url}
       />
-      <SearchDropDown
-        isHidden={searchDropDownHidden}
-        setIsHidden={setSearchDropDownHidden}
-      />
+      {navSearch === "true" && <SearchDropDown />}
     </div>
-    <MobileHeaderDropDown isHeaderBannerClosed={isHeaderBannerClosed} isVisible={mobileMenuVisible}
-    >
-      <MobileMenu menu={menu} collectionGroups={collectionGroups} primaryDomainUrl={shop.primaryDomain.url} closeMenu={() => setMobileMenuVisible(!mobileMenuVisible)} />
-    </MobileHeaderDropDown>
-    <MobileHeaderDropDown isHeaderBannerClosed={isHeaderBannerClosed} isVisible={mobileSearchVisible}
-    >
-      <div>Here's the search</div>
-    </MobileHeaderDropDown>
+    {!!navMobileDrawer &&
+      <MobileHeaderDropDown
+        isHeaderBannerClosed={isHeaderBannerClosed}
+        isVisible={!!navMobileDrawer}
+      >
+        {navMobileDrawer === "menu" &&
+          < MobileMenu
+            menu={menu}
+            collectionGroups={collectionGroups}
+            primaryDomainUrl={shop.primaryDomain.url}
+          />
+        }
+        {
+          navMobileDrawer === "search" &&
+          <div>Here's the search</div>
+        }
+      </MobileHeaderDropDown>
+    }
   </>
   );
 }
@@ -96,17 +108,14 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
 export function HeaderMenu({
   menu,
   primaryDomainUrl,
-  handleSelectedMenuItemIndex,
-  selectedMenuItemIndex,
-  toggleSearchDropDown
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
-  handleSelectedMenuItemIndex: (index: number | null) => void;
-  selectedMenuItemIndex: number | null;
-  toggleSearchDropDown: () => void;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navMenuId = searchParams.get('nav-menu-id') || null;
+
   const className = `font-display tracking-wider font-bold line divide-x divide-jc-light-blue flex flex-row`;
 
   return (
@@ -120,19 +129,48 @@ export function HeaderMenu({
             ? new URL(item.url).pathname
             : item.url;
         return (
-          <NavLink
-            className={`header-menu-item !no-underline px-4 my-6 ${(selectedMenuItemIndex === index) ? "text-jc-light-blue" : ""}`}
-            end
-            key={item.id}
-            prefetch="intent"
-            to={url}
-            onClick={() => handleSelectedMenuItemIndex(index)}
-          >
-            {item.title}
-          </NavLink>
+          <>
+            {
+              item.items.length > 0 ?
+                <button
+                  className={`header-menu-item !no-underline px-4 my-6 ${(navMenuId === item.id) ? "text-jc-light-blue" : ""}`}
+                  key={item.id}
+                  name="nav-menu-id"
+                  onClick={() => {
+                    setSearchParams((prev) => {
+                      prev.delete("nav-search");
+                      prev.set("nav-menu-id", item.id);
+                      return prev;
+                    });
+                  }}
+                >
+                  {item.title}
+                </button>
+                :
+                <NavLink
+                  key={item.id}
+                  className={`header-menu-item !no-underline px-4 my-6`}
+                  end
+                  prefetch="intent"
+                  to={url}>
+                  {item.title}
+                </NavLink>
+            }
+          </>
         );
       })}
-      <button onClick={() => toggleSearchDropDown()} className="!no-underline header-menu-item flex px-2 my-6"><Search style={{ marginTop: "3px" }} height={15} />Search</button>
+      <button onClick={() => {
+        setSearchParams((prev) => {
+          prev.delete("nav-menu-id");
+          prev.set("nav-search", "true");
+          return prev;
+        });
+      }}
+        className="!no-underline header-menu-item flex px-2 my-6"
+      >
+        <Search style={{ marginTop: "3px" }} height={15} />
+        Search
+      </button>
     </nav>
   );
 }
@@ -216,7 +254,7 @@ function HeaderBanner({ isClosed }: { isClosed: boolean }) {
 
 function MobileHeaderDropDown({ isVisible, isHeaderBannerClosed, children }: { isVisible: boolean; isHeaderBannerClosed: boolean; children: React.ReactNode }) {
   return (
-    <div className={`z-[49] ${isHeaderBannerClosed ? "top-[78px]" : "top-[120px]"} w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen' : 'h-0'}`}>
+    <div className={`z-[49] ${isHeaderBannerClosed ? "top-[78px]" : "top-[120px]"} w-full overflow-hidden fixed bg-white transition-height duration-200 ease-in-out shadow-lg ${isVisible ? 'h-screen block' : 'h-0 hidden'}`}>
       {children}
     </div>
   );
