@@ -1,10 +1,10 @@
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import type {
   NormalizedPredictiveSearch,
   NormalizedPredictiveSearchResults,
 } from '~/components/Search';
-import {NO_PREDICTIVE_SEARCH_RESULTS} from '~/components/Search';
-import {applyTrackingParams} from '~/lib/search';
+import { NO_PREDICTIVE_SEARCH_RESULTS } from '~/components/Search';
+import { applyTrackingParams } from '~/lib/search';
 
 import type {
   PredictiveArticleFragment,
@@ -34,7 +34,7 @@ const DEFAULT_SEARCH_TYPES: PredictiveSearchTypes[] = [
  * Fetches the search results from the predictive search API
  * requested by the SearchForm component
  */
-export async function loader({request, params, context}: LoaderFunctionArgs) {
+export async function loader({ request, params, context }: LoaderFunctionArgs) {
   const search = await fetchPredictiveSearchResults({
     params,
     request,
@@ -42,7 +42,7 @@ export async function loader({request, params, context}: LoaderFunctionArgs) {
   });
 
   return json(search, {
-    headers: {'Cache-Control': `max-age=${search.searchTerm ? 60 : 3600}`},
+    headers: { 'Cache-Control': `max-age=${search.searchTerm ? 60 : 3600}` },
   });
 }
 
@@ -61,13 +61,13 @@ async function fetchPredictiveSearchResults({
     rawTypes === 'ANY'
       ? DEFAULT_SEARCH_TYPES
       : rawTypes
-          .split(',')
-          .map((t) => t.toUpperCase() as PredictiveSearchTypes)
-          .filter((t) => DEFAULT_SEARCH_TYPES.includes(t));
+        .split(',')
+        .map((t) => t.toUpperCase() as PredictiveSearchTypes)
+        .filter((t) => DEFAULT_SEARCH_TYPES.includes(t));
 
   if (!searchTerm) {
     return {
-      searchResults: {results: null, totalResults: 0},
+      searchResults: { results: null, totalResults: 0 },
       searchTerm,
       searchTypes,
     };
@@ -91,7 +91,7 @@ async function fetchPredictiveSearchResults({
     params.locale,
   );
 
-  return {searchResults, searchTerm, searchTypes};
+  return { searchResults, searchTerm, searchTypes };
 }
 
 /**
@@ -156,65 +156,65 @@ export function normalizePredictiveSearchResults(
     });
   }
 
-  if (predictiveSearch.collections.length) {
-    results.push({
-      type: 'collections',
-      items: predictiveSearch.collections.map(
-        (collection: PredictiveCollectionFragment) => {
-          totalResults++;
-          const trackingParams = applyTrackingParams(collection);
-          return {
-            __typename: collection.__typename,
-            handle: collection.handle,
-            id: collection.id,
-            image: collection.image,
-            title: collection.title,
-            url: `${localePrefix}/collections/${collection.handle}${trackingParams}`,
-          };
-        },
-      ),
-    });
-  }
+  // if (predictiveSearch.collections.length) {
+  //   results.push({
+  //     type: 'collections',
+  //     items: predictiveSearch.collections.map(
+  //       (collection: PredictiveCollectionFragment) => {
+  //         totalResults++;
+  //         const trackingParams = applyTrackingParams(collection);
+  //         return {
+  //           __typename: collection.__typename,
+  //           handle: collection.handle,
+  //           id: collection.id,
+  //           image: collection.image,
+  //           title: collection.title,
+  //           url: `${localePrefix}/collections/${collection.handle}${trackingParams}`,
+  //         };
+  //       },
+  //     ),
+  //   });
+  // }
 
-  if (predictiveSearch.pages.length) {
-    results.push({
-      type: 'pages',
-      items: predictiveSearch.pages.map((page: PredictivePageFragment) => {
-        totalResults++;
-        const trackingParams = applyTrackingParams(page);
-        return {
-          __typename: page.__typename,
-          handle: page.handle,
-          id: page.id,
-          image: undefined,
-          title: page.title,
-          url: `${localePrefix}/pages/${page.handle}${trackingParams}`,
-        };
-      }),
-    });
-  }
+  // if (predictiveSearch.pages.length) {
+  //   results.push({
+  //     type: 'pages',
+  //     items: predictiveSearch.pages.map((page: PredictivePageFragment) => {
+  //       totalResults++;
+  //       const trackingParams = applyTrackingParams(page);
+  //       return {
+  //         __typename: page.__typename,
+  //         handle: page.handle,
+  //         id: page.id,
+  //         image: undefined,
+  //         title: page.title,
+  //         url: `${localePrefix}/pages/${page.handle}${trackingParams}`,
+  //       };
+  //     }),
+  //   });
+  // }
 
-  if (predictiveSearch.articles.length) {
-    results.push({
-      type: 'articles',
-      items: predictiveSearch.articles.map(
-        (article: PredictiveArticleFragment) => {
-          totalResults++;
-          const trackingParams = applyTrackingParams(article);
-          return {
-            __typename: article.__typename,
-            handle: article.handle,
-            id: article.id,
-            image: article.image,
-            title: article.title,
-            url: `${localePrefix}/blog/${article.handle}${trackingParams}`,
-          };
-        },
-      ),
-    });
-  }
+  // if (predictiveSearch.articles.length) {
+  //   results.push({
+  //     type: 'articles',
+  //     items: predictiveSearch.articles.map(
+  //       (article: PredictiveArticleFragment) => {
+  //         totalResults++;
+  //         const trackingParams = applyTrackingParams(article);
+  //         return {
+  //           __typename: article.__typename,
+  //           handle: article.handle,
+  //           id: article.id,
+  //           image: article.image,
+  //           title: article.title,
+  //           url: `${localePrefix}/blog/${article.handle}${trackingParams}`,
+  //         };
+  //       },
+  //     ),
+  //   });
+  // }
 
-  return {results, totalResults};
+  return { results, totalResults };
 }
 
 const PREDICTIVE_SEARCH_QUERY = `#graphql

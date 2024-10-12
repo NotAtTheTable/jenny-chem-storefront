@@ -4,10 +4,13 @@ import {
   useParams,
   useFetcher,
   type FormProps,
+  useNavigate,
 } from '@remix-run/react';
-import {Image, Money, Pagination} from '@shopify/hydrogen';
-import React, {useRef, useEffect} from 'react';
-import {applyTrackingParams} from '~/lib/search';
+import { Image, Money, Pagination } from '@shopify/hydrogen';
+import React, { useRef, useEffect } from 'react';
+import { applyTrackingParams } from '~/lib/search';
+
+import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
 import type {
   PredictiveProductFragment,
@@ -15,6 +18,8 @@ import type {
   PredictiveArticleFragment,
   SearchQuery,
 } from 'storefrontapi.generated';
+import ProductCard from './card/ProductCard';
+import { ArrowButton } from './foundational/ArrowButton';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -36,11 +41,11 @@ export type NormalizedPredictiveSearchResultItem = {
 };
 
 export type NormalizedPredictiveSearchResults = Array<
-  | {type: 'queries'; items: Array<NormalizedPredictiveSearchResultItem>}
-  | {type: 'products'; items: Array<NormalizedPredictiveSearchResultItem>}
-  | {type: 'collections'; items: Array<NormalizedPredictiveSearchResultItem>}
-  | {type: 'pages'; items: Array<NormalizedPredictiveSearchResultItem>}
-  | {type: 'articles'; items: Array<NormalizedPredictiveSearchResultItem>}
+  | { type: 'queries'; items: Array<NormalizedPredictiveSearchResultItem> }
+  | { type: 'products'; items: Array<NormalizedPredictiveSearchResultItem> }
+  | { type: 'collections'; items: Array<NormalizedPredictiveSearchResultItem> }
+  | { type: 'pages'; items: Array<NormalizedPredictiveSearchResultItem> }
+  | { type: 'articles'; items: Array<NormalizedPredictiveSearchResultItem> }
 >;
 
 export type NormalizedPredictiveSearch = {
@@ -57,14 +62,14 @@ type FetchSearchResultsReturn = {
 };
 
 export const NO_PREDICTIVE_SEARCH_RESULTS: NormalizedPredictiveSearchResults = [
-  {type: 'queries', items: []},
-  {type: 'products', items: []},
-  {type: 'collections', items: []},
-  {type: 'pages', items: []},
-  {type: 'articles', items: []},
+  { type: 'queries', items: [] },
+  { type: 'products', items: [] },
+  { type: 'collections', items: [] },
+  { type: 'pages', items: [] },
+  { type: 'articles', items: [] },
 ];
 
-export function SearchForm({searchTerm}: {searchTerm: string}) {
+export function SearchForm({ searchTerm }: { searchTerm: string }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   // focus the input when cmd+k is pressed
@@ -155,12 +160,12 @@ export function SearchResults({
 function SearchResultsProductsGrid({
   products,
   searchTerm,
-}: Pick<SearchQuery, 'products'> & {searchTerm: string}) {
+}: Pick<SearchQuery, 'products'> & { searchTerm: string }) {
   return (
     <div className="search-result">
       <h2>Products</h2>
       <Pagination connection={products}>
-        {({nodes, isLoading, NextLink, PreviousLink}) => {
+        {({ nodes, isLoading, NextLink, PreviousLink }) => {
           const ItemsMarkup = nodes.map((product) => {
             const trackingParams = applyTrackingParams(
               product,
@@ -215,7 +220,7 @@ function SearchResultsProductsGrid({
   );
 }
 
-function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
+function SearchResultPageGrid({ pages }: Pick<SearchQuery, 'pages'>) {
   return (
     <div className="search-result">
       <h2>Pages</h2>
@@ -233,7 +238,7 @@ function SearchResultPageGrid({pages}: Pick<SearchQuery, 'pages'>) {
   );
 }
 
-function SearchResultArticleGrid({articles}: Pick<SearchQuery, 'articles'>) {
+function SearchResultArticleGrid({ articles }: Pick<SearchQuery, 'articles'>) {
   return (
     <div className="search-result">
       <h2>Articles</h2>
@@ -291,8 +296,8 @@ export function PredictiveSearchForm({
       : searchAction;
 
     fetcher.submit(
-      {q: newSearchTerm, limit: '6'},
-      {method: 'GET', action: localizedAction},
+      { q: newSearchTerm, limit: '6' },
+      { method: 'GET', action: localizedAction },
     );
   }
 
@@ -315,21 +320,38 @@ export function PredictiveSearchForm({
         inputRef.current.blur();
       }}
     >
-      {children({fetchResults, inputRef, fetcher})}
+      {children({ fetchResults, inputRef, fetcher })}
     </fetcher.Form>
   );
 }
 
-export function PredictiveSearchResults() {
-  const {results, totalResults, searchInputRef, searchTerm, state} =
+export function PredictiveSearchResults({ handleClose, fetchResults }: { handleClose: () => void; fetchResults: ((event: React.ChangeEvent<HTMLInputElement>) => void) | null; }) {
+  const { results, totalResults, searchInputRef, searchTerm, state } =
     usePredictiveSearch();
 
+  // For when there is an indexed search
   function goToSearchResult(event: React.MouseEvent<HTMLAnchorElement>) {
     if (!searchInputRef.current) return;
     searchInputRef.current.blur();
     searchInputRef.current.value = '';
     // close the aside
     window.location.href = event.currentTarget.href;
+  }
+
+  function handleQueryClick(query: string) {
+    if (searchInputRef.current && fetchResults) {
+      searchInputRef.current.value = query;
+      searchInputRef.current.focus();
+
+      // Create a synthetic event
+      const syntheticEvent = {
+        target: searchInputRef.current,
+        currentTarget: searchInputRef.current,
+      } as React.ChangeEvent<HTMLInputElement>;
+
+      // Call fetchResults with the synthetic event
+      fetchResults(syntheticEvent);
+    }
   }
 
   if (state === 'loading') {
@@ -340,29 +362,38 @@ export function PredictiveSearchResults() {
     return <NoPredictiveSearchResults searchTerm={searchTerm} />;
   }
 
-  return (
-    <div className="predictive-search-results">
-      <div>
-        {results.map(({type, items}) => (
-          <PredictiveSearchResult
+  return <div className='container flex flex-row py-6 gap-4'> {
+    results.map(({ type, items }, index) => {
+      switch (type) {
+        case 'queries':
+          // Handle article type
+          return <div key={index} className='flex flex-col gap-2 min-w-80'>
+            <strong><h3 className='text-jc-dark-blue  font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
+            {items.map((link) => (
+              <button
+                key={link.id}
+                className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
+                onClick={() => handleQueryClick(link.title)}
+              >{link.title}</button>
+            ))}
+          </div>;
+        case 'products':
+          // Handle product type
+          return <ProductSearchResult
             goToSearchResult={goToSearchResult}
             items={items}
-            key={type}
+            key={index}
             searchTerm={searchTerm}
             type={type}
+            handleClose={handleClose}
           />
-        ))}
-      </div>
-      {searchTerm.current && (
-        <Link onClick={goToSearchResult} to={`/search?q=${searchTerm.current}`}>
-          <p>
-            View all results for <q>{searchTerm.current}</q>
-            &nbsp; →
-          </p>
-        </Link>
-      )}
-    </div>
-  );
+            ;
+        default:
+          return null; // Handle unknown type
+      }
+    })
+  }
+  </div>
 }
 
 function NoPredictiveSearchResults({
@@ -385,71 +416,57 @@ type SearchResultTypeProps = {
   items: NormalizedPredictiveSearchResultItem[];
   searchTerm: UseSearchReturn['searchTerm'];
   type: NormalizedPredictiveSearchResults[number]['type'];
+  handleClose: () => void;
 };
 
-function PredictiveSearchResult({
+function NavigateToProductPageButton({ handle }: { handle: string }) {
+  const navigate = useNavigate();
+  return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+}
+
+function ProductSearchResult({
   goToSearchResult,
   items,
   searchTerm,
   type,
+  handleClose
 }: SearchResultTypeProps) {
-  const isSuggestions = type === 'queries';
-  const categoryUrl = `/search?q=${
-    searchTerm.current
-  }&type=${pluralToSingularSearchType(type)}`;
-
   return (
-    <div className="predictive-search-result" key={type}>
-      <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
-        <h5>{isSuggestions ? 'Suggestions' : type}</h5>
-      </Link>
-      <ul>
-        {items.map((item: NormalizedPredictiveSearchResultItem) => (
-          <SearchResultItem
-            goToSearchResult={goToSearchResult}
-            item={item}
-            key={item.id}
-          />
-        ))}
-      </ul>
-    </div>
+    <ul key={type} className='flex flex-1 flex-row gap-3 w-20'>
+      {items.slice(0, 4).map((item: NormalizedPredictiveSearchResultItem) => (
+        <SearchResultItem
+          item={item}
+          handleClose={handleClose}
+          key={item.id}
+        />
+      ))}
+    </ul>
   );
 }
 
-type SearchResultItemProps = Pick<SearchResultTypeProps, 'goToSearchResult'> & {
+type SearchResultItemProps = {
   item: NormalizedPredictiveSearchResultItem;
+  handleClose: () => void;
 };
 
-function SearchResultItem({goToSearchResult, item}: SearchResultItemProps) {
+function SearchResultItem({ item, handleClose }: SearchResultItemProps) {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    handleClose();
+    return navigate(`/products/${item.handle}`);
+  }
+
   return (
-    <li className="predictive-search-result-item" key={item.id}>
-      <Link onClick={goToSearchResult} to={item.url}>
-        {item.image?.url && (
-          <Image
-            alt={item.image.altText ?? ''}
-            src={item.image.url}
-            width={50}
-            height={50}
-          />
-        )}
-        <div>
-          {item.styledTitle ? (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: item.styledTitle,
-              }}
-            />
-          ) : (
-            <span>{item.title}</span>
-          )}
-          {item?.price && (
-            <small>
-              <Money data={item.price} />
-            </small>
-          )}
-        </div>
-      </Link>
-    </li>
+    <div onClick={() => handleClick()}>
+      <ProductCard
+        id={item.id}
+        imageData={item.image as StorefrontAPI.Image}
+        title={item.title}
+        price={item.price as StorefrontAPI.MoneyV2}
+        ActionElement={NavigateToProductPageButton}
+        handle={item.handle}
+      />
+    </div>
   );
 }
 
@@ -460,7 +477,7 @@ type UseSearchReturn = NormalizedPredictiveSearch & {
 };
 
 function usePredictiveSearch(): UseSearchReturn {
-  const searchFetcher = useFetcher<FetchSearchResultsReturn>({key: 'search'});
+  const searchFetcher = useFetcher<FetchSearchResultsReturn>({ key: 'search' });
   const searchTerm = useRef<string>('');
   const searchInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -479,7 +496,7 @@ function usePredictiveSearch(): UseSearchReturn {
     searchInputRef.current = document.querySelector('input[type="search"]');
   }, []);
 
-  return {...search, searchInputRef, searchTerm, state: searchFetcher.state};
+  return { ...search, searchInputRef, searchTerm, state: searchFetcher.state };
 }
 
 /**

@@ -130,7 +130,7 @@ const ArticleList = ({ articles }: Readonly<{
                   }</button>
               </div>
               {nodes.map((article: ArticleCardFragment) => (
-                <div className='flex justify-center my-3'>
+                <div key={article.id} className='flex justify-center my-3'>
                   <ArticleCard
                     handle={article.handle}
                     title={article.title}

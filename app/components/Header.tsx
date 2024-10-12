@@ -1,5 +1,5 @@
-import { Await, NavLink, useFetcher, useSearchParams } from '@remix-run/react';
-import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Await, NavLink, useFetcher } from '@remix-run/react';
+import { Suspense, useState } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
@@ -7,10 +7,11 @@ import ContactIcon from "~/assets/foundational/contact_icon.svg"
 import ParcelIcon from "~/assets/foundational/parcel_icon.svg"
 import ProfilePlaceholderIcon from "~/assets/foundational/profile_placeholder.svg"
 import BasketIcon from "~/assets/foundational/basket_icon.svg"
-import { AlignJustify, Cross, Dot, Plus, Search, SearchIcon, X } from 'lucide-react';
+import { AlignJustify, Plus, Search, SearchIcon, X } from 'lucide-react';
 import HeaderDropDown from './header/HeaderDropDown';
 import MobileMenu from './header/MobileMenu';
 import { Button } from './foundational/ArrowButton';
+import SearchDropDown from './header/SearchDropDown';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups' | 'isHeaderBannerClosed'>;
 
@@ -18,6 +19,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
   const { shop, menu } = header;
 
   const [selectedMenuItemIndex, setSelectedMenuItemIndex] = useState<number | null>(null);
+  const [searchDropDownHidden, setSearchDropDownHidden] = useState<boolean>(true);
   const [mobileMenuVisible, setMobileMenuVisible] = useState<boolean>(false);
   const [mobileSearchVisible, setMobileSearchVisible] = useState<boolean>(false);
 
@@ -33,6 +35,10 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
       setMobileMenuVisible(false);
     }
     setMobileSearchVisible(!mobileSearchVisible)
+  }
+
+  const toggleSearchDropDown = () => {
+    setSearchDropDownHidden(!searchDropDownHidden)
   }
 
   return (<>
@@ -57,6 +63,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
               primaryDomainUrl={shop.primaryDomain.url}
               handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
               selectedMenuItemIndex={selectedMenuItemIndex}
+              toggleSearchDropDown={toggleSearchDropDown}
             />
           </div>
           <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
@@ -68,6 +75,10 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
         collectionGroups={collectionGroups}
         handleSelectedMenuItemIndex={setSelectedMenuItemIndex}
         primaryDomainUrl={shop.primaryDomain.url}
+      />
+      <SearchDropDown
+        isHidden={searchDropDownHidden}
+        setIsHidden={setSearchDropDownHidden}
       />
     </div>
     <MobileHeaderDropDown isHeaderBannerClosed={isHeaderBannerClosed} isVisible={mobileMenuVisible}
@@ -86,12 +97,14 @@ export function HeaderMenu({
   menu,
   primaryDomainUrl,
   handleSelectedMenuItemIndex,
-  selectedMenuItemIndex
+  selectedMenuItemIndex,
+  toggleSearchDropDown
 }: {
   menu: HeaderProps['header']['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
   handleSelectedMenuItemIndex: (index: number | null) => void;
   selectedMenuItemIndex: number | null;
+  toggleSearchDropDown: () => void;
 }) {
   const { publicStoreDomain } = useRootLoaderData();
   const className = `font-display tracking-wider font-bold line divide-x divide-jc-light-blue flex flex-row`;
@@ -119,7 +132,7 @@ export function HeaderMenu({
           </NavLink>
         );
       })}
-      <a href="#search-aside" className="!no-underline header-menu-item flex px-2 my-6"><Search style={{ marginTop: "3px" }} height={15} />Search</a>
+      <button onClick={() => toggleSearchDropDown()} className="!no-underline header-menu-item flex px-2 my-6"><Search style={{ marginTop: "3px" }} height={15} />Search</button>
     </nav>
   );
 }

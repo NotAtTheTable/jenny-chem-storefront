@@ -37,7 +37,6 @@ export function Layout({
   return (
     <>
       <CartAside cart={cart} />
-      <SearchAside />
       {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} isHeaderBannerClosed={isHeaderBannerClosed} />}
       <main>{children}</main>
       <Suspense>
@@ -63,37 +62,36 @@ function CartAside({ cart }: { cart: LayoutProps['cart'] }) {
   );
 }
 
-function SearchAside() {
-  return (
-    <Aside id="search-aside" heading="SEARCH">
-      <div className="predictive-search">
-        <br />
-        <PredictiveSearchForm>
-          {({ fetchResults, inputRef }) => (
-            <div>
-              <input
-                name="q"
-                onChange={fetchResults}
-                onFocus={fetchResults}
-                placeholder="Search"
-                ref={inputRef}
-                type="search"
-              />
-              &nbsp;
-              <button
-                onClick={() => {
-                  window.location.href = inputRef?.current?.value
-                    ? `/search?q=${inputRef.current.value}`
-                    : `/search`;
-                }}
-              >
-                Search
-              </button>
-            </div>
-          )}
-        </PredictiveSearchForm>
-        <PredictiveSearchResults />
-      </div>
-    </Aside>
-  );
-}
+// function SearchAside() {
+//   return (
+//     <Aside id="search-aside" heading="SEARCH">
+//       <div className="predictive-search">
+//         <br />
+//         <PredictiveSearchForm>
+//           {({ fetchResults, inputRef }) => (
+//             <div>
+//               <input
+//                 name="q"
+//                 onChange={fetchResults}
+//                 onFocus={fetchResults}
+//                 placeholder="Search"
+//                 ref={inputRef}
+//                 type="search"
+//               />
+//               &nbsp;
+//               <button
+//                 onClick={() => {
+//                   window.location.href = inputRef?.current?.value
+//                     ? `/search?q=${inputRef.current.value}`
+//                     : `/search`;
+//                 }}
+//               >
+//                 Search
+//               </button>
+//             </div>
+//           )}
+//         </PredictiveSearchForm>
+//       </div>
+//     </Aside>
+//   );
+// }

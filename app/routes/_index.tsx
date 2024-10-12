@@ -23,7 +23,6 @@ import { useViewport } from '~/hooks/useViewport';
 import { BlueBubbleBackground } from '~/components/foundational/BlueBubbleBackground';
 import { ArticleCarousel } from '~/components/blog/ArticleCarousel';
 import { RECOMMENDED_BLOG_ARTICLES_QUERY } from './blogs.$blogHandle._index';
-import { Header } from '~/components/Header';
 import Heading from '~/components/foundational/Heading';
 
 export type Viewport = 'desktop' | 'mobile';

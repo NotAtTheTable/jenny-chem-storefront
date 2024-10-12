@@ -1,7 +1,5 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
-import DashDivider from '~/components/foundational/DashDivider';
-import { PageHeader } from '~/components/foundational/PageHeader';
+import { type MetaFunction } from '@remix-run/react';
 import Heading from '~/components/foundational/Heading';
 import { useState } from 'react';
 import ArrowLeft from '~/assets/foundational/arrows/filled_dark_blue_left_arrow.svg';
@@ -172,7 +170,7 @@ export default function About() {
                     </div>
                 </div>
                 <div className='container my-16 flex flex-row gap-16'>
-                    <div className='bg-jc-dark-blue w-[374px] p-6 rounded-3xl shadow flex flex-col justify-between'>
+                    <div className='bg-jc-dark-blue w-[374px] p-6 rounded-3xl shadow flex flex-col justify-between' style={{ backgroundImage: 'url(https://cdn.shopify.com/s/files/1/0032/5474/7185/files/About_Us_Image.png?v=1728585343)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
                         <div>
                             <Heading dashClassName='w-16' level={1} className='!text-white text-8xl'>WHO <br /> WE ARE.</Heading>
                             <p className='text-white -mt-1'>Providing the correct workwear and equipment for the job, with a range from clothing to accessories to choose from.</p>
