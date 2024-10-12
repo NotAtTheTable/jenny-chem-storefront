@@ -1,5 +1,5 @@
-import { Await, Form, NavLink, useFetcher, useSearchParams } from '@remix-run/react';
-import { Suspense, useState } from 'react';
+import { Await, NavLink, useFetcher, useSearchParams } from '@remix-run/react';
+import { Suspense } from 'react';
 import type { HeaderQuery } from 'storefrontapi.generated';
 import type { LayoutProps } from './Layout';
 import { useRootLoaderData } from '~/lib/root-data';
@@ -21,13 +21,6 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
   const [searchParams, setSearchParams] = useSearchParams();
   const navMobileDrawer = searchParams.get('nav-mobile-drawer') || null;
   const navSearch = searchParams.get('nav-search') || null;
-
-  function resetSearchParams(prev: URLSearchParams): URLSearchParams {
-    prev.delete("nav-mobile-drawer");
-    prev.delete("nav-menu-item");
-    prev.delete("nav-search");
-    return prev;
-  }
 
   function toggleMobileMenu() {
     setSearchParams((prev) => {
@@ -103,6 +96,13 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
     }
   </>
   );
+}
+
+export function resetSearchParams(prev: URLSearchParams): URLSearchParams {
+  prev.delete("nav-mobile-drawer");
+  prev.delete("nav-menu-item");
+  prev.delete("nav-search");
+  return prev;
 }
 
 export function HeaderMenu({

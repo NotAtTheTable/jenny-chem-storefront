@@ -1,6 +1,5 @@
 import { SearchIcon } from "lucide-react";
 import { PredictiveSearchForm, PredictiveSearchResults } from "../Search";
-import { useSearchParams } from "@remix-run/react";
 
 export default function SearchDropDown() {
     return (
@@ -15,6 +14,7 @@ export default function SearchDropDown() {
                                 <input
                                     name="q"
                                     onChange={fetchResults}
+                                    onFocus={fetchResults}
                                     placeholder="Product name, type or sku code"
                                     className="rounded w-full pl-12 text-sm pr-1 py-1 border-[0.75px] border-jc-light-blue focus:outline-none"
                                     ref={inputRef}

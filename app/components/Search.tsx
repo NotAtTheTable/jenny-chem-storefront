@@ -5,6 +5,7 @@ import {
   useFetcher,
   type FormProps,
   useNavigate,
+  useSearchParams,
 } from '@remix-run/react';
 import { Image, Money, Pagination } from '@shopify/hydrogen';
 import React, { useRef, useEffect } from 'react';
@@ -20,6 +21,7 @@ import type {
 } from 'storefrontapi.generated';
 import ProductCard from './card/ProductCard';
 import { ArrowButton } from './foundational/ArrowButton';
+import { resetSearchParams } from './Header';
 
 type PredicticeSearchResultItemImage =
   | PredictiveCollectionFragment['image']
@@ -339,7 +341,13 @@ export function PredictiveSearchResults() {
   }
 
   function handleQueryClick(query: string) {
-
+    if (!searchInputRef.current) return;
+    searchInputRef.current.value = query;
+    searchInputRef.current.focus();
+    const inputEvent = new Event("input", { bubbles: true });
+    searchInputRef.current.dispatchEvent(inputEvent);
+    const focusEvent = new FocusEvent("focus", { bubbles: true });
+    searchInputRef.current.dispatchEvent(focusEvent);
   }
 
   if (state === 'loading') {
@@ -361,6 +369,7 @@ export function PredictiveSearchResults() {
               <button
                 key={link.id}
                 className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
+                onClick={() => handleQueryClick(link.title)}
               >{link.title}</button>
             ))}
           </div>;
