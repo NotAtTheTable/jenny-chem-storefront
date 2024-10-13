@@ -12,6 +12,7 @@ import HeaderDropDown from './header/HeaderDropDown';
 import MobileMenu from './header/MobileMenu';
 import { Button } from './foundational/ArrowButton';
 import SearchDropDown from './header/SearchDropDown';
+import MobileSearchDropDown from './header/MobileSearchDropDown';
 
 type HeaderProps = Pick<LayoutProps, 'header' | 'cart' | 'isLoggedIn' | 'collectionGroups' | 'isHeaderBannerClosed'>;
 
@@ -30,7 +31,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
         prev.set('nav-mobile-drawer', 'menu');
       }
       return prev;
-    });
+    }, { preventScrollReset: true });
   }
 
   function toggleMobileSearch() {
@@ -41,7 +42,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
         prev.set('nav-mobile-drawer', 'search');
       }
       return prev;
-    });
+    }, { preventScrollReset: true });
   }
 
   return (<>
@@ -90,7 +91,7 @@ export function Header({ header, isHeaderBannerClosed, isLoggedIn, collectionGro
         }
         {
           navMobileDrawer === "search" &&
-          <div>Here's the search</div>
+          <MobileSearchDropDown />
         }
       </MobileHeaderDropDown>
     }
@@ -141,7 +142,7 @@ export function HeaderMenu({
                       prev.delete("nav-search");
                       prev.set("nav-menu-id", item.id);
                       return prev;
-                    });
+                    }, { preventScrollReset: true });
                   }}
                 >
                   {item.title}
@@ -164,7 +165,7 @@ export function HeaderMenu({
           prev.delete("nav-menu-id");
           prev.set("nav-search", "true");
           return prev;
-        });
+        }, { preventScrollReset: true });
       }}
         className="!no-underline header-menu-item flex px-2 my-6"
       >

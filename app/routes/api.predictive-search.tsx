@@ -7,9 +7,6 @@ import { NO_PREDICTIVE_SEARCH_RESULTS } from '~/components/Search';
 import { applyTrackingParams } from '~/lib/search';
 
 import type {
-  PredictiveArticleFragment,
-  PredictiveCollectionFragment,
-  PredictivePageFragment,
   PredictiveProductFragment,
   PredictiveQueryFragment,
   PredictiveSearchQuery,
@@ -66,6 +63,9 @@ async function fetchPredictiveSearchResults({
         .filter((t) => DEFAULT_SEARCH_TYPES.includes(t));
 
   if (!searchTerm) {
+
+    // Get the Top Suggestions
+
     return {
       searchResults: { results: null, totalResults: 0 },
       searchTerm,
@@ -218,39 +218,39 @@ export function normalizePredictiveSearchResults(
 }
 
 const PREDICTIVE_SEARCH_QUERY = `#graphql
-  fragment PredictiveArticle on Article {
-    __typename
-    id
-    title
-    handle
-    image {
-      url
-      altText
-      width
-      height
-    }
-    trackingParameters
-  }
-  fragment PredictiveCollection on Collection {
-    __typename
-    id
-    title
-    handle
-    image {
-      url
-      altText
-      width
-      height
-    }
-    trackingParameters
-  }
-  fragment PredictivePage on Page {
-    __typename
-    id
-    title
-    handle
-    trackingParameters
-  }
+  # fragment PredictiveArticle on Article {
+  #   __typename
+  #   id
+  #   title
+  #   handle
+  #   image {
+  #     url
+  #     altText
+  #     width
+  #     height
+  #   }
+  #   trackingParameters
+  # }
+  # fragment PredictiveCollection on Collection {
+  #   __typename
+  #   id
+  #   title
+  #   handle
+  #   image {
+  #     url
+  #     altText
+  #     width
+  #     height
+  #   }
+  #   trackingParameters
+  # }
+  # fragment PredictivePage on Page {
+  #   __typename
+  #   id
+  #   title
+  #   handle
+  #   trackingParameters
+  # }
   fragment PredictiveProduct on Product {
     __typename
     id
@@ -293,15 +293,15 @@ const PREDICTIVE_SEARCH_QUERY = `#graphql
       query: $searchTerm,
       types: $types,
     ) {
-      articles {
-        ...PredictiveArticle
-      }
-      collections {
-        ...PredictiveCollection
-      }
-      pages {
-        ...PredictivePage
-      }
+      # articles {
+      #   ...PredictiveArticle
+      # }
+      # collections {
+      #   ...PredictiveCollection
+      # }
+      # pages {
+      #   ...PredictivePage
+      # }
       products {
         ...PredictiveProduct
       }

@@ -2,19 +2,13 @@ import type {
   PredictiveQueryFragment,
   SearchProductFragment,
   PredictiveProductFragment,
-  PredictiveCollectionFragment,
-  PredictivePageFragment,
-  PredictiveArticleFragment,
 } from 'storefrontapi.generated';
 
 export function applyTrackingParams(
   resource:
     | PredictiveQueryFragment
     | SearchProductFragment
-    | PredictiveProductFragment
-    | PredictiveCollectionFragment
-    | PredictiveArticleFragment
-    | PredictivePageFragment,
+    | PredictiveProductFragment,
   params?: string,
 ) {
   if (params) {

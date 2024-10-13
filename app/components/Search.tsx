@@ -6,6 +6,7 @@ import {
   type FormProps,
   useNavigate,
   useSearchParams,
+  NavLink,
 } from '@remix-run/react';
 import { Image, Money, Pagination } from '@shopify/hydrogen';
 import React, { useRef, useEffect } from 'react';
@@ -15,26 +16,28 @@ import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
 
 import type {
   PredictiveProductFragment,
-  PredictiveCollectionFragment,
-  PredictiveArticleFragment,
   SearchQuery,
 } from 'storefrontapi.generated';
 import ProductCard, { MiniProductCard } from './card/ProductCard';
 import { ArrowButton, DownArrowButton, MiniArrowButton } from './foundational/ArrowButton';
-import { resetSearchParams } from './Header';
+import { SearchIcon } from 'lucide-react';
 
 type PredicticeSearchResultItemImage =
-  | PredictiveCollectionFragment['image']
-  | PredictiveArticleFragment['image']
+  // | PredictiveCollectionFragment['image']
+  // | PredictiveArticleFragment['image']
   | PredictiveProductFragment['variants']['nodes'][0]['image'];
 
 type PredictiveSearchResultItemPrice =
   | PredictiveProductFragment['variants']['nodes'][0]['price'];
 
+type PredictiveSearchResultsItemTrackingParameters =
+  | PredictiveProductFragment['trackingParameters']
+
 export type NormalizedPredictiveSearchResultItem = {
   __typename: string | undefined;
   handle: string;
   id: string;
+  trackingParameters?: PredictiveSearchResultsItemTrackingParameters;
   image?: PredicticeSearchResultItemImage;
   price?: PredictiveSearchResultItemPrice;
   styledTitle?: string;
@@ -96,15 +99,19 @@ export function SearchForm({ searchTerm }: { searchTerm: string }) {
 
   return (
     <Form method="get">
-      <input
-        defaultValue={searchTerm}
-        name="q"
-        placeholder="Search…"
-        ref={inputRef}
-        type="search"
-      />
-      &nbsp;
-      <button type="submit">Search</button>
+      <div className="w-full p-4 bg-[#EBF2FF] flex justify-center gap-1">
+        <div className="w-full max-w-[750px] rounded-tl rounded-bl overflow-hidden">
+          <input
+            defaultValue={searchTerm}
+            name="q"
+            placeholder="Product name, type or sku code"
+            className="rounded w-full text-sm p-2 border-[0.75px] border-jc-light-blue focus:outline-none"
+            ref={inputRef}
+            type="search"
+          />
+        </div>
+        <button className='rounded px-2 flex items-center pointer-events-none bg-jc-light-blue' type="submit"><SearchIcon className='text-white w-[20px]' /></button>
+      </div>
     </Form>
   );
 }
@@ -363,37 +370,63 @@ export function PredictiveSearchResults() {
     return <NoPredictiveSearchResults searchTerm={searchTerm} />;
   }
 
-  return <div className='container flex flex-row py-6 gap-4'> {
-    results.map(({ type, items }, index) => {
-      switch (type) {
-        case 'queries':
-          // Handle article type
-          return <div key={index} className='flex flex-col gap-2 min-w-80'>
-            <strong><h3 className='text-jc-dark-blue font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
-            {items.map((link) => (
-              <button
-                key={link.id}
-                className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
-                onClick={() => handleQueryClick(link.title)}
-              >{link.title}</button>
-            ))}
-          </div>;
-        case 'products':
-          // Handle product type
-          return <ProductSearchResult
-            goToSearchResult={goToSearchResult}
-            items={items}
-            key={index}
-            searchTerm={searchTerm}
-            type={type}
-          />
-            ;
-        default:
-          return null; // Handle unknown type
-      }
-    })
-  }
-  </div>
+  return <>
+    <div className='desktop-component container flex flex-row py-6 gap-4'> {
+      results.map(({ type, items }, index) => {
+        switch (type) {
+          case 'queries':
+            // Handle article type
+            return <div key={index} className='flex flex-col gap-2 min-w-80'>
+              <strong><h3 className='text-jc-dark-blue font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
+              {items.map((link) => (
+                <button
+                  key={link.id}
+                  className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
+                  onClick={() => handleQueryClick(link.title)}
+                >{link.title}</button>
+              ))}
+            </div>;
+          case 'products':
+            // Handle product type
+            return <ProductSearchResult
+              goToSearchResult={goToSearchResult}
+              items={items}
+              key={index}
+              searchTerm={searchTerm}
+              type={type}
+            />
+              ;
+          default:
+            return null; // Handle unknown type
+        }
+      })
+    }
+    </div>
+    <div className='mobile-component m-4'> {
+      results.map(({ type, items }, index) => {
+        switch (type) {
+          case 'queries':
+            // Handle article type
+            return <div key={index} className='flex flex-col gap-2 min-w-80'>
+              <strong><h3 className='text-jc-dark-blue font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
+              {items.map((link) => (
+                <NavLink
+                  key={link.id}
+                  className='text-jc-dark-blue text-left !no-underline font-body pb-1 border-b-[0.75px] border-jc-light-blue-100'
+                  to={link.url}
+                  prefetch="intent"
+                >
+                  {link.title}
+                </NavLink>
+              ))}
+            </div>;
+          default:
+            return null; // Handle unknown type
+        }
+      })
+    }
+    </div>
+  </>
 }
 
 function NoPredictiveSearchResults({
@@ -430,29 +463,30 @@ function ProductSearchResult({
   type,
 }: SearchResultTypeProps) {
   return (
-    <ul key={type} className='flex flex-1 flex-row gap-3 w-20'>
+    <div key={type} className='flex flex-1 flex-row gap-3'>
       {items.slice(0, 4).map((item: NormalizedPredictiveSearchResultItem) => (
         <SearchResultItem
           item={item}
+          searchTerm={searchTerm}
           key={item.id}
         />
       ))}
-    </ul>
+    </div>
   );
 }
 
 type SearchResultItemProps = {
   item: NormalizedPredictiveSearchResultItem;
+  searchTerm: UseSearchReturn['searchTerm'];
 };
 
-function SearchResultItem({ item }: SearchResultItemProps) {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    return navigate(`/products/${item.handle}`);
-  }
-
+function SearchResultItem({ item, searchTerm }: SearchResultItemProps) {
   return (
-    <div onClick={() => handleClick()}>
+    <Link
+      className='!no-underline'
+      prefetch="intent"
+      to={`/products/${item.handle}`}
+    >
       <ProductCard
         id={item.id}
         imageData={item.image as StorefrontAPI.Image}
@@ -461,7 +495,7 @@ function SearchResultItem({ item }: SearchResultItemProps) {
         ActionElement={NavigateToProductPageButton}
         handle={item.handle}
       />
-    </div>
+    </Link>
   );
 }
 

@@ -21,7 +21,7 @@ export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUr
     function closeDropDown() {
         setSearchParams((prev) => {
             return resetSearchParams(prev);
-        })
+        }, { preventScrollReset: true })
     }
 
     function NavigateToCollectionPageButton({ handle }: { handle: string }) {
@@ -106,7 +106,7 @@ export default function HeaderDropDown({ menu, collectionGroups, primaryDomainUr
                     </div>
                 </div>
             </div>
-            <div onClick={() => closeDropDown()} className="fixed !top-[200px] inset-0 z-[11] opacity-0" />
+            <div onClick={() => closeDropDown()} className="fixed inset-0 z-[11] opacity-0" />
         </>
     )
 }

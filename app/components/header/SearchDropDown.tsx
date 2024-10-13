@@ -10,13 +10,13 @@ export default function SearchDropDown() {
     function closeDropDown() {
         setSearchParams((prev) => {
             return resetSearchParams(prev);
-        })
+        }, { preventScrollReset: true })
     }
 
     return (
         <>
             <div
-                className={`w-full absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)`}
+                className={`w-full z-[12] absolute bg-white overflow-hidden transition-[max-height] duration-200 ease-in-out shadow-[0_6_9px_rgba(0,0,0,0.16)`}
             >
                 <PredictiveSearchForm className="w-full max-w-full">
                     {({ fetchResults, inputRef }) => {
@@ -42,7 +42,7 @@ export default function SearchDropDown() {
                 </PredictiveSearchForm>
                 <PredictiveSearchResults />
             </div>
-            <div onClick={() => closeDropDown()} className="fixed !top-[200px] inset-0 z-[11] opacity-0" />
+            <div onClick={() => closeDropDown()} className="fixed inset-0 z-[11] opacity-0" />
         </>
     )
 }
