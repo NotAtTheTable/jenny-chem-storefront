@@ -2,6 +2,11 @@ import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
 import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
 import DashDivider from '~/components/foundational/DashDivider';
 import { PageHeader } from '~/components/foundational/PageHeader';
+import IgWhite from "~/assets/social-icons/instagram-white.svg";
+import FbWhite from "~/assets/social-icons/facebook-white.svg";
+import TTWhite from "~/assets/social-icons/tiktok-white.svg";
+import YTWhite from "~/assets/social-icons/youtube-white.svg";
+
 
 export const meta: MetaFunction<typeof loader> = ({ data }) => {
   return [{ title: `Hydrogen | ${data?.article.title ?? ''} article` }];
@@ -46,7 +51,20 @@ export default function Article() {
         subTextNode={
           <>
             <div style={{ fontSize: "18px" }} className='text'>{publishedDate} / {author?.name}</div>
-            <div>Share</div>
+            {/* <div className='flex flex-row gap-2 items-center'>Share:
+              <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer">
+                <img className='h-[18px]' src={FbWhite} alt="Share on Facebook" />
+              </a>
+              <a href="https://www.instagram.com/officialjennychem" target="_blank" rel="noopener noreferrer">
+                <img className='h-[18px]' src={IgWhite} alt="Share on Instagram" />
+              </a>
+              <a href="https://www.tiktok.com/@jennychem.com" target="_blank" rel="noopener noreferrer">
+                <img className='h-[18px]' src={TTWhite} alt="Share on TikTok" />
+              </a>
+              <a href="https://www.youtube.com/channel/UC5UXsZSRBnF7sVBi0egZz6g" target="_blank" rel="noopener noreferrer">
+                <img className='h-[18px]' src={YTWhite} alt="Share on YouTube" />
+              </a>
+            </div> */}
             <br />
             <div className='pb-6'><Link to={`/`}>Home</Link>&nbsp;&gt;&nbsp;<Link to={`/blogs/news`}>Blog</Link>&nbsp;&gt;&nbsp;{title}</div>
           </>
