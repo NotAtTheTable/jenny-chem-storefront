@@ -1,4 +1,4 @@
-import { CartForm, Image, Money } from '@shopify/hydrogen';
+import { CartForm, Image, Money, OptimisticCart, OptimisticCartLine, OptimisticCartLineInput, OptimisticInput, useOptimisticCart, useOptimisticData } from '@shopify/hydrogen';
 import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
 import { Link } from '@remix-run/react';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
@@ -13,23 +13,30 @@ import LargeDroplet from "~/assets/foundational/large_droplet.svg"
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
 
+type OptimisticData = {
+  action: string;
+};
+
 type CartMainProps = {
-  cart: CartApiQueryFragment | null;
+  cart: CartApiQueryFragment | OptimisticCart | null;
   layout: 'page' | 'aside';
 };
 
 export function CartMain({ layout, cart }: CartMainProps) {
-  const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
+
+  const optimisticCart = useOptimisticCart(cart);
+
+  const linesCount = Boolean(optimisticCart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&
-    Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
+    Boolean(optimisticCart?.discountCodes?.filter((code) => code.applicable)?.length);
 
   return (
     <div>
       <CartDeliveryBanner />
       <div className={`h-full max-h-[calc(100vh-var(--cart-aside-summary-height))] overflow-y-auto`}>
         <CartEmpty hidden={linesCount} layout={layout} />
-        <CartDetails cart={cart} layout={layout} />
+        <CartDetails cart={optimisticCart as OptimisticCart} layout={layout} />
       </div>
     </div>
   );
@@ -63,16 +70,19 @@ function CartLines({
   layout,
 }: {
   layout: CartMainProps['layout'];
-  lines: CartApiQueryFragment['lines'] | undefined;
+  lines: CartApiQueryFragment['lines'] | OptimisticCart['lines'] | undefined;
 }) {
+
   if (!lines) return null;
 
   return (
     <div className='aside-container' aria-labelledby="cart-lines">
       <ul>
-        {lines.nodes.map((line) => (
-          <CartLineItem key={line.id} line={line} layout={layout} />
-        ))}
+        {lines.nodes.map((line) => {
+          return (
+            <CartLineItem key={line.id} line={line as OptimisticCartLine} layout={layout} />
+          )
+        })}
       </ul>
     </div>
   );
@@ -83,14 +93,14 @@ function CartLineItem({
   line,
 }: {
   layout: CartMainProps['layout'];
-  line: CartLine;
+  line: OptimisticCartLine;
 }) {
   const { id, merchandise } = line;
   const { product, title, image, selectedOptions } = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
 
   return (
-    <li key={id} className="flex gap-3 mb-3">
+    <li key={id} className={`flex gap-3 mb-3`}>
       {image && (
         <Image
           alt={title}
@@ -119,7 +129,7 @@ function CartLineItem({
               <strong>{product.title.toUpperCase()}</strong>
             </p>
           </Link>
-          <CartLineRemoveButton lineIds={[line.id]} />
+          <CartLineRemoveButton lineIds={[line.id]} disabled={!!line.isOptimistic} />
         </div>
         <div className='text-jc-dark-blue text-sm mt-2 mb-1 flex flex-wrap divide-x divide-jc-light-blue'>
           {selectedOptions.map((option, index) => (
@@ -192,14 +202,14 @@ function CartCostSummary({ cost }: { cost: CartApiQueryFragment["cost"] }) {
   )
 }
 
-function CartLineRemoveButton({ lineIds }: { lineIds: string[] }) {
+function CartLineRemoveButton({ lineIds, disabled }: { lineIds: string[], disabled: boolean; }) {
   return (
     <CartForm
       route="/cart"
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{ lineIds }}
     >
-      <button type="submit"><Plus strokeWidth={3} height={18} className="rotate-45 text-jc-dark-blue" /></button>
+      <button disabled={disabled} type="submit"><Plus strokeWidth={3} height={18} className="rotate-45 text-jc-dark-blue" /></button>
     </CartForm>
   );
 }

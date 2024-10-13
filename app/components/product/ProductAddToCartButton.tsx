@@ -1,5 +1,5 @@
 import { FetcherWithComponents } from "@remix-run/react";
-import { CartForm } from "@shopify/hydrogen";
+import { CartForm, OptimisticInput } from "@shopify/hydrogen";
 import { CartLineInput } from "@shopify/hydrogen/storefront-api-types";
 import { ArrowButton, MobileArrowButton } from "../foundational/ArrowButton";
 
