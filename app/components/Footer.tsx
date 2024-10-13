@@ -292,7 +292,7 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
           <div key={section.heading} className='flex flex-col gap-2 w-40'>
             <strong><h3 className='text-white font-body text-2xl border-b border-jc-light-blue pb-2 font-bold'>{section.heading}</h3></strong>
             {section.links.map((link) => (
-              <a key={link.href} className='text-white font-body pb-1 text-xs border-b border-jc-light-blue' href={link.href}>{link.label}</a>
+              <a key={link.href} className='text-white !no-underline font-body pb-1 text-xs border-b border-jc-light-blue' href={link.href}>{link.label}</a>
             ))}
           </div>
         ))

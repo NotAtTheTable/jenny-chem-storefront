@@ -1,5 +1,7 @@
+"use client";
+
 import { Minus, Plus } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 interface NumericInputProps {
     min?: number;

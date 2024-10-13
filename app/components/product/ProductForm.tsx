@@ -26,6 +26,14 @@ export function ProductForm({
     // Remove the product.options which have name "title" so we don't get default
     const filteredOptions = product.options.filter(option => option.name.toLowerCase() !== 'title');
 
+    const openCartAside = () => {
+        const url = new URL(window.location.href);
+        if (!url.hash.includes('cart-aside')) {
+            url.hash = 'cart-aside';
+            window.location.href = url.toString();
+        }
+    }
+
     return (
         <>
             <div className="desktop-component">
@@ -62,13 +70,12 @@ export function ProductForm({
                             :
                             <AddToCartButton
                                 disabled={!selectedVariant}
-                                onClick={() => {
-                                    window.location.href = window.location.href + '#cart-aside';
-                                }}
+                                onClick={openCartAside}
                                 lines={
                                     selectedVariant
                                         ? [
                                             {
+                                                selectedVariant: selectedVariant,
                                                 merchandiseId: selectedVariant.id,
                                                 quantity: quantity,
                                             },
@@ -117,13 +124,12 @@ export function ProductForm({
                             :
                             <AddToCartButton
                                 disabled={!selectedVariant}
-                                onClick={() => {
-                                    window.location.href = window.location.href + '#cart-aside';
-                                }}
+                                onClick={openCartAside}
                                 lines={
                                     selectedVariant
                                         ? [
                                             {
+                                                selectedVariant: selectedVariant,
                                                 merchandiseId: selectedVariant.id,
                                                 quantity: quantity,
                                             },

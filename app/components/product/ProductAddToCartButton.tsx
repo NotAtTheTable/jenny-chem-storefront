@@ -1,5 +1,5 @@
 import { FetcherWithComponents } from "@remix-run/react";
-import { CartForm, OptimisticInput } from "@shopify/hydrogen";
+import { CartForm, OptimisticCartLineInput, OptimisticInput } from "@shopify/hydrogen";
 import { CartLineInput } from "@shopify/hydrogen/storefront-api-types";
 import { ArrowButton, MobileArrowButton } from "../foundational/ArrowButton";
 
@@ -12,7 +12,7 @@ export function AddToCartButton({
 }: {
     analytics?: unknown;
     disabled?: boolean;
-    lines: CartLineInput[];
+    lines: OptimisticCartLineInput[];
     onClick?: () => void;
     label: string;
 }) {

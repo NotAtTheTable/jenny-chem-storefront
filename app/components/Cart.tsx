@@ -220,6 +220,11 @@ function CartLineQuantity({ line }: { line: CartLine }) {
 
   const [currentQuantity, setCurrentQuantity] = useState<number>(quantity);
 
+  useEffect(() => {
+    if (quantity !== currentQuantity) {
+      setCurrentQuantity(quantity);
+    }
+  }, [quantity])
   return (
     <CartForm
       route="/cart"
