@@ -19,6 +19,7 @@ export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   children?: React.ReactNode;
   footer: Promise<FooterQuery>;
+  siteMap: Promise<FooterQuery>;
   header: HeaderQuery;
   collectionGroups: CollectionGroupsQuery;
   isLoggedIn: Promise<boolean>;
@@ -29,6 +30,7 @@ export function Layout({
   cart,
   children = null,
   footer,
+  siteMap,
   header,
   collectionGroups,
   isLoggedIn,
@@ -40,8 +42,8 @@ export function Layout({
       {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} isHeaderBannerClosed={isHeaderBannerClosed} />}
       <main>{children}</main>
       <Suspense>
-        <Await resolve={footer}>
-          {(footer) => <Footer menu={footer?.menu} shop={header?.shop} />}
+        <Await resolve={Promise.all([footer, siteMap])}>
+          {([footer, siteMap]) => <Footer menu={footer?.menu} siteMapMenu={siteMap?.menu} shop={header?.shop} />}
         </Await>
       </Suspense>
     </>

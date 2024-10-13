@@ -20,8 +20,9 @@ import { BlueBubbleBackground } from './foundational/BlueBubbleBackground';
 
 export function Footer({
   menu,
+  siteMapMenu,
   shop,
-}: FooterQuery & { shop: HeaderQuery['shop'] }) {
+}: { menu: FooterQuery['menu'], shop: HeaderQuery['shop'], siteMapMenu: FooterQuery['menu']; }) {
 
   const isMobile = useViewport();
   if (isMobile !== null) {
@@ -31,7 +32,7 @@ export function Footer({
         <MailingListBanner viewport={isMobile ? 'mobile' : 'desktop'} />
         <BlueBubbleBackground>
           {menu && shop?.primaryDomain?.url && (
-            <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+            <FooterMenu viewport={isMobile ? 'mobile' : 'desktop'} menu={menu} siteMapMenu={siteMapMenu} primaryDomainUrl={shop.primaryDomain.url} />
           )}
         </BlueBubbleBackground>
       </footer>
@@ -85,10 +86,12 @@ function MailingListBanner({ viewport = 'desktop' }: { viewport?: Viewport }) {
 function FooterMenu({
   viewport = 'desktop',
   menu,
+  siteMapMenu,
   primaryDomainUrl,
 }: {
   viewport?: Viewport;
   menu: FooterQuery['menu'];
+  siteMapMenu: FooterQuery['menu'];
   primaryDomainUrl: HeaderQuery['shop']['primaryDomain']['url'];
 }) {
   const { publicStoreDomain } = useRootLoaderData();
@@ -96,7 +99,7 @@ function FooterMenu({
   if (viewport === 'mobile') {
     return (
       <div className='flex flex-col p-6 justify-between items-center container'>
-        <SiteMap viewport={'mobile'} />
+        <SiteMap viewport={'mobile'} siteMapMenu={siteMapMenu} primaryDomainUrl={primaryDomainUrl} />
         <div className='flex flex-col my-6 items-center justify-end gap-4'>
           <img className="w-48 h-auto -ml-6" alt="logo" src='https://cdn.shopify.com/s/files/1/0032/5474/7185/files/jennychem_logo_24.png?v=1720257895' />
           <div className="flex flex-row gap-1">
@@ -146,7 +149,7 @@ function FooterMenu({
 
       <div className='flex flex-row p-10 justify-between container'>
         <div className='z-10'>
-          <SiteMap />
+          <SiteMap siteMapMenu={siteMapMenu} primaryDomainUrl={primaryDomainUrl} />
           <nav className="text-white font-body text-xs divide-x divide-white flex pt-10" role="navigation">
             {(menu || FALLBACK_FOOTER_MENU).items.map((item, index) => {
               if (!item.url) return null;
@@ -193,87 +196,37 @@ function FooterMenu({
 
 }
 
-function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
+function SiteMap({ viewport = 'desktop', siteMapMenu, primaryDomainUrl }: { viewport?: Viewport, siteMapMenu: FooterQuery['menu']; primaryDomainUrl: string }) {
 
-  const data = [{
-    heading: "Company",
-    links: [
-      {
-        label: "About Us",
-        href: "/about"
-      },
-      {
-        label: "Blog",
-        href: "/blog"
-      },
-      {
-        label: "Services",
-        href: "/trade-and-customer-login"
-      },
-      {
-        label: "Trustpilot",
-        href: "/search"
-      }
-    ]
-  },
-  {
-    heading: "Support",
-    links: [
-      {
-        label: "Contact",
-        href: "/contact"
-      },
-      {
-        label: "Shipping Rates",
-        href: "/shipping-rates"
-      },
-      {
-        label: "Trade & Customer Login",
-        href: "/order-returns"
-      },
-      {
-        label: "Dilution Calculator",
-        href: "/distributors"
-      }
-    ]
-  },
-  {
-    heading: "Social",
-    links: [
-      {
-        label: "Facebook",
-        href: "/privacy-policy1"
-      },
-      {
-        label: "Instagram",
-        href: "/terms-of-service2"
-      },
-      {
-        label: "Youtube",
-        href: "/privacy-policy3"
-      },
-      {
-        label: "TikTok",
-        href: "/terms-of-service4"
-      }
-    ]
-
-  }]
+  const { publicStoreDomain } = useRootLoaderData();
 
   if (viewport === 'mobile') {
     return <div className='flex flex-col w-full'>
       <Accordion collapsible type="single">
-        {data.map((section, index) => (
+        {siteMapMenu?.items.map((section, index) => (
           <AccordionItem key={index} value={`value_${index}`} className="border-b-2 border-jc-light-blue">
             <AccordionTrigger>
-              <div key={section.heading} className='flex items-center w-full hover:underline justify-between flex-row '>
-                <h3 className='text-white font-body text-xl'>{section.heading}</h3>
+              <div key={section.id} className='flex items-center w-full hover:underline justify-between flex-row '>
+                <h3 className='text-white font-body text-xl'>{section.title}</h3>
               </div>
             </AccordionTrigger>
             <AccordionContent className='flex flex-col gap-4 '>
-              {section.links.map((link) => (
-                <a key={link.href} className='text-white font-body pb-1 text-xsm' href={link.href}>{link.label}</a>
-              ))}
+              {section.items?.map((item) => {
+                if (!item.url) return null;
+                const url =
+                  item.url.includes('myshopify.com') ||
+                    item.url.includes(publicStoreDomain) ||
+                    item.url.includes(primaryDomainUrl)
+                    ? new URL(item.url).pathname
+                    : item.url;
+                return (
+                  <NavLink
+                    key={item.id}
+                    className='text-white font-body pb-1 text-xsm'
+                    to={url}
+                  >{item.title}</NavLink>
+                )
+              })}
             </AccordionContent>
           </AccordionItem>
         ))}
@@ -288,12 +241,25 @@ function SiteMap({ viewport = 'desktop' }: { viewport?: Viewport }) {
   } else {
     return <div className='flex flex-row gap-6'>
       {
-        data.map((section) => (
-          <div key={section.heading} className='flex flex-col gap-2 w-40'>
-            <strong><h3 className='text-white font-body text-2xl border-b border-jc-light-blue pb-2 font-bold'>{section.heading}</h3></strong>
-            {section.links.map((link) => (
-              <a key={link.href} className='text-white !no-underline font-body pb-1 text-xs border-b border-jc-light-blue' href={link.href}>{link.label}</a>
-            ))}
+        siteMapMenu?.items.map((section) => (
+          <div key={section.id} className='flex flex-col gap-2 w-40'>
+            <strong><h3 className='text-white font-body text-2xl border-b border-jc-light-blue pb-2 font-bold'>{section.title}</h3></strong>
+            {section.items?.map((item) => {
+              if (!item.url) return null;
+              const url =
+                item.url.includes('myshopify.com') ||
+                  item.url.includes(publicStoreDomain) ||
+                  item.url.includes(primaryDomainUrl)
+                  ? new URL(item.url).pathname
+                  : item.url;
+              return (
+                <NavLink
+                  key={item.id}
+                  className='text-white !no-underline font-body pb-1 text-xs border-b border-jc-light-blue'
+                  to={url}
+                >{item.title}</NavLink>
+              )
+            })}
           </div>
         ))
       }

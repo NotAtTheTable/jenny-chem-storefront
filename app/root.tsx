@@ -69,9 +69,17 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const footerPromise = storefront.query(FOOTER_QUERY, {
     cache: storefront.CacheLong(),
     variables: {
-      footerMenuHandle: 'footer-menu-v2', // Adjust to your footer menu handle
+      footerMenuHandle: 'footer-menu-v2',
     },
   });
+
+  const footerSiteMapPromise = storefront.query(FOOTER_QUERY, {
+    cache: storefront.CacheLong(),
+    variables: {
+      footerMenuHandle: 'site-map',
+    },
+  });
+
 
   // await the header query (above the fold)
   const headerPromise = storefront.query(HEADER_QUERY, {
@@ -89,6 +97,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     {
       cart: cartPromise,
       footer: footerPromise,
+      siteMap: footerSiteMapPromise,
       header: await headerPromise,
       collectionGroups: collectionGroups,
       isLoggedIn: isLoggedInPromise,
@@ -165,7 +174,7 @@ export function ErrorBoundary() {
         <Links />
       </head>
       <body>
-        <Layout cart={null as any} footer={null as any} collectionGroups={null as any} header={null as any} isLoggedIn={false as any} isHeaderBannerClosed={false}>
+        <Layout siteMap={null as any} cart={null as any} footer={null as any} collectionGroups={null as any} header={null as any} isLoggedIn={false as any} isHeaderBannerClosed={false}>
           <div className="route-error">
             <h1>Oops</h1>
             <h2>{errorStatus}</h2>
