@@ -19,8 +19,8 @@ import type {
   PredictiveArticleFragment,
   SearchQuery,
 } from 'storefrontapi.generated';
-import ProductCard from './card/ProductCard';
-import { ArrowButton } from './foundational/ArrowButton';
+import ProductCard, { MiniProductCard } from './card/ProductCard';
+import { ArrowButton, DownArrowButton, MiniArrowButton } from './foundational/ArrowButton';
 import { resetSearchParams } from './Header';
 
 type PredicticeSearchResultItemImage =
@@ -125,12 +125,12 @@ export function SearchResults({
         keys.map((type) => {
           const resourceResults = results[type];
 
-          if (resourceResults.nodes[0]?.__typename === 'Page') {
-            const pageResults = resourceResults as SearchQuery['pages'];
-            return resourceResults.nodes.length ? (
-              <SearchResultPageGrid key="pages" pages={pageResults} />
-            ) : null;
-          }
+          // if (resourceResults.nodes[0]?.__typename === 'Page') {
+          //   const pageResults = resourceResults as SearchQuery['pages'];
+          //   return resourceResults.nodes.length ? (
+          //     <SearchResultPageGrid key="pages" pages={pageResults} />
+          //   ) : null;
+          // }
 
           if (resourceResults.nodes[0]?.__typename === 'Product') {
             const productResults = resourceResults as SearchQuery['products'];
@@ -143,15 +143,15 @@ export function SearchResults({
             ) : null;
           }
 
-          if (resourceResults.nodes[0]?.__typename === 'Article') {
-            const articleResults = resourceResults as SearchQuery['articles'];
-            return resourceResults.nodes.length ? (
-              <SearchResultArticleGrid
-                key="articles"
-                articles={articleResults}
-              />
-            ) : null;
-          }
+          // if (resourceResults.nodes[0]?.__typename === 'Article') {
+          //   const articleResults = resourceResults as SearchQuery['articles'];
+          //   return resourceResults.nodes.length ? (
+          //     <SearchResultArticleGrid
+          //       key="articles"
+          //       articles={articleResults}
+          //     />
+          //   ) : null;
+          // }
 
           return null;
         })}
@@ -165,7 +165,6 @@ function SearchResultsProductsGrid({
 }: Pick<SearchQuery, 'products'> & { searchTerm: string }) {
   return (
     <div className="search-result">
-      <h2>Products</h2>
       <Pagination connection={products}>
         {({ nodes, isLoading, NextLink, PreviousLink }) => {
           const ItemsMarkup = nodes.map((product) => {
@@ -175,43 +174,49 @@ function SearchResultsProductsGrid({
             );
 
             return (
-              <div className="search-results-item" key={product.id}>
+              <div key={product.id}>
                 <Link
+                  className='!no-underline'
                   prefetch="intent"
                   to={`/products/${product.handle}${trackingParams}`}
                 >
-                  {product.variants.nodes[0].image && (
-                    <Image
-                      data={product.variants.nodes[0].image}
-                      alt={product.title}
-                      width={50}
+                  <div className='desktop-component'>
+                    <ProductCard
+                      id={product.id}
+                      imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
+                      title={product.title}
+                      price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
+                      handle={product.handle}
+                      ActionElement={() => <ArrowButton label="VIEW ALL SIZES" />}
                     />
-                  )}
-                  <div>
-                    <p>{product.title}</p>
-                    <small>
-                      <Money data={product.variants.nodes[0].price} />
-                    </small>
+                  </div>
+                  <div className='mobile-component'>
+                    <MiniProductCard
+                      id={product.id}
+                      imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
+                      title={product.title}
+                      price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
+                      handle={product.handle}
+                      ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" />}
+                    />
                   </div>
                 </Link>
               </div>
+
             );
           });
           return (
             <div>
-              <div>
-                <PreviousLink>
-                  {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
-                </PreviousLink>
-              </div>
-              <div>
+              <div className='desktop-component relative m-auto w-max grid grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5'>
                 {ItemsMarkup}
                 <br />
               </div>
-              <div>
-                <NextLink>
-                  {isLoading ? 'Loading...' : <span>Load more ↓</span>}
-                </NextLink>
+              <div className='mobile-component mx-2 relative grid grid-cols-2 gap-1'>
+                {ItemsMarkup}
+                <br />
+              </div>
+              <div className='flex justify-center'>
+                <NextLink><DownArrowButton label="View More" onClick={() => { }} /></NextLink>
               </div>
             </div>
           );
@@ -364,7 +369,7 @@ export function PredictiveSearchResults() {
         case 'queries':
           // Handle article type
           return <div key={index} className='flex flex-col gap-2 min-w-80'>
-            <strong><h3 className='text-jc-dark-blue  font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
+            <strong><h3 className='text-jc-dark-blue font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
             {items.map((link) => (
               <button
                 key={link.id}

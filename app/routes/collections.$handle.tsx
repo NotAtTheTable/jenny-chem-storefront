@@ -103,7 +103,7 @@ export default function Collection() {
   );
 }
 
-function ProductsGrid({ products }: { products: ProductCardPreviewFragment[] }) {
+export function ProductsGrid({ products }: { products: ProductCardPreviewFragment[] }) {
   const navigate = useNavigate();
   return (
     <>
