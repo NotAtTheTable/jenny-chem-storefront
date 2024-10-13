@@ -11,6 +11,7 @@ import type {
 } from 'storefrontapi.generated';
 import {
   getSelectedProductOptions,
+  getSeoMeta,
 
 } from '@shopify/hydrogen';
 import type {
@@ -27,9 +28,7 @@ import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';
 import Heading from '~/components/foundational/Heading';
 import ProductRecommendations from '~/components/product/ProductRecommendations';
 
-export const meta: MetaFunction<typeof loader> = ({ data, location }) => {
-  return [{ title: `Hydrogen | ${data?.product.title ?? ''}` }];
-};
+
 
 export async function loader({ params, request, context }: LoaderFunctionArgs) {
   const { handle } = params;
@@ -60,7 +59,7 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
   });
 
   // await the query for the critical product data
-  const { product } = await storefront.query(PRODUCT_QUERY, {
+  const { product }: { product: ProductFragment } = await storefront.query(PRODUCT_QUERY, {
     variables: { handle, selectedOptions },
   });
 
@@ -91,12 +90,34 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     }
   })
 
+  const seo = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    name: product.title,
+    description: product.description,
+    image: product.selectedVariant.image?.url,
+    sku: product.selectedVariant.sku,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: product.selectedVariant.price.currencyCode,
+      price: product.selectedVariant.price.amount,
+      itemCondition: "https://schema.org/NewCondition",
+      availability: product.selectedVariant.availableForSale ?
+        "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  }
+
   return defer({
     product,
     variants: variantsPromise,
-    productRecommendations
+    productRecommendations,
+    seo
   });
 }
+
+export const meta: MetaFunction<typeof loader> = ({ data, matches }) => {
+  return getSeoMeta((matches as any)[0].data.seo, { jsonLd: data!.seo });
+};
 
 function redirectToFirstVariant({
   product,
@@ -324,6 +345,7 @@ const PRODUCT_FRAGMENT = `#graphql
     seo {
       description
       title
+
     }
     tags
     collections(first: 5) {
