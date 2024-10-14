@@ -126,14 +126,16 @@ export function ProductsGrid({ products }: { products: ProductCardPreviewFragmen
       <div className='mobile-component mx-2 relative grid grid-cols-2 gap-1'>
         {products.map((product) => {
           return (
-            <MiniProductCard
-              id={product.id}
-              imageData={product.images.nodes[0] as StorefrontAPI.Image}
-              title={product.title}
-              price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
-              handle={product.handle}
-              ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${product.handle}`)} />}
-            />
+            <div key={product.id}>
+              <MiniProductCard
+                id={product.id}
+                imageData={product.images.nodes[0] as StorefrontAPI.Image}
+                title={product.title}
+                price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
+                handle={product.handle}
+                ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${product.handle}`)} />}
+              />
+            </div>
           );
         })}
       </div>

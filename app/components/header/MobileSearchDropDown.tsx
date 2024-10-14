@@ -1,11 +1,12 @@
 import { SearchIcon } from "lucide-react";
 import { PredictiveSearchForm, PredictiveSearchResults } from "../Search";
-import { useSearchParams } from "@remix-run/react";
+import { useNavigate, useSearchParams } from "@remix-run/react";
 import { resetSearchParams } from "../Header";
 
 export default function MobileSearchDropDown() {
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const navigate = useNavigate();
 
     function closeDropDown() {
         setSearchParams((prev) => {
@@ -20,20 +21,29 @@ export default function MobileSearchDropDown() {
             <PredictiveSearchForm className="w-full max-w-full">
                 {({ fetchResults, inputRef }) => {
                     return (
-                        <div className="w-full py-4 bg-[#EBF2FF] flex justify-center">
-                            <div className="relative w-full mx-4 max-w-[750px] rounded-tl rounded-bl overflow-hidden">
+                        <div className="w-full p-4 bg-[#EBF2FF] flex justify-center gap-1">
+                            <div className="relative w-full max-w-[750px] rounded-tl rounded-bl overflow-hidden">
                                 <input
                                     name="q"
-                                    onChange={fetchResults}
-                                    onFocus={fetchResults}
                                     placeholder="Product name, type or sku code"
-                                    className="rounded w-full pl-12 text-sm pr-1 py-2 border-[0.75px] border-jc-light-blue focus:outline-none"
+                                    className="rounded w-full md:text-sm p-2 pr-10 border-[0.75px] border-jc-light-blue focus:outline-none"
                                     ref={inputRef}
                                     type="search"
+                                    autoComplete="off"
+                                    onChange={fetchResults}
+                                    onFocus={fetchResults}
                                 />
-                                <div className="absolute inset-y-0 left-0 px-2 flex items-center pointer-events-none bg-jc-light-blue">
-                                    <SearchIcon className='text-white w-[20px]' />
-                                </div>
+                                <button
+                                    className='absolute right-0 top-0 bottom-0 rounded-tr rounded-br px-2 flex items-center bg-jc-light-blue'
+                                    onClick={() => {
+                                        const searchTerm = inputRef.current?.value;
+                                        if (searchTerm) {
+                                            navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+                                        }
+                                    }}
+                                >
+                                    <SearchIcon className='text-white w-[25px]' />
+                                </button>
                             </div>
                         </div>
                     )

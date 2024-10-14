@@ -98,21 +98,38 @@ export function SearchForm({ searchTerm }: { searchTerm: string }) {
   }, []);
 
   return (
-    <Form method="get">
-      <div className="w-full p-4 bg-[#EBF2FF] flex justify-center gap-1">
-        <div className="w-full max-w-[750px] rounded-tl rounded-bl overflow-hidden">
-          <input
-            defaultValue={searchTerm}
-            name="q"
-            placeholder="Product name, type or sku code"
-            className="rounded w-full text-sm p-2 border-[0.75px] border-jc-light-blue focus:outline-none"
-            ref={inputRef}
-            type="search"
-          />
-        </div>
-        <button className='rounded px-2 flex items-center pointer-events-none bg-jc-light-blue' type="submit"><SearchIcon className='text-white w-[20px]' /></button>
-      </div>
-    </Form>
+    <div className="relative w-full p-4 bg-[#EBF2FF] flex justify-center gap-1">
+      <PredictiveSearchForm className="w-full max-w-full">
+        {({ fetchResults, inputRef }) => {
+          return (
+            <Form className='!max-w-none' method="get">
+              <div className='w-full flex justify-center gap-1'>
+                <div className="relative w-full max-w-[750px] rounded-tl rounded-bl overflow-hidden">
+                  <input
+                    defaultValue={searchTerm}
+                    name="q"
+                    onChange={fetchResults}
+                    placeholder="Product name, type or sku code"
+                    className="rounded w-full p-2 pr-10 border-[0.75px] border-jc-light-blue focus:outline-none"
+                    ref={inputRef}
+                    type="search"
+                    autoComplete="off"
+                  />
+                  <button
+                    className='absolute right-0 top-0 bottom-0 rounded-tr rounded-br px-2 flex items-center bg-jc-light-blue'
+                    type="submit"
+                  >
+                    <SearchIcon className='text-white w-[25px]' />
+                  </button>
+                </div>
+              </div>
+            </Form>)
+        }}
+      </PredictiveSearchForm>
+      {/* <div className="absolute left-0 right-0 top-full bg-white shadow-[0_4px_6px_-1px_rgba(0,0,0,0.1)] z-[15]">
+        <PredictiveSearchResults />
+      </div> */}
+    </div>
   );
 }
 
@@ -302,13 +319,14 @@ export function PredictiveSearchForm({
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
   function fetchResults(event: React.ChangeEvent<HTMLInputElement>) {
+
     const searchAction = action ?? '/api/predictive-search';
     const newSearchTerm = event.target.value || '';
     const localizedAction = params.locale
       ? `/${params.locale}${searchAction}`
       : searchAction;
     fetcher.submit(
-      { q: newSearchTerm, limit: '6' },
+      { q: newSearchTerm, limit: '10' },
       { method: 'GET', action: localizedAction },
     );
   }
@@ -359,12 +377,12 @@ export function PredictiveSearchResults() {
     searchInputRef.current.dispatchEvent(focusEvent);
   }
 
-  if (state === 'loading') {
-    return <div>Loading...</div>;
-  }
+  // if (!totalResults) {
+  //   return <NoPredictiveSearchResults searchTerm={searchTerm} />;
+  // }
 
-  if (!totalResults) {
-    return <NoPredictiveSearchResults searchTerm={searchTerm} />;
+  if (totalResults === 0) {
+    return null;
   }
 
   return <>
@@ -373,7 +391,7 @@ export function PredictiveSearchResults() {
         switch (type) {
           case 'queries':
             // Handle article type
-            return <div key={index} className='flex flex-col gap-2 min-w-80'>
+            return <div key={index} className='flex flex-col gap-2 w-80'>
               <strong><h3 className='text-jc-dark-blue font-body text-2xl border-b border-jc-dark-blue pb-2 font-bold'>Top Suggestions</h3></strong>
               {items.map((link) => (
                 <button
@@ -450,7 +468,7 @@ type SearchResultTypeProps = {
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
   const navigate = useNavigate();
-  return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+  return <MiniArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
 }
 
 function ProductSearchResult({
@@ -460,13 +478,14 @@ function ProductSearchResult({
   type,
 }: SearchResultTypeProps) {
   return (
-    <div key={type} className='flex flex-1 flex-row gap-3'>
-      {items.slice(0, 4).map((item: NormalizedPredictiveSearchResultItem) => (
-        <SearchResultItem
-          item={item}
-          searchTerm={searchTerm}
-          key={item.id}
-        />
+    <div key={type} className='grid flex-1 grid-cols-5 gap-2 h-[28rem] overflow-y-scroll'>
+      {items.map((item: NormalizedPredictiveSearchResultItem) => (
+        <div key={item.id} className='col-span-1'>
+          <SearchResultItem
+            item={item}
+            searchTerm={searchTerm}
+          />
+        </div>
       ))}
     </div>
   );
@@ -484,7 +503,7 @@ function SearchResultItem({ item, searchTerm }: SearchResultItemProps) {
       prefetch="intent"
       to={`/products/${item.handle}`}
     >
-      <ProductCard
+      <MiniProductCard
         id={item.id}
         imageData={item.image as StorefrontAPI.Image}
         title={item.title}

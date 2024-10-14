@@ -10,13 +10,13 @@ import { Aside } from '~/components/Aside';
 import { Footer } from '~/components/Footer';
 import { Header } from '~/components/Header';
 import { CartMain } from '~/components/Cart';
-import { MergeAwaits } from '~/lib/mergeAwait';
+import { MergeAwaits } from '~/lib/MergeAwait';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
   children?: React.ReactNode;
-  footer: Promise<FooterQuery>;
-  siteMap: Promise<FooterQuery>;
+  footer: FooterQuery;
+  siteMap: FooterQuery;
   header: HeaderQuery;
   collectionGroups: CollectionGroupsQuery;
   isLoggedIn: Promise<boolean>;
@@ -33,6 +33,8 @@ export function Layout({
   isLoggedIn,
   isHeaderBannerClosed
 }: LayoutProps) {
+  console.log('Footer:', footer);
+  console.log('Site Map:', siteMap);
   return (
     <>
       <CartAside cart={cart} />
@@ -45,9 +47,7 @@ export function Layout({
           isHeaderBannerClosed={isHeaderBannerClosed}
         />}
       <main>{children}</main>
-      <MergeAwaits resolve={[footer, siteMap]}>
-        {([footer, siteMap]) => <Footer menu={footer?.menu} siteMapMenu={siteMap?.menu} shop={header?.shop} />}
-      </MergeAwaits>
+      <Footer menu={footer?.menu} siteMapMenu={siteMap?.menu} shop={header?.shop} />
     </>
   );
 }

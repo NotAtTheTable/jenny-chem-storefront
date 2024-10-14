@@ -45,7 +45,7 @@ export default function ProductCard({ id, imageData, title, handle, price, Actio
 export function MiniProductCard({ id, imageData, title, handle, price, ActionElement }: ProductCardProps) {
     return (
         <div key={id} className="shadow m-[6px] flex flex-col h-[22.5rem] border overflow-hidden rounded-lg">
-            <div className="bg-jc-light-grey flex justify-center items-center w-full h-70">
+            <div className="bg-jc-light-grey flex justify-center items-center w-full h-[12.5rem]">
                 <Image
                     height={"100"}
                     sizes="(min-width: 45em) 50vw, 100vw"
