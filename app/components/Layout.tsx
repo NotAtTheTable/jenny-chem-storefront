@@ -10,6 +10,7 @@ import { Aside } from '~/components/Aside';
 import { Footer } from '~/components/Footer';
 import { Header } from '~/components/Header';
 import { CartMain } from '~/components/Cart';
+import { MergeAwaits } from '~/lib/mergeAwait';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -44,11 +45,9 @@ export function Layout({
           isHeaderBannerClosed={isHeaderBannerClosed}
         />}
       <main>{children}</main>
-      <Suspense>
-        <Await resolve={Promise.all([footer, siteMap])}>
-          {([footer, siteMap]) => <Footer menu={footer?.menu} siteMapMenu={siteMap?.menu} shop={header?.shop} />}
-        </Await>
-      </Suspense>
+      <MergeAwaits resolve={[footer, siteMap]}>
+        {([footer, siteMap]) => <Footer menu={footer?.menu} siteMapMenu={siteMap?.menu} shop={header?.shop} />}
+      </MergeAwaits>
     </>
   );
 }
