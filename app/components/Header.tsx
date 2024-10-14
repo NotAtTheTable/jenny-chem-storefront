@@ -130,12 +130,11 @@ export function HeaderMenu({
             ? new URL(item.url).pathname
             : item.url;
         return (
-          <>
+          <div key={item.id} className='px-4 my-6 header-menu-item'>
             {
               item.items.length > 0 ?
                 <button
-                  className={`header-menu-item !no-underline px-4 my-6 ${(navMenuId === item.id) ? "text-jc-light-blue" : ""}`}
-                  key={item.id}
+                  className={`!no-underline  ${(navMenuId === item.id) ? "text-jc-light-blue" : ""}`}
                   name="nav-menu-id"
                   onClick={() => {
                     setSearchParams((prev) => {
@@ -149,15 +148,14 @@ export function HeaderMenu({
                 </button>
                 :
                 <NavLink
-                  key={item.id}
-                  className={`header-menu-item !no-underline px-4 my-6`}
+                  className={`!no-underline`}
                   end
                   prefetch="intent"
                   to={url}>
                   {item.title}
                 </NavLink>
             }
-          </>
+          </div>
         );
       })}
       <button onClick={() => {

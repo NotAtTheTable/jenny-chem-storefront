@@ -9,7 +9,7 @@ import {
   NavLink,
 } from '@remix-run/react';
 import { Image, Money, Pagination } from '@shopify/hydrogen';
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { applyTrackingParams } from '~/lib/search';
 
 import * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
@@ -301,14 +301,12 @@ export function PredictiveSearchForm({
     key: 'search',
   });
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   function fetchResults(event: React.ChangeEvent<HTMLInputElement>) {
     const searchAction = action ?? '/api/predictive-search';
     const newSearchTerm = event.target.value || '';
     const localizedAction = params.locale
       ? `/${params.locale}${searchAction}`
       : searchAction;
-
     fetcher.submit(
       { q: newSearchTerm, limit: '6' },
       { method: 'GET', action: localizedAction },
@@ -342,7 +340,6 @@ export function PredictiveSearchForm({
 export function PredictiveSearchResults() {
   const { results, totalResults, searchInputRef, searchTerm, state } =
     usePredictiveSearch();
-
   // For when there is an indexed search
   function goToSearchResult(event: React.MouseEvent<HTMLAnchorElement>) {
     if (!searchInputRef.current) return;
@@ -509,17 +506,20 @@ function usePredictiveSearch(): UseSearchReturn {
   const searchFetcher = useFetcher<FetchSearchResultsReturn>({ key: 'search' });
   const searchTerm = useRef<string>('');
   const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const prevSearchTerm = useRef('');
 
-  if (searchFetcher?.state === 'loading') {
+  if (searchFetcher?.state === 'loading' && prevSearchTerm.current !== searchFetcher.formData?.get('q')) {
     searchTerm.current = (searchFetcher.formData?.get('q') || '') as string;
+    prevSearchTerm.current = searchTerm.current;
   }
 
-  const search = (searchFetcher?.data?.searchResults || {
-    results: NO_PREDICTIVE_SEARCH_RESULTS,
-    totalResults: 0,
-  }) as NormalizedPredictiveSearch;
+  const search = useMemo(() => {
+    return (searchFetcher?.data?.searchResults || {
+      results: NO_PREDICTIVE_SEARCH_RESULTS,
+      totalResults: 0,
+    }) as NormalizedPredictiveSearch;
+  }, [searchFetcher?.data?.searchResults]);
 
-  // capture the search input element as a ref
   useEffect(() => {
     if (searchInputRef.current) return;
     searchInputRef.current = document.querySelector('input[type="search"]');

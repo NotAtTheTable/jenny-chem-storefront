@@ -8,12 +8,8 @@ import type {
 } from 'storefrontapi.generated';
 import { Aside } from '~/components/Aside';
 import { Footer } from '~/components/Footer';
-import { Header, HeaderMenu } from '~/components/Header';
+import { Header } from '~/components/Header';
 import { CartMain } from '~/components/Cart';
-import {
-  PredictiveSearchForm,
-  PredictiveSearchResults,
-} from '~/components/Search';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -39,7 +35,14 @@ export function Layout({
   return (
     <>
       <CartAside cart={cart} />
-      {header && <Header header={header} collectionGroups={collectionGroups} cart={cart} isLoggedIn={isLoggedIn} isHeaderBannerClosed={isHeaderBannerClosed} />}
+      {header &&
+        <Header
+          header={header}
+          collectionGroups={collectionGroups}
+          cart={cart}
+          isLoggedIn={isLoggedIn}
+          isHeaderBannerClosed={isHeaderBannerClosed}
+        />}
       <main>{children}</main>
       <Suspense>
         <Await resolve={Promise.all([footer, siteMap])}>

@@ -9,7 +9,7 @@ export default defineConfig({
   plugins: [
     hydrogen(),
     oxygen(),
-    remixDevTools(),
+    //remixDevTools(),
     remix({
       presets: [hydrogen.preset()],
       future: {
