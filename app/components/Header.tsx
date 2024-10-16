@@ -188,7 +188,7 @@ function HeaderCtas({
         <img alt="contact-icon" className="h-7" src={ContactIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>CONTACT</p>
       </NavLink>
-      <NavLink className={"flex flex-col items-center desktop-only !no-underline"} prefetch="intent" to={"https://shopify.com/3254747185/account"}>
+      <NavLink className={"flex flex-col items-center desktop-only !no-underline"} prefetch="intent" to={"/account"}>
         <img alt="profile-placeholder" className="h-7" src={ProfilePlaceholderIcon} />
         <p className='font-body mt-1' style={{ fontSize: "9px" }}>
           {isLoggedIn ? 'ACCOUNT' : 'SIGN IN'}
