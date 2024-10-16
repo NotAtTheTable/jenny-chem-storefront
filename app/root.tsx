@@ -100,7 +100,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
       siteMap: await footerSiteMapPromise,
       header: await headerPromise,
       collectionGroups: collectionGroups,
-      isLoggedIn: isLoggedInPromise,
+      isLoggedIn: await isLoggedInPromise,
       isHeaderBannerClosed,
       publicStoreDomain,
     },

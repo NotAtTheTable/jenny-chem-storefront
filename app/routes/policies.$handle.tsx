@@ -1,19 +1,21 @@
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
-import {type Shop} from '@shopify/hydrogen/storefront-api-types';
+import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
+import { type Shop } from '@shopify/hydrogen/storefront-api-types';
+import { Header } from '~/components/Header';
+import Heading from '~/components/foundational/Heading';
 
 type SelectedPolicies = keyof Pick<
   Shop,
   'privacyPolicy' | 'shippingPolicy' | 'termsOfService' | 'refundPolicy'
 >;
 
-export const meta: MetaFunction<typeof loader> = ({data}) => {
-  return [{title: `Hydrogen | ${data?.policy.title ?? ''}`}];
+export const meta: MetaFunction<typeof loader> = ({ data }) => {
+  return [{ title: `Hydrogen | ${data?.policy.title ?? ''}` }];
 };
 
-export async function loader({params, context}: LoaderFunctionArgs) {
+export async function loader({ params, context }: LoaderFunctionArgs) {
   if (!params.handle) {
-    throw new Response('No handle was passed in', {status: 404});
+    throw new Response('No handle was passed in', { status: 404 });
   }
 
   const policyName = params.handle.replace(
@@ -35,25 +37,21 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   const policy = data.shop?.[policyName];
 
   if (!policy) {
-    throw new Response('Could not find the policy', {status: 404});
+    throw new Response('Could not find the policy', { status: 404 });
   }
 
-  return json({policy});
+  return json({ policy });
 }
 
 export default function Policy() {
-  const {policy} = useLoaderData<typeof loader>();
+  const { policy } = useLoaderData<typeof loader>();
 
   return (
-    <div className="policy">
-      <br />
-      <br />
-      <div>
-        <Link to="/policies">← Back to Policies</Link>
-      </div>
-      <br />
-      <h1>{policy.title}</h1>
-      <div dangerouslySetInnerHTML={{__html: policy.body}} />
+    <div className='container my-10'>
+      <Heading level={1} className={"text-8xl text-center"}>{policy.title}</Heading>
+      <div className='text-jc-dark-blue'><Link className='!no-underline' to={'/'}>Home</Link> &gt; {policy.title}</div>
+      <div className='w-full h-[1px] bg-jc-light-blue opacity-50 my-4' />
+      <div className='article my-4' dangerouslySetInnerHTML={{ __html: policy.body }} />
     </div>
   );
 }

@@ -10,7 +10,6 @@ import { Aside } from '~/components/Aside';
 import { Footer } from '~/components/Footer';
 import { Header } from '~/components/Header';
 import { CartMain } from '~/components/Cart';
-import { MergeAwaits } from '~/lib/MergeAwait';
 
 export type LayoutProps = {
   cart: Promise<CartApiQueryFragment | null>;
@@ -19,7 +18,7 @@ export type LayoutProps = {
   siteMap: FooterQuery;
   header: HeaderQuery;
   collectionGroups: CollectionGroupsQuery;
-  isLoggedIn: Promise<boolean>;
+  isLoggedIn: boolean;
   isHeaderBannerClosed: boolean;
 };
 
