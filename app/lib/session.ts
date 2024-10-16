@@ -1,4 +1,4 @@
-import type {HydrogenSession} from '@shopify/hydrogen';
+import type { HydrogenSession } from '@shopify/hydrogen';
 import {
   createCookieSessionStorage,
   type SessionStorage,
@@ -13,6 +13,7 @@ import {
 export class AppSession implements HydrogenSession {
   #sessionStorage;
   #session;
+  public isPending = false;
 
   constructor(sessionStorage: SessionStorage, session: Session) {
     this.#sessionStorage = sessionStorage;
@@ -46,22 +47,27 @@ export class AppSession implements HydrogenSession {
   }
 
   get flash() {
+    this.isPending = true;
     return this.#session.flash;
   }
 
   get unset() {
+    this.isPending = true;
     return this.#session.unset;
   }
 
   get set() {
+    this.isPending = true;
     return this.#session.set;
   }
 
   destroy() {
+    this.isPending = true;
     return this.#sessionStorage.destroySession(this.#session);
   }
 
   commit() {
+    this.isPending = false;
     return this.#sessionStorage.commitSession(this.#session);
   }
 }

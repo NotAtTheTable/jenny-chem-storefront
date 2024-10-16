@@ -1,27 +1,27 @@
-import {Link, useLoaderData, type MetaFunction} from '@remix-run/react';
+import { Link, useLoaderData, type MetaFunction } from '@remix-run/react';
 import {
   Money,
   Pagination,
   getPaginationVariables,
   flattenConnection,
 } from '@shopify/hydrogen';
-import {json, redirect, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {CUSTOMER_ORDERS_QUERY} from '~/graphql/customer-account/CustomerOrdersQuery';
+import { json, redirect, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
+import { CUSTOMER_ORDERS_QUERY } from '~/graphql/customer-account/CustomerOrdersQuery';
 import type {
   CustomerOrdersFragment,
   OrderItemFragment,
 } from 'customer-accountapi.generated';
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Orders'}];
+  return [{ title: 'Orders' }];
 };
 
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({ request, context }: LoaderFunctionArgs) {
   const paginationVariables = getPaginationVariables(request, {
     pageBy: 20,
   });
 
-  const {data, errors} = await context.customerAccount.query(
+  const { data, errors } = await context.customerAccount.query(
     CUSTOMER_ORDERS_QUERY,
     {
       variables: {
@@ -35,18 +35,15 @@ export async function loader({request, context}: LoaderFunctionArgs) {
   }
 
   return json(
-    {customer: data.customer},
+    { customer: data.customer },
     {
-      headers: {
-        'Set-Cookie': await context.session.commit(),
-      },
     },
   );
 }
 
 export default function Orders() {
-  const {customer} = useLoaderData<{customer: CustomerOrdersFragment}>();
-  const {orders} = customer;
+  const { customer } = useLoaderData<{ customer: CustomerOrdersFragment }>();
+  const { orders } = customer;
   return (
     <div className="orders">
       {orders.nodes.length ? <OrdersTable orders={orders} /> : <EmptyOrders />}
@@ -54,12 +51,12 @@ export default function Orders() {
   );
 }
 
-function OrdersTable({orders}: Pick<CustomerOrdersFragment, 'orders'>) {
+function OrdersTable({ orders }: Pick<CustomerOrdersFragment, 'orders'>) {
   return (
     <div className="acccount-orders">
       {orders?.nodes.length ? (
         <Pagination connection={orders}>
-          {({nodes, isLoading, PreviousLink, NextLink}) => {
+          {({ nodes, isLoading, PreviousLink, NextLink }) => {
             return (
               <>
                 <PreviousLink>
@@ -94,7 +91,7 @@ function EmptyOrders() {
   );
 }
 
-function OrderItem({order}: {order: OrderItemFragment}) {
+function OrderItem({ order }: { order: OrderItemFragment }) {
   const fulfillmentStatus = flattenConnection(order.fulfillments)[0]?.status;
   return (
     <>

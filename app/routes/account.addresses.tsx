@@ -1,4 +1,4 @@
-import type {CustomerAddressInput} from '@shopify/hydrogen/customer-account-api-types';
+import type { CustomerAddressInput } from '@shopify/hydrogen/customer-account-api-types';
 import type {
   AddressFragment,
   CustomerFragment,
@@ -32,24 +32,19 @@ export type ActionResponse = {
 };
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Addresses'}];
+  return [{ title: 'Addresses' }];
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
-  await context.customerAccount.handleAuthStatus();
+export async function loader({ context }: LoaderFunctionArgs) {
+  context.customerAccount.handleAuthStatus();
 
   return json(
-    {},
-    {
-      headers: {
-        'Set-Cookie': await context.session.commit(),
-      },
-    },
+    {}
   );
 }
 
-export async function action({request, context}: ActionFunctionArgs) {
-  const {customerAccount} = context;
+export async function action({ request, context }: ActionFunctionArgs) {
+  const { customerAccount } = context;
 
   try {
     const form = await request.formData();
@@ -65,12 +60,9 @@ export async function action({request, context}: ActionFunctionArgs) {
     const isLoggedIn = await customerAccount.isLoggedIn();
     if (!isLoggedIn) {
       return json(
-        {error: {[addressId]: 'Unauthorized'}},
+        { error: { [addressId]: 'Unauthorized' } },
         {
           status: 401,
-          headers: {
-            'Set-Cookie': await context.session.commit(),
-          },
         },
       );
     }
@@ -103,10 +95,10 @@ export async function action({request, context}: ActionFunctionArgs) {
       case 'POST': {
         // handle new address creation
         try {
-          const {data, errors} = await customerAccount.mutate(
+          const { data, errors } = await customerAccount.mutate(
             CREATE_ADDRESS_MUTATION,
             {
-              variables: {address, defaultAddress},
+              variables: { address, defaultAddress },
             },
           );
 
@@ -127,32 +119,18 @@ export async function action({request, context}: ActionFunctionArgs) {
               error: null,
               createdAddress: data?.customerAddressCreate?.customerAddress,
               defaultAddress,
-            },
-            {
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
-            },
+            }
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
             return json(
-              {error: {[addressId]: error.message}},
-              {
-                status: 400,
-                headers: {
-                  'Set-Cookie': await context.session.commit(),
-                },
-              },
+              { error: { [addressId]: error.message } }
             );
           }
           return json(
-            {error: {[addressId]: error}},
+            { error: { [addressId]: error } },
             {
               status: 400,
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
             },
           );
         }
@@ -161,7 +139,7 @@ export async function action({request, context}: ActionFunctionArgs) {
       case 'PUT': {
         // handle address updates
         try {
-          const {data, errors} = await customerAccount.mutate(
+          const { data, errors } = await customerAccount.mutate(
             UPDATE_ADDRESS_MUTATION,
             {
               variables: {
@@ -190,31 +168,22 @@ export async function action({request, context}: ActionFunctionArgs) {
               updatedAddress: address,
               defaultAddress,
             },
-            {
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
-            },
+
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
             return json(
-              {error: {[addressId]: error.message}},
+              { error: { [addressId]: error.message } },
               {
                 status: 400,
-                headers: {
-                  'Set-Cookie': await context.session.commit(),
-                },
+
               },
             );
           }
           return json(
-            {error: {[addressId]: error}},
+            { error: { [addressId]: error } },
             {
-              status: 400,
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
+              status: 400
             },
           );
         }
@@ -223,10 +192,10 @@ export async function action({request, context}: ActionFunctionArgs) {
       case 'DELETE': {
         // handles address deletion
         try {
-          const {data, errors} = await customerAccount.mutate(
+          const { data, errors } = await customerAccount.mutate(
             DELETE_ADDRESS_MUTATION,
             {
-              variables: {addressId: decodeURIComponent(addressId)},
+              variables: { addressId: decodeURIComponent(addressId) },
             },
           );
 
@@ -243,32 +212,23 @@ export async function action({request, context}: ActionFunctionArgs) {
           }
 
           return json(
-            {error: null, deletedAddress: addressId},
-            {
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
-            },
+            { error: null, deletedAddress: addressId },
+
           );
         } catch (error: unknown) {
           if (error instanceof Error) {
             return json(
-              {error: {[addressId]: error.message}},
+              { error: { [addressId]: error.message } },
               {
                 status: 400,
-                headers: {
-                  'Set-Cookie': await context.session.commit(),
-                },
+
               },
             );
           }
           return json(
-            {error: {[addressId]: error}},
+            { error: { [addressId]: error } },
             {
-              status: 400,
-              headers: {
-                'Set-Cookie': await context.session.commit(),
-              },
+              status: 400
             },
           );
         }
@@ -276,12 +236,9 @@ export async function action({request, context}: ActionFunctionArgs) {
 
       default: {
         return json(
-          {error: {[addressId]: 'Method not allowed'}},
+          { error: { [addressId]: 'Method not allowed' } },
           {
-            status: 405,
-            headers: {
-              'Set-Cookie': await context.session.commit(),
-            },
+            status: 405
           },
         );
       }
@@ -289,30 +246,24 @@ export async function action({request, context}: ActionFunctionArgs) {
   } catch (error: unknown) {
     if (error instanceof Error) {
       return json(
-        {error: error.message},
+        { error: error.message },
         {
-          status: 400,
-          headers: {
-            'Set-Cookie': await context.session.commit(),
-          },
+          status: 400
         },
       );
     }
     return json(
-      {error},
+      { error },
       {
-        status: 400,
-        headers: {
-          'Set-Cookie': await context.session.commit(),
-        },
+        status: 400
       },
     );
   }
 }
 
 export default function Addresses() {
-  const {customer} = useOutletContext<{customer: CustomerFragment}>();
-  const {defaultAddress, addresses} = customer;
+  const { customer } = useOutletContext<{ customer: CustomerFragment }>();
+  const { defaultAddress, addresses } = customer;
 
   return (
     <div className="account-addresses">
@@ -360,7 +311,7 @@ function NewAddressForm() {
       address={newAddress}
       defaultAddress={null}
     >
-      {({stateForMethod}) => (
+      {({ stateForMethod }) => (
         <div>
           <button
             disabled={stateForMethod('POST') !== 'idle'}
@@ -389,7 +340,7 @@ function ExistingAddresses({
           address={address}
           defaultAddress={defaultAddress}
         >
-          {({stateForMethod}) => (
+          {({ stateForMethod }) => (
             <div>
               <button
                 disabled={stateForMethod('PUT') !== 'idle'}
@@ -428,7 +379,7 @@ export function AddressForm({
     ) => ReturnType<typeof useNavigation>['state'];
   }) => React.ReactNode;
 }) {
-  const {state, formMethod} = useNavigation();
+  const { state, formMethod } = useNavigation();
   const action = useActionData<ActionResponse>();
   const error = action?.error?.[addressId];
   const isDefaultAddress = defaultAddress?.id === addressId;

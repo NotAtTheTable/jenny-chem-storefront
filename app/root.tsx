@@ -105,9 +105,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
       publicStoreDomain,
     },
     {
-      headers: {
-        'Set-Cookie': await context.session.commit(),
-      },
     },
   );
 }
@@ -120,9 +117,6 @@ export async function action({
   context.session.set("isHeaderBannerClosed", formData.get("isHeaderBannerClosed"));
 
   return json(formData.get("isHeaderBannerClosed"), {
-    headers: {
-      'Set-Cookie': await context.session.commit()
-    }
   })
 }
 

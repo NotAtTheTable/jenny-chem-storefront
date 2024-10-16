@@ -1,6 +1,6 @@
-import type {CustomerFragment} from 'customer-accountapi.generated';
-import type {CustomerUpdateInput} from '@shopify/hydrogen/customer-account-api-types';
-import {CUSTOMER_UPDATE_MUTATION} from '~/graphql/customer-account/CustomerUpdateMutation';
+import type { CustomerFragment } from 'customer-accountapi.generated';
+import type { CustomerUpdateInput } from '@shopify/hydrogen/customer-account-api-types';
+import { CUSTOMER_UPDATE_MUTATION } from '~/graphql/customer-account/CustomerUpdateMutation';
 import {
   json,
   redirect,
@@ -21,27 +21,24 @@ export type ActionResponse = {
 };
 
 export const meta: MetaFunction = () => {
-  return [{title: 'Profile'}];
+  return [{ title: 'Profile' }];
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({ context }: LoaderFunctionArgs) {
   await context.customerAccount.handleAuthStatus();
 
   return json(
     {},
     {
-      headers: {
-        'Set-Cookie': await context.session.commit(),
-      },
     },
   );
 }
 
-export async function action({request, context}: ActionFunctionArgs) {
-  const {customerAccount} = context;
+export async function action({ request, context }: ActionFunctionArgs) {
+  const { customerAccount } = context;
 
   if (request.method !== 'PUT') {
-    return json({error: 'Method not allowed'}, {status: 405});
+    return json({ error: 'Method not allowed' }, { status: 405 });
   }
 
   const form = await request.formData();
@@ -59,7 +56,7 @@ export async function action({request, context}: ActionFunctionArgs) {
     }
 
     // update customer and possibly password
-    const {data, errors} = await customerAccount.mutate(
+    const { data, errors } = await customerAccount.mutate(
       CUSTOMER_UPDATE_MUTATION,
       {
         variables: {
@@ -82,27 +79,21 @@ export async function action({request, context}: ActionFunctionArgs) {
         customer: data?.customerUpdate?.customer,
       },
       {
-        headers: {
-          'Set-Cookie': await context.session.commit(),
-        },
       },
     );
   } catch (error: any) {
     return json(
-      {error: error.message, customer: null},
+      { error: error.message, customer: null },
       {
         status: 400,
-        headers: {
-          'Set-Cookie': await context.session.commit(),
-        },
       },
     );
   }
 }
 
 export default function AccountProfile() {
-  const account = useOutletContext<{customer: CustomerFragment}>();
-  const {state} = useNavigation();
+  const account = useOutletContext<{ customer: CustomerFragment }>();
+  const { state } = useNavigation();
   const action = useActionData<ActionResponse>();
   const customer = action?.customer ?? account?.customer;
 
