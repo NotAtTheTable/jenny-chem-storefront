@@ -89,7 +89,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ menu, primaryDomainUrl, collect
                         <div className='flex flex-row p-5 bg-jc-dark-blue' style={{ backgroundImage: `url(${collectionGroupsMap[navItem.id].navbarImage?.image?.url})`, backgroundSize: 'cover' }}>
                             <div className='w-1/2'>
                                 <Heading dashClassName='w-16' className='!text-white text-6xl line-clamp-2' level={3}>
-                                    {collectionGroupsMap[navItem.id].featuredProductTitle || collectionGroupsMap[navItem.id].featuredProduct.title}
+                                    {collectionGroupsMap[navItem.id].featuredProductTitle || collectionGroupsMap[navItem.id].featuredProduct?.title || collectionGroupsMap[navItem.id].title}
                                 </Heading>
                                 <ArrowButton onClick={() => navigateToProductPage(collectionGroupsMap[navItem.id].featuredProduct.handle)} className='w-max mx-auto' label='VIEW PRODUCT' />
                             </div>

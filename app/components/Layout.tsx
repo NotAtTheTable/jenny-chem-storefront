@@ -33,8 +33,7 @@ export function Layout({
   isLoggedIn,
   isHeaderBannerClosed
 }: LayoutProps) {
-  console.log('Footer:', footer);
-  console.log('Site Map:', siteMap);
+
   return (
     <>
       <CartAside cart={cart} />
