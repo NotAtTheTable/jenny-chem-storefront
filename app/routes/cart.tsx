@@ -1,21 +1,21 @@
-import {Await, type MetaFunction} from '@remix-run/react';
-import {Suspense} from 'react';
-import type {CartQueryDataReturn} from '@shopify/hydrogen';
-import {CartForm} from '@shopify/hydrogen';
-import {json, type ActionFunctionArgs} from '@shopify/remix-oxygen';
-import {CartMain} from '~/components/Cart';
-import {useRootLoaderData} from '~/lib/root-data';
+import { Await, type MetaFunction } from '@remix-run/react';
+import { Suspense } from 'react';
+import type { CartQueryDataReturn } from '@shopify/hydrogen';
+import { CartForm } from '@shopify/hydrogen';
+import { json, type ActionFunctionArgs } from '@shopify/remix-oxygen';
+import { CartMain } from '~/components/Cart';
+import { useRootLoaderData } from '~/lib/root-data';
 
 export const meta: MetaFunction = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{ title: `Hydrogen | Cart` }];
 };
 
-export async function action({request, context}: ActionFunctionArgs) {
-  const {cart} = context;
+export async function action({ request, context }: ActionFunctionArgs) {
+  const { cart } = context;
 
   const formData = await request.formData();
 
-  const {action, inputs} = CartForm.getFormInput(formData);
+  const { action, inputs } = CartForm.getFormInput(formData);
 
   if (!action) {
     throw new Error('No action provided');
@@ -60,15 +60,13 @@ export async function action({request, context}: ActionFunctionArgs) {
 
   const cartId = result.cart.id;
   const headers = cart.setCartId(result.cart.id);
-  const {cart: cartResult, errors} = result;
+  const { cart: cartResult, errors } = result;
 
   const redirectTo = formData.get('redirectTo') ?? null;
   if (typeof redirectTo === 'string') {
     status = 303;
     headers.set('Location', redirectTo);
   }
-
-  headers.append('Set-Cookie', await context.session.commit());
 
   return json(
     {
@@ -78,7 +76,7 @@ export async function action({request, context}: ActionFunctionArgs) {
         cartId,
       },
     },
-    {status, headers},
+    { status, headers },
   );
 }
 

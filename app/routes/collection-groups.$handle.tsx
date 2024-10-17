@@ -102,7 +102,7 @@ const CollectionSummary = (props: CollectionPreviewFragment) => {
         <div className='desktop-component flex flex-row justify-center'>
             <div className={`p-5 relative bg-cover bg-center bg-jc-dark-blue w-[457px] mr-[6px] flex flex-col justify-end`}
                 style={{ backgroundImage: `url(${props.image?.url})` }}>
-                <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " />
+                {/* <div style={{ background: 'linear-gradient(to top, rgba(11,21,57,0.75), rgba(11,21,57,0) )' }} className="absolute w-full inset-0 " /> */}
                 <div className='relative pt-14 z-10 text-white'>
                     <h1 className='w-[50%] font-display text-6xl tracking-large'>{props.title}</h1>
                     <div className='w-16'><DashDivider className='-mt-3 h-[3px]' /></div>
