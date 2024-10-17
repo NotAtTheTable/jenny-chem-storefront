@@ -355,6 +355,7 @@ export type RecommendedProductFragment = Pick<
 export type RecommendedProductsQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+  buyer?: StorefrontAPI.InputMaybe<StorefrontAPI.BuyerInput>;
 }>;
 
 export type RecommendedProductsQuery = {
@@ -621,6 +622,7 @@ export type CollectionPreviewFragment = Pick<
 export type CollectionGroupByHandleQueryVariables = StorefrontAPI.Exact<{
   collectionGroupHandle: StorefrontAPI.Scalars['String']['input'];
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
+  buyer?: StorefrontAPI.InputMaybe<StorefrontAPI.BuyerInput>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
   first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
@@ -709,6 +711,7 @@ export type CollectionQueryVariables = StorefrontAPI.Exact<{
   handle: StorefrontAPI.Scalars['String']['input'];
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+  buyer?: StorefrontAPI.InputMaybe<StorefrontAPI.BuyerInput>;
   first?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   last?: StorefrontAPI.InputMaybe<StorefrontAPI.Scalars['Int']['input']>;
   startCursor?: StorefrontAPI.InputMaybe<
@@ -760,6 +763,7 @@ export type CollectionQuery = {
 export type CollectionGroupLightQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+  buyer?: StorefrontAPI.InputMaybe<StorefrontAPI.BuyerInput>;
 }>;
 
 export type CollectionGroupLightQuery = {
@@ -1295,6 +1299,7 @@ export type ProductVariantsFragment = {
 export type ProductVariantsQueryVariables = StorefrontAPI.Exact<{
   country?: StorefrontAPI.InputMaybe<StorefrontAPI.CountryCode>;
   language?: StorefrontAPI.InputMaybe<StorefrontAPI.LanguageCode>;
+  buyer?: StorefrontAPI.InputMaybe<StorefrontAPI.BuyerInput>;
   handle: StorefrontAPI.Scalars['String']['input'];
 }>;
 
@@ -1454,7 +1459,7 @@ interface GeneratedQueryTypes {
     return: SitemapQuery;
     variables: SitemapQueryVariables;
   };
-  '#graphql\n                fragment RecommendedProduct on Product {\n                  id\n    title\n                handle\n                priceRange {\n                  minVariantPrice {\n                    amount\n                    currencyCode\n                  }\n                }\n                variants(first: 1) {\n                  nodes {\n                    sku\n                  }\n                }\n                images(first: 1) {\n                  nodes {\n                  id\n        url\n                altText\n                width\n                height\n      }\n    }\n  }\n                query RecommendedProducts ($country: CountryCode, $language: LanguageCode)\n                @inContext(country: $country, language: $language) {\n                  products(first: 8, query: "tag:Best Sellers") {\n                  nodes {\n                  ...RecommendedProduct\n                }\n    }\n  }\n                ': {
+  '#graphql\n                fragment RecommendedProduct on Product {\n                  id\n    title\n                handle\n                priceRange {\n                  minVariantPrice {\n                    amount\n                    currencyCode\n                  }\n                }\n                variants(first: 1) {\n                  nodes {\n                    sku\n                  }\n                }\n                images(first: 1) {\n                  nodes {\n                  id\n        url\n                altText\n                width\n                height\n      }\n    }\n  }\n                query RecommendedProducts ($country: CountryCode, $language: LanguageCode, $buyer: BuyerInput)\n                @inContext(country: $country, language: $language, buyer: $buyer) {\n                  products(first: 8, query: "tag:Best Sellers") {\n                  nodes {\n                  ...RecommendedProduct\n                }\n    }\n  }\n                ': {
     return: RecommendedProductsQuery;
     variables: RecommendedProductsQueryVariables;
   };
@@ -1478,15 +1483,15 @@ interface GeneratedQueryTypes {
     return: BlogsQuery;
     variables: BlogsQueryVariables;
   };
-  '#graphql\n\n            query CollectionGroupByHandle(\n            $collectionGroupHandle: String!\n            $country: CountryCode\n            $language: LanguageCode\n            $first: Int\n            $last: Int\n            $startCursor: String\n            $endCursor: String\n            ) @inContext(language: $language, country: $country) {\n\n                metaobject(handle: {handle: $collectionGroupHandle, type: "collection_group"}) {\n                id\n        fields {\n                value\n            key\n            reference {\n                ...on MediaImage {\n                image {\n                id\n                        url\n            altText\n                    }\n                }\n            }\n            references(\n            first: $first\n            last: $last\n            before: $startCursor\n            after: $endCursor\n            ) {\n                pageInfo {\n                endCursor\n                    hasNextPage\n            hasPreviousPage\n            startCursor\n                }\n            nodes {\n                ...on Collection {\n                ...CollectionPreview\n            }   \n                }\n            }\n        }\n    }\n    \n}\n            #graphql\n            fragment CollectionPreview on Collection {\n                id\n        handle\n            title\n            image {\n                url\n          altText\n            id\n        }\n            description(truncateAt: 150)\n            products(first: 3) {\n                nodes {\n                ...ProductPreview\n            }\n        }\n      }\n            #graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n            \n            ': {
+  '#graphql\n\n            query CollectionGroupByHandle(\n            $collectionGroupHandle: String!\n            $country: CountryCode\n            $buyer: BuyerInput\n            $language: LanguageCode\n            $first: Int\n            $last: Int\n            $startCursor: String\n            $endCursor: String\n            ) @inContext(language: $language, country: $country, buyer: $buyer) {\n\n                metaobject(handle: {handle: $collectionGroupHandle, type: "collection_group"}) {\n                id\n        fields {\n                value\n            key\n            reference {\n                ...on MediaImage {\n                image {\n                id\n                        url\n            altText\n                    }\n                }\n            }\n            references(\n            first: $first\n            last: $last\n            before: $startCursor\n            after: $endCursor\n            ) {\n                pageInfo {\n                endCursor\n                    hasNextPage\n            hasPreviousPage\n            startCursor\n                }\n            nodes {\n                ...on Collection {\n                ...CollectionPreview\n            }   \n                }\n            }\n        }\n    }\n    \n}\n            #graphql\n            fragment CollectionPreview on Collection {\n                id\n        handle\n            title\n            image {\n                url\n          altText\n            id\n        }\n            description(truncateAt: 150)\n            products(first: 3) {\n                nodes {\n                ...ProductPreview\n            }\n        }\n      }\n            #graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n            \n            ': {
     return: CollectionGroupByHandleQuery;
     variables: CollectionGroupByHandleQueryVariables;
   };
-  '#graphql\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description(truncateAt: 150)\n      image {\n          url\n          altText\n          id\n        }\n      products(\n        first: $first,\n        last: $last,\n        before: $startCursor,\n        after: $endCursor\n      ) {\n        nodes {\n          ...ProductCardPreview\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n  #graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n': {
+  '#graphql\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $buyer: BuyerInput\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language, buyer: $buyer) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description(truncateAt: 150)\n      image {\n          url\n          altText\n          id\n        }\n      products(\n        first: $first,\n        last: $last,\n        before: $startCursor,\n        after: $endCursor\n      ) {\n        nodes {\n          ...ProductCardPreview\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n  #graphql\n    fragment MoneyProductItem on MoneyV2 {\n      amount\n      currencyCode\n    }\n    fragment ProductCardPreview on Product {\n        images(first: 1) {\n            nodes {\n                id\n                url\n                altText\n                width\n                height\n            }\n        }\n        id\n        handle\n        title\n        seo {\n          description\n          title\n        }\n        priceRange {\n          minVariantPrice {\n            ...MoneyProductItem\n          }\n        }\n    }\n\n': {
     return: CollectionQuery;
     variables: CollectionQueryVariables;
   };
-  '#graphql\n\n  query CollectionGroupLight(\n    $country: CountryCode\n    $language: LanguageCode\n  ) @inContext(language: $language, country: $country) {\n    metaobjects(type: "collection_group", first:250) {\n      nodes {\n        id\n        handle\n        updatedAt\n        type\n        fields {\n          value\n          key\n        }\n      }\n    }\n}\n': {
+  '#graphql\n\n  query CollectionGroupLight(\n    $country: CountryCode\n    $language: LanguageCode\n    $buyer: BuyerInput\n  ) @inContext(language: $language, country: $country, buyer: $buyer) {\n    metaobjects(type: "collection_group", first:250) {\n      nodes {\n        id\n        handle\n        updatedAt\n        type\n        fields {\n          value\n          key\n        }\n      }\n    }\n}\n': {
     return: CollectionGroupLightQuery;
     variables: CollectionGroupLightQueryVariables;
   };
@@ -1518,7 +1523,7 @@ interface GeneratedQueryTypes {
     return: ProductRecommendationsQuery;
     variables: ProductRecommendationsQueryVariables;
   };
-  '#graphql\n  #graphql\n  fragment ProductVariants on Product {\n    variants(first: 250) {\n      nodes {\n        ...ProductVariant\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n  query ProductVariants(\n    $country: CountryCode\n    $language: LanguageCode\n    $handle: String!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) {\n      ...ProductVariants\n    }\n  }\n': {
+  '#graphql\n  #graphql\n  fragment ProductVariants on Product {\n    variants(first: 250) {\n      nodes {\n        ...ProductVariant\n      }\n    }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice {\n      amount\n      currencyCode\n    }\n    id\n    image {\n      __typename\n      id\n      url\n      altText\n      width\n      height\n    }\n    price {\n      amount\n      currencyCode\n    }\n    product {\n      title\n      handle\n    }\n    selectedOptions {\n      name\n      value\n    }\n    sku\n    title\n    unitPrice {\n      amount\n      currencyCode\n    }\n  }\n\n\n  query ProductVariants(\n    $country: CountryCode\n    $language: LanguageCode\n    $buyer: BuyerInput\n    $handle: String!\n  ) @inContext(country: $country, language: $language, buyer: $buyer) {\n    product(handle: $handle) {\n      ...ProductVariants\n    }\n  }\n': {
     return: ProductVariantsQuery;
     variables: ProductVariantsQueryVariables;
   };

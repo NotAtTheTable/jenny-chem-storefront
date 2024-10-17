@@ -51,16 +51,16 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     throw new Error('Expected product handle to be defined');
   }
 
+  const buyer = await context.customerAccount.UNSTABLE_getBuyer();
+
   // In order to show which variants are available in the UI, we need to query
   // all of them. But there might be a *lot*, so instead separate the variants
   // into it's own separate query that is deferred. So there's a brief moment
   // where variant options might show as available when they're not, but after
   // this deffered query resolves, the UI will update.
   const variantsPromise = storefront.query(VARIANTS_QUERY, {
-    variables: { handle },
+    variables: { handle, buyer: buyer as StorefrontAPI.BuyerInput },
   });
-
-  const buyer = await context.customerAccount.UNSTABLE_getBuyer();
 
   // await the query for the critical product data
   const { product }: { product: ProductFragment } = await storefront.query(PRODUCT_QUERY, {
@@ -425,8 +425,9 @@ const VARIANTS_QUERY = `#graphql
   query ProductVariants(
     $country: CountryCode
     $language: LanguageCode
+    $buyer: BuyerInput
     $handle: String!
-  ) @inContext(country: $country, language: $language) {
+  ) @inContext(country: $country, language: $language, buyer: $buyer) {
     product(handle: $handle) {
       ...ProductVariants
     }

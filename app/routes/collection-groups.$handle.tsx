@@ -10,7 +10,7 @@ import ProductCard from '~/components/card/ProductCard';
 
 export async function loader({ request, params, context }: LoaderFunctionArgs) {
     const { handle } = params;
-    const { storefront } = context;
+    const { storefront, customerAccount } = context;
     const paginationVariables = getPaginationVariables(request, {
         pageBy: 4,
     });
@@ -19,8 +19,10 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
         return redirect('/collections');
     }
 
+    const buyer = await customerAccount.UNSTABLE_getBuyer();
+
     const collectionGroup: CollectionGroupByHandleQuery = await storefront.query(COLLECTION_GROUP_QUERY, {
-        variables: { collectionGroupHandle: handle, ...paginationVariables },
+        variables: { collectionGroupHandle: handle, ...paginationVariables, buyer: buyer as StorefrontAPI.BuyerInput },
     });
 
     if (!collectionGroup.metaobject) {
@@ -195,12 +197,13 @@ const COLLECTION_GROUP_QUERY = `#graphql
             query CollectionGroupByHandle(
             $collectionGroupHandle: String!
             $country: CountryCode
+            $buyer: BuyerInput
             $language: LanguageCode
             $first: Int
             $last: Int
             $startCursor: String
             $endCursor: String
-            ) @inContext(language: $language, country: $country) {
+            ) @inContext(language: $language, country: $country, buyer: $buyer) {
 
                 metaobject(handle: {handle: $collectionGroupHandle, type: "collection_group"}) {
                 id

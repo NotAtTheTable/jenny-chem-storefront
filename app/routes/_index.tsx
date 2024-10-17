@@ -32,8 +32,13 @@ export const meta: MetaFunction = () => {
 };
 
 export async function loader({ context }: LoaderFunctionArgs) {
-  const { storefront } = context;
-  const recommendedProducts = await storefront.query(RECOMMENDED_PRODUCTS_QUERY);
+  const { storefront, customerAccount } = context;
+
+  const buyer = await customerAccount.UNSTABLE_getBuyer();
+
+  const recommendedProducts = await storefront.query(RECOMMENDED_PRODUCTS_QUERY, {
+    variables: { buyer: buyer as StorefrontAPI.BuyerInput }
+  });
   const recommendedArticles = await storefront.query(RECOMMENDED_BLOG_ARTICLES_QUERY);
 
   return json({ recommendedProducts, recommendedArticles });
@@ -382,8 +387,8 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       }
     }
   }
-                query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-                @inContext(country: $country, language: $language) {
+                query RecommendedProducts ($country: CountryCode, $language: LanguageCode, $buyer: BuyerInput)
+                @inContext(country: $country, language: $language, buyer: $buyer) {
                   products(first: 8, query: "tag:Best Sellers") {
                   nodes {
                   ...RecommendedProduct

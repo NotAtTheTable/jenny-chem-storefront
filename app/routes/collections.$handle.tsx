@@ -26,8 +26,10 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     return redirect('/collections');
   }
 
+  const buyer = await context.customerAccount.UNSTABLE_getBuyer();
+
   const { collection } = await storefront.query(COLLECTION_QUERY, {
-    variables: { handle, ...paginationVariables },
+    variables: { handle, ...paginationVariables, buyer: buyer as StorefrontAPI.BuyerInput },
   });
 
   if (!collection) {
@@ -36,7 +38,9 @@ export async function loader({ request, params, context }: LoaderFunctionArgs) {
     });
   }
 
-  const collectionGroups: CollectionGroupLightQuery = await storefront.query(COLLECTION_GROUP_LIGHT_QUERY)
+  const collectionGroups: CollectionGroupLightQuery = await storefront.query(COLLECTION_GROUP_LIGHT_QUERY, {
+    variables: { buyer: buyer as StorefrontAPI.BuyerInput }
+  })
   // Is this collection part of any collectionGroups for breadcrumb 
   const metaObject = collectionGroups.metaobjects.nodes.find((node) => {
     return node.fields.some((field) => {
@@ -179,11 +183,12 @@ const COLLECTION_QUERY = `#graphql
     $handle: String!
     $country: CountryCode
     $language: LanguageCode
+    $buyer: BuyerInput
     $first: Int
     $last: Int
     $startCursor: String
     $endCursor: String
-  ) @inContext(country: $country, language: $language) {
+  ) @inContext(country: $country, language: $language, buyer: $buyer) {
     collection(handle: $handle) {
       id
       handle
@@ -220,7 +225,8 @@ const COLLECTION_GROUP_LIGHT_QUERY = `#graphql
   query CollectionGroupLight(
     $country: CountryCode
     $language: LanguageCode
-  ) @inContext(language: $language, country: $country) {
+    $buyer: BuyerInput
+  ) @inContext(language: $language, country: $country, buyer: $buyer) {
     metaobjects(type: "collection_group", first:250) {
       nodes {
         id
