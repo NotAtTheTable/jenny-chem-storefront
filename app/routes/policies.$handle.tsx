@@ -50,7 +50,8 @@ export default function Policy() {
       <Heading level={1} className={"text-8xl text-center"}>{policy.title}</Heading>
       <div className='text-jc-dark-blue'><Link className='!no-underline' to={'/'}>Home</Link> &gt; {policy.title}</div>
       <div className='w-full h-[1px] bg-jc-light-blue opacity-50 my-4' />
-      <div className='article my-4' dangerouslySetInnerHTML={{ __html: policy.body }} />
+      <div className='desktop-component article my-4' dangerouslySetInnerHTML={{ __html: policy.body }} />
+      <div className='mobile-component mobile-article my-4' dangerouslySetInnerHTML={{ __html: policy.body }} />
     </div>
   );
 }
