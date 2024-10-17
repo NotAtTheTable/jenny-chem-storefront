@@ -34,7 +34,7 @@ export function CartMain({ layout, cart }: CartMainProps) {
   return (
     <div>
       <CartDeliveryBanner />
-      <div className={`h-full ${(optimisticCart?.totalQuantity || 0) > 0 && "max-h-[calc(100vh-var(--cart-aside-summary-height))]"} overflow-y-auto`}>
+      <div className={`h-full ${(optimisticCart?.totalQuantity || 0) > 0 && "max-h-[calc(100dvh-var(--cart-aside-summary-height))]"} overflow-y-auto`}>
         <CartEmpty hidden={linesCount} layout={layout} />
         <CartDetails cart={optimisticCart as OptimisticCart} layout={layout} />
       </div>
