@@ -3,6 +3,25 @@
 /* eslint-disable */
 import type * as CustomerAccountAPI from '@shopify/hydrogen/customer-account-api-types';
 
+export type StorefrontCustomerAccessTokenCreateMutationVariables =
+  CustomerAccountAPI.Exact<{[key: string]: never}>;
+
+export type StorefrontCustomerAccessTokenCreateMutation = {
+  storefrontCustomerAccessTokenCreate?: CustomerAccountAPI.Maybe<
+    Pick<
+      CustomerAccountAPI.StorefrontCustomerAccessTokenCreatePayload,
+      'customerAccessToken'
+    > & {
+      userErrors: Array<
+        Pick<
+          CustomerAccountAPI.UserErrorsStorefrontCustomerAccessTokenCreateUserErrors,
+          'field' | 'message'
+        >
+      >;
+    }
+  >;
+};
+
 export type CustomerAddressUpdateMutationVariables = CustomerAccountAPI.Exact<{
   address: CustomerAccountAPI.CustomerAddressInput;
   addressId: CustomerAccountAPI.Scalars['ID']['input'];
@@ -64,6 +83,30 @@ export type CustomerAddressCreateMutation = {
       >
     >;
   }>;
+};
+
+export type CustomerQueryVariables = CustomerAccountAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type CustomerQuery = {
+  customer: Pick<CustomerAccountAPI.Customer, 'id'> & {
+    companyContacts: {
+      edges: Array<{
+        node: {
+          company?: CustomerAccountAPI.Maybe<
+            Pick<CustomerAccountAPI.Company, 'id' | 'name'> & {
+              locations: {
+                edges: Array<{
+                  node: Pick<CustomerAccountAPI.CompanyLocation, 'id' | 'name'>;
+                }>;
+              };
+            }
+          >;
+        };
+      }>;
+    };
+  };
 };
 
 export type CustomerFragment = Pick<
@@ -470,6 +513,10 @@ export type CustomerUpdateMutation = {
 };
 
 interface GeneratedQueryTypes {
+  '#graphql\n    query customer {\n  customer {\n    id\n    companyContacts(first: 1) {\n      edges {\n        node {\n          company {\n            id\n            name\n            locations(first: 1) {\n              edges {\n                node {\n                  id\n                  name\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n': {
+    return: CustomerQuery;
+    variables: CustomerQueryVariables;
+  };
   '#graphql\n  query CustomerDetails {\n    customer {\n      ...Customer\n    }\n  }\n  #graphql\n  fragment Customer on Customer {\n    id\n    firstName\n    lastName\n    defaultAddress {\n      ...Address\n    }\n    addresses(first: 6) {\n      nodes {\n        ...Address\n      }\n    }\n  }\n  fragment Address on CustomerAddress {\n    id\n    formatted\n    firstName\n    lastName\n    company\n    address1\n    address2\n    territoryCode\n    zoneCode\n    city\n    zip\n    phoneNumber\n  }\n\n': {
     return: CustomerDetailsQuery;
     variables: CustomerDetailsQueryVariables;
@@ -485,6 +532,10 @@ interface GeneratedQueryTypes {
 }
 
 interface GeneratedMutationTypes {
+  '#graphql\n    mutation storefrontCustomerAccessTokenCreate {\n        storefrontCustomerAccessTokenCreate {\n          customerAccessToken\n          userErrors {\n            field\n            message\n          }\n        }\n      }\n': {
+    return: StorefrontCustomerAccessTokenCreateMutation;
+    variables: StorefrontCustomerAccessTokenCreateMutationVariables;
+  };
   '#graphql\n  mutation customerAddressUpdate(\n    $address: CustomerAddressInput!\n    $addressId: ID!\n    $defaultAddress: Boolean\n ) {\n    customerAddressUpdate(\n      address: $address\n      addressId: $addressId\n      defaultAddress: $defaultAddress\n    ) {\n      customerAddress {\n        id\n      }\n      userErrors {\n        code\n        field\n        message\n      }\n    }\n  }\n': {
     return: CustomerAddressUpdateMutation;
     variables: CustomerAddressUpdateMutationVariables;

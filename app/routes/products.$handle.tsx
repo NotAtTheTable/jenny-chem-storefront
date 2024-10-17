@@ -28,6 +28,8 @@ import { PRODUCT_PREVIEW_FRAGMENT } from './collections.$handle';
 import Heading from '~/components/foundational/Heading';
 import ProductRecommendations from '~/components/product/ProductRecommendations';
 
+import type * as StorefrontAPI from '@shopify/hydrogen/storefront-api-types';
+
 
 
 export async function loader({ params, request, context }: LoaderFunctionArgs) {
@@ -58,9 +60,11 @@ export async function loader({ params, request, context }: LoaderFunctionArgs) {
     variables: { handle },
   });
 
+  const buyer = await context.customerAccount.UNSTABLE_getBuyer();
+
   // await the query for the critical product data
   const { product }: { product: ProductFragment } = await storefront.query(PRODUCT_QUERY, {
-    variables: { handle, selectedOptions },
+    variables: { handle, selectedOptions, buyer: buyer as StorefrontAPI.BuyerInput },
   });
 
   if (!product?.id) {
@@ -384,9 +388,10 @@ const PRODUCT_QUERY = `#graphql
   query Product(
     $country: CountryCode
     $handle: String!
+    $buyer: BuyerInput
     $language: LanguageCode
     $selectedOptions: [SelectedOptionInput!]!
-  ) @inContext(country: $country, language: $language) {
+  ) @inContext(country: $country, language: $language, buyer: $buyer) {
     product(handle: $handle) {
       ...Product
     }
