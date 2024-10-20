@@ -1,21 +1,15 @@
-import { CartForm, Image, Money, OptimisticCart, OptimisticCartLine, OptimisticCartLineInput, OptimisticInput, useOptimisticCart, useOptimisticData } from '@shopify/hydrogen';
-import type { CartLineUpdateInput } from '@shopify/hydrogen/storefront-api-types';
+import { CartForm, Image, Money, OptimisticCart, OptimisticCartLine, useOptimisticCart } from '@shopify/hydrogen';
 import { Link } from '@remix-run/react';
 import type { CartApiQueryFragment } from 'storefrontapi.generated';
 import { useVariantUrl } from '~/lib/variants';
-import BlueInfoIcon from '~/assets/foundational/blue_info_icon.svg'
 import { Plus } from 'lucide-react';
 import NumericInput from './foundational/NumericInput';
 import { useEffect, useState } from 'react';
-import { ArrowButton, Button, MobileArrowButton } from './foundational/ArrowButton';
+import { ArrowButton, Button } from './foundational/ArrowButton';
 import BlueSecureIcon from "~/assets/foundational/blue_secure_icon.svg"
 import LargeDroplet from "~/assets/foundational/large_droplet.svg"
 
 type CartLine = CartApiQueryFragment['lines']['nodes'][0];
-
-type OptimisticData = {
-  action: string;
-};
 
 type CartMainProps = {
   cart: CartApiQueryFragment | OptimisticCart | null;
