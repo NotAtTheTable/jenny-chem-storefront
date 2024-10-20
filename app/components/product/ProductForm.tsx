@@ -142,7 +142,7 @@ export function ProductForm({
                                 />
                                 <ShopPayButton
                                     variantIdsAndQuantities={[{ id: selectedVariant.id, quantity }]}
-                                    storeDomain={publicStoreDomain}
+                                    storeDomain={`https://${publicStoreDomain}`}
                                     width="100%"
                                     className="rounded-lg overflow-hidden mt-2 shadow"
                                 />
