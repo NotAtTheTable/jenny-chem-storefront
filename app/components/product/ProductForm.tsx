@@ -1,4 +1,4 @@
-import { VariantSelector } from "@shopify/hydrogen";
+import { ShopPayButton, VariantSelector } from "@shopify/hydrogen";
 import { useState } from "react";
 import { ProductFragment, ProductVariantFragment } from "storefrontapi.generated";
 import { ProductOptionButtons } from "./ProductOptionButtons";
@@ -9,6 +9,7 @@ import { AddToCartButton } from "./ProductAddToCartButton";
 import "~/styles/app.css"
 import { ProductOptionSelect } from "./ProductOptionSelect";
 import NumericInput from "../foundational/NumericInput";
+import { useRootLoaderData } from "~/lib/root-data";
 
 export function ProductForm({
     product,
@@ -19,10 +20,10 @@ export function ProductForm({
     selectedVariant: ProductFragment['selectedVariant'];
     variants: Array<ProductVariantFragment>;
 }) {
+    const { publicStoreDomain } = useRootLoaderData();
 
     // Store the quantity of products in the form
     const [quantity, setQuantity] = useState<number>(1);
-
     // Remove the product.options which have name "title" so we don't get default
     const filteredOptions = product.options.filter(option => option.name.toLowerCase() !== 'title');
 
@@ -122,22 +123,30 @@ export function ProductForm({
                             </div>
 
                             :
-                            <AddToCartButton
-                                disabled={!selectedVariant}
-                                onClick={openCartAside}
-                                lines={
-                                    selectedVariant
-                                        ? [
-                                            {
-                                                selectedVariant: selectedVariant,
-                                                merchandiseId: selectedVariant.id,
-                                                quantity: quantity,
-                                            },
-                                        ]
-                                        : []
-                                }
-                                label={'Add to basket'}
-                            />
+                            <>
+                                <AddToCartButton
+                                    disabled={!selectedVariant}
+                                    onClick={openCartAside}
+                                    lines={
+                                        selectedVariant
+                                            ? [
+                                                {
+                                                    selectedVariant: selectedVariant,
+                                                    merchandiseId: selectedVariant.id,
+                                                    quantity: quantity,
+                                                },
+                                            ]
+                                            : []
+                                    }
+                                    label={'Add to basket'}
+                                />
+                                <ShopPayButton
+                                    variantIdsAndQuantities={[{ id: selectedVariant.id, quantity }]}
+                                    storeDomain={publicStoreDomain}
+                                    width="100%"
+                                    className="rounded-lg overflow-hidden mt-2 shadow"
+                                />
+                            </>
                     }
                 </div>
             </div>
