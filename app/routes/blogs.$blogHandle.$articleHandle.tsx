@@ -89,7 +89,20 @@ export default function Article() {
           <h1 className='font-display text-6xl leading-[1] '>{title}</h1>
           <DashDivider />
           <div style={{ fontSize: "18px" }} className='mt-4'>{publishedDate} / {author?.name}</div>
-          <div>Share</div>
+          <div className='flex mt-4 flex-row gap-2 items-center justify-center'>
+            <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer">
+              <img className='h-[25px]' src={FbWhite} alt="Share on Facebook" />
+            </a>
+            <a href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer">
+              <img className='h-[25px]' src={XWhite} alt="Share on X" />
+            </a>
+            <a href={`https://pinterest.com/pin/create/button/?url=${encodeURIComponent(window.location.href)}&description=${title}`} target="_blank" rel="noopener noreferrer">
+              <img className='h-[25px]' src={PWhite} alt="Share on Pinterest" />
+            </a>
+            <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`} target="_blank" rel="noopener noreferrer">
+              <img className='h-[25px]' src={LIWhite} alt="Share on LinkedIn" />
+            </a>
+          </div>
           <br />
           <div className='text-sm'><Link to={`/`}>Home</Link>&nbsp;&gt;&nbsp;<Link to={`/blogs/news`}>Blog</Link>&nbsp;&gt;&nbsp;{title}</div>
         </div>
