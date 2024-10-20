@@ -1,5 +1,5 @@
 import { json, type LoaderFunctionArgs } from '@shopify/remix-oxygen';
-import { Await, useLoaderData, type MetaFunction, useNavigate } from '@remix-run/react';
+import { Await, useLoaderData, type MetaFunction, useNavigate, Link } from '@remix-run/react';
 import { Suspense, useState } from 'react';
 import type {
   RecommendedBlogArticlesQuery,
@@ -77,6 +77,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
       subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
       backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/washer_man.png?v=1717245774',
       ctaOnClick: () => { },
+      to: "/collections/outdoor-surface-cleaners",
       ctaText: 'Shop Collection',
       viewport
     },
@@ -85,6 +86,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
       subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
       backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/defender_tyre_wash.jpg?v=1718738895',
       ctaOnClick: () => { },
+      to: "/collections/traffic-film-removers",
       ctaText: 'Shop Collection',
       viewport
     },
@@ -93,6 +95,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
       subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
       backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/soapy_sports_car.jpg?v=1718738897',
       ctaOnClick: () => { },
+      to: "/collections/snow-foam-shampoos",
       ctaText: 'Shop Collection',
       viewport
     },
@@ -101,6 +104,7 @@ function HeroSlideShow({ viewport }: { viewport?: Viewport }) {
       subtitle: "Giving your vehicle a showroom look without damaging or affecting its paintwork, while keeping its gloss finish.",
       backgroundImage: 'https://cdn.shopify.com/s/files/1/0032/5474/7185/files/alloys-being-washed.jpg?v=1718738896',
       ctaOnClick: () => { },
+      to: "/collections/alloy-wheel-cleaners",
       ctaText: 'Shop Collection',
       viewport
     }
@@ -134,6 +138,7 @@ interface HeroProps {
   subtitle: string,
   ctaText: string,
   ctaOnClick: () => void,
+  to: string,
   backgroundImage: string
   viewport?: Viewport
 }
@@ -143,6 +148,7 @@ function Hero({
   subtitle,
   ctaText,
   ctaOnClick,
+  to,
   backgroundImage,
   viewport = 'desktop'
 }: Readonly<HeroProps>) {
@@ -157,7 +163,7 @@ function Hero({
           <h1 className="text-8xl font-display">{title}</h1>
           <div className='w-full'><DashDivider /></div>
           <p className="text-xl mb-5 mt-2">{subtitle}</p>
-          <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
+          <div className='w-52' ><Link to={to}><ArrowButton label={ctaText} /></Link></div>
         </div>
       </div>
     </div>
@@ -171,7 +177,7 @@ function Hero({
         <div className="relative z-10 text-left text-white max-w-sm">
           <Heading className='text-9xl !text-white font-display' dashClassName='w-16' level={1}>{title}</Heading>
           <p className="text-xl mb-5">{subtitle}</p>
-          <div className='w-52'><ArrowButton label={ctaText} onClick={ctaOnClick} /></div>
+          <div className='w-52'><Link to={to}><ArrowButton label={ctaText} /></Link></div>
         </div>
       </div>
     </div>
