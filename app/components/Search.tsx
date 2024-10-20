@@ -199,32 +199,26 @@ function SearchResultsProductsGrid({
 
             return (
               <div key={product.id}>
-                <Link
-                  className='!no-underline'
-                  prefetch="intent"
-                  to={`/products/${product.handle}${trackingParams}`}
-                >
-                  <div className='desktop-component'>
-                    <ProductCard
-                      id={product.id}
-                      imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
-                      title={product.title}
-                      price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
-                      handle={product.handle}
-                      ActionElement={() => <ArrowButton label="VIEW ALL SIZES" />}
-                    />
-                  </div>
-                  <div className='mobile-component'>
-                    <MiniProductCard
-                      id={product.id}
-                      imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
-                      title={product.title}
-                      price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
-                      handle={product.handle}
-                      ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" />}
-                    />
-                  </div>
-                </Link>
+                <div className='desktop-component'>
+                  <ProductCard
+                    id={product.id}
+                    imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
+                    title={product.title}
+                    price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
+                    handle={product.handle}
+                    ActionElement={() => <ArrowButton label="VIEW ALL SIZES" />}
+                  />
+                </div>
+                <div className='mobile-component'>
+                  <MiniProductCard
+                    id={product.id}
+                    imageData={product.variants.nodes[0].image as StorefrontAPI.Image}
+                    title={product.title}
+                    price={product.variants.nodes[0].price as StorefrontAPI.MoneyV2}
+                    handle={product.handle}
+                    ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" />}
+                  />
+                </div>
               </div>
 
             );
@@ -467,8 +461,7 @@ type SearchResultTypeProps = {
 };
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
-  const navigate = useNavigate();
-  return <MiniArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+  return <MiniArrowButton label="VIEW ALL SIZES" />
 }
 
 function ProductSearchResult({

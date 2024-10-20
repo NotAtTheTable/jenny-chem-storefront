@@ -1,7 +1,7 @@
 import { NavLink } from '@remix-run/react';
 import type { FooterQuery, HeaderQuery } from 'storefrontapi.generated';
 import { useRootLoaderData } from '~/lib/root-data';
-import FacebookIcon from '~/assets/social-icons/facebook-white.svg'
+import FacebookIcon from '~/assets/social-icons/footer-facebook-white.svg'
 import YoutubeIcon from '~/assets/social-icons/youtube-white.svg'
 import TiktokIcon from '~/assets/social-icons/tiktok-white.svg'
 import InstagramIcon from '~/assets/social-icons/instagram-white.svg'

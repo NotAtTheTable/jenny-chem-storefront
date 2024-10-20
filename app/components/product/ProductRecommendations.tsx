@@ -14,7 +14,7 @@ interface ProductRecommendationsProps {
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
     const navigate = useNavigate();
-    return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+    return <ArrowButton label="VIEW ALL SIZES" />
 }
 
 const ProductRecommendations = ({ productRecommendations }: ProductRecommendationsProps) => {

@@ -121,7 +121,7 @@ export function ProductsGrid({ products }: { products: ProductCardPreviewFragmen
                 title={product.title}
                 price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
                 handle={product.handle}
-                ActionElement={() => <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${product.handle}`)} />}
+                ActionElement={() => <ArrowButton label="VIEW ALL SIZES" />}
               />
             </div>
           );
@@ -137,7 +137,7 @@ export function ProductsGrid({ products }: { products: ProductCardPreviewFragmen
                 title={product.title}
                 price={product.priceRange.minVariantPrice as StorefrontAPI.MoneyV2}
                 handle={product.handle}
-                ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${product.handle}`)} />}
+                ActionElement={() => <MiniArrowButton label="VIEW ALL SIZES" />}
               />
             </div>
           );

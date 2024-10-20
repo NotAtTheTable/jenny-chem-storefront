@@ -141,8 +141,7 @@ const CollectionSummary = (props: CollectionPreviewFragment) => {
 }
 
 function NavigateToProductPageButton({ handle }: { handle: string }) {
-    const navigate = useNavigate();
-    return <ArrowButton label="VIEW ALL SIZES" onClick={() => navigate(`/products/${handle}`)} />
+    return <ArrowButton label="VIEW ALL SIZES" />
 }
 
 export const PRODUCT_PREVIEW_FRAGMENT = `#graphql
